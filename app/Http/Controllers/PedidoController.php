@@ -9,6 +9,7 @@ use App\Models\Producto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Http\Client\Request;
 use Inertia\Inertia;
 
 class PedidoController extends Controller
@@ -18,7 +19,7 @@ class PedidoController extends Controller
     {
         try {
             $pedidos = Pedido::query()
-                ->with(['cliente', 'user', 'detalles'])
+                ->with(['cliente', 'user', 'detalles.producto'])
                 ->when(request('search'), function ($query, $search) {
                     $query->where('id', 'like', "%{$search}%")
                         ->orWhere('observacion', 'like', "%{$search}%")
@@ -30,9 +31,25 @@ class PedidoController extends Controller
                     request('direction', 'desc') ?? 'desc'
                 )
                 ->paginate(5);
+            $total_pedidos = Pedido::with(['detalles.producto'])->get();
+             // sumar cantidades según el nombre del producto
+            $totales = [
+                'grandes' => $total_pedidos->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
+                ),
+                'medianos' => $total_pedidos->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Mediano')->sum('cantidad')
+                ),
+                'pequenos' => $total_pedidos->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
+                ),
+            ];
+            // dd($totales);
+
             return Inertia::render('Pedidos/Index', [
                 'pedidos' => $pedidos,
                 'filters' => request()->only('search', 'sort', 'direction'),
+                'totales' => $totales,
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -40,6 +57,20 @@ class PedidoController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    public function show($id)
+    {
+        $pedido = Pedido::with([
+            'cliente',
+            'user',
+            'detalles.producto' // importante: cargar producto en cada detalle
+        ])->findOrFail($id);
+
+        return Inertia::render('Pedidos/Show', [
+            'pedido' => $pedido
+        ]);
     }
 
     public function create()
@@ -92,6 +123,7 @@ class PedidoController extends Controller
     // Actualizar pedido con transacción y manejo de errores
     public function update(UpdatePedidoRequest $request, Pedido $pedido): JsonResponse
     {
+
         try {
             DB::transaction(function () use ($request, $pedido) {
                 $pedido->update($request->validated());
@@ -112,6 +144,26 @@ class PedidoController extends Controller
                 'message' => 'Error al actualizar el pedido',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function procesar(Request $request, $id) {
+        dd($request);
+        try {
+            //code...
+            $pedido = Pedido::find($id);
+            $pedido->estado = 'preparado';
+            $pedido->save();
+
+            return response()->json([
+                'message' => 'Pedido preparado correctamente',
+                'pedido' => $request->estado,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al preparar pedido',
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 

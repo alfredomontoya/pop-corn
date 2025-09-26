@@ -30,7 +30,6 @@ const PedidoForm: FC<Props> = ({
 }) => {
   // Inicializar datos si es edición
   useEffect(() => {
-    console.log('Pedido para edición:', pedido);
     if (pedido) {
       setData('cliente_id', String(pedido.cliente_id));
       setData('fecha', pedido.fecha);
@@ -45,12 +44,12 @@ const PedidoForm: FC<Props> = ({
           subtotal: Number(d.subtotal),
         }))
       );
+      setData('total', Number(pedido.total));
     }
   }, [pedido?.id]);
 
   // Inicializar con productos por defecto (solo en creación)
   useEffect(() => {
-    console.log('Productos disponibles:', productos);
     if (!pedido && form.detalles!.length === 0 && productos.length > 0) {
       const iniciales: DetallePedido[] = productos.slice(0, 3).map((p) => {
         const precio = Number(p.precio_activo?.precio_venta ?? 0);
@@ -64,6 +63,12 @@ const PedidoForm: FC<Props> = ({
       setData('detalles', iniciales);
     }
   }, [pedido, productos]);
+
+  // Calcular total automáticamente al cambiar detalles
+  useEffect(() => {
+    const total = form.detalles?.reduce((acc, d) => acc + (d.subtotal ?? 0), 0) ?? 0;
+    setData('total', total);
+  }, [form.detalles]);
 
   const handleUpdateDetalle = (index: number, detalle: DetallePedido) => {
     const subtotal = detalle.cantidad * detalle.precio;
@@ -119,6 +124,13 @@ const PedidoForm: FC<Props> = ({
         errors={errors}
       />
 
+      {/* Total */}
+      <div className="text-right">
+        <span className="font-bold text-lg">Total: </span>
+        <span className="text-2xl text-blue-600 font-bold">{form.total?.toFixed(2) ?? '0.00'}</span>
+      </div>
+      {errors.total && <p className="text-red-500 text-sm">{errors.total[0]}</p>}
+
       {/* Observación */}
       <div>
         <label className="block font-bold">Observación</label>
@@ -131,11 +143,7 @@ const PedidoForm: FC<Props> = ({
       </div>
 
       {/* Botón Guardar */}
-      <Button
-        type="button"
-        onClick={onSubmit}
-        variant={'default'}
-      >
+      <Button type="button" onClick={onSubmit} variant={'default'}>
         {pedido ? 'Actualizar' : 'Guardar'}
       </Button>
     </div>

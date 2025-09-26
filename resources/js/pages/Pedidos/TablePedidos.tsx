@@ -1,5 +1,8 @@
+import { Button } from '@/components/ui/button';
 import { Pedido } from '@/interfaces/Pedidos.Interface';
 import { Paginated } from '@/interfaces/Venta.Interface';
+import { router } from '@inertiajs/react';
+
 import { FC } from 'react';
 
 interface Props {
@@ -34,6 +37,9 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
             <td className="border px-4 py-2">{p.estado}</td>
             <td className="border px-4 py-2">{p.total}</td>
             <td className="border px-4 py-2 space-x-2">
+
+                <Button variant={"default"} onClick={ () => router.visit(`/pedidos/${p.id}`) } >Ver</Button>
+
               <a href={`/pedidos/${p.id}/edit`} className="text-blue-500">Editar</a>
               <button
                 onClick={() => onDelete(`/api/pedidos/${p.id}`, p.id)}

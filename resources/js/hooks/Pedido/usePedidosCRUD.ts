@@ -57,6 +57,18 @@ export default function usePedidosCRUD() {
     }
   };
 
+  // Preparar pedido
+  const procesarPedido = async (url: string): Promise<AxiosResponse<any> | void> => {
+    if (!confirm('¿Deseas preparar este pedido?')) return;
+    try {
+      const response = await axios.put(url);
+      return  response
+    //   await fetchPedidos(url.replace(`/update/${form['id']}`, ''));
+    } catch (error) {
+      console.error('Error al preparar pedido', error);
+    }
+  };
+
   // Eliminar pedido
   const deletePedido = async (url: string, id: number): Promise<void> => {
     if (!confirm('¿Deseas eliminar este pedido?')) return;
@@ -68,5 +80,5 @@ export default function usePedidosCRUD() {
     }
   };
 
-  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido };
+  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido, procesarPedido };
 }

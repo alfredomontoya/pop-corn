@@ -22,6 +22,7 @@ class StorePedidoRequest extends FormRequest
             'detalles.*.cantidad' => ['required','integer','min:1'],
             'detalles.*.precio' => ['required','numeric','min:1'],
             'detalles.*.subtotal' => ['required','numeric','min:1'],
+            'total' => ['required', 'numeric', 'min:1']
         ];
     }
 
@@ -49,6 +50,7 @@ class StorePedidoRequest extends FormRequest
             'detalles.*.cantidad' => 'cantidad',
             'detalles.*.precio' => 'precio',
             'detalles.*.subtotal' => 'subtotal',
+            'total' => 'total'
         ];
     }
 }
