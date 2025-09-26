@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('pedidos', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('cliente_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            // $table->integer('nro')->unique()->defu;
+            $table->date('fecha');
+            $table->enum('estado', ['pendiente', 'confirmado', 'cancelado', 'entregado'])->default('pendiente');
+            $table->decimal('total', 10, 2)->default(0);
+            $table->text('observacion')->nullable();
+            $table->timestamps();
+
+            $table->foreign('cliente_id')->references('id')->on('clientes')->nullOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+        });
+    }
+
+    public function down(): void {
+        Schema::dropIfExists('pedidos');
+    }
+};
