@@ -48,7 +48,7 @@ Route::middleware(['auth', SetUserId::class])->group(function () {
         Route::get('/{pedido}', [PedidoController::class, 'show'])->name('pedidos.show');     // Ver un pedido (opcional)
         Route::put('/update/{pedido}', [PedidoController::class, 'update'])->name('pedidos.update'); // Actualizar pedido
         Route::delete('/{pedido}', [PedidoController::class, 'destroy'])->name('pedidos.destroy');    // Eliminar pedido
-        Route::put('/{id}/{estado}/procesar', [PedidoController::class, 'procesar'])->name('pedidos.procesar');
+        Route::put('/{id}/procesar', [PedidoController::class, 'procesar'])->name('pedidos.procesar');
     });
 
     Route::resource('captaciones', CaptacionController::class);

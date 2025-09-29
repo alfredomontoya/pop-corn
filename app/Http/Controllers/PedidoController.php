@@ -9,7 +9,7 @@ use App\Models\Producto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Exception;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class PedidoController extends Controller
@@ -31,11 +31,11 @@ class PedidoController extends Controller
                     request('direction', 'desc') ?? 'desc'
                 )
                 ->paginate(5);
-            $total_pedidos = Pedido::with(['detalles.producto'])->get();
+            $total_pedidos = Pedido::with(['detalles.producto'])->where('estado', 'pendiente')->get();
              // sumar cantidades según el nombre del producto
             $totales = [
                 'grandes' => $total_pedidos->sum(fn($p) =>
-                    $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
+                    $p->detalles->where('producto.nombre', 'Grande')->where('estado')->sum('cantidad')
                 ),
                 'medianos' => $total_pedidos->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Mediano')->sum('cantidad')
@@ -148,20 +148,20 @@ class PedidoController extends Controller
     }
 
     public function procesar(Request $request, $id) {
-        dd($request);
+        // dd($request->all());
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado = 'preparado';
+            $pedido->estado = $request->estado;
             $pedido->save();
 
             return response()->json([
-                'message' => 'Pedido preparado correctamente',
-                'pedido' => $request->estado,
+                'message' => 'Pedido procesado correctamente',
+                'estado' => $request->estado,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Error al preparar pedido',
+                'message' => 'Error al procesar pedido',
                 'error' => $e->getMessage()
             ], 400);
         }

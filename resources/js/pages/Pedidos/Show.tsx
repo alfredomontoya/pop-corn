@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { Pedido } from '@/interfaces/Pedidos.Interface';
 import { Button } from '@/components/ui/button';
 import usePedidosCRUD from '@/hooks/Pedido/usePedidosCRUD';
@@ -13,10 +13,11 @@ export default function Show({ pedido }: Props) {
     const { procesarPedido } = usePedidosCRUD();
     const [estadoPedido, setEstadoPedido] = useState(pedido.estado??'pendiente')
 
-    const handlePreparar = async() => {
-        const response = await procesarPedido(`/pedidos/${pedido.id}/procesar?estado=procesado`)
+    const handlePreparar = async(estado: string) => {
+        const response = await procesarPedido(`/pedidos/${pedido.id}/procesar?estado=${estado}`)
         if (response?.status == 200){
-            setEstadoPedido('preparado')
+            // console.log(response.data.estado)
+            setEstadoPedido(response.data.estado)
         }
 
     }
@@ -29,13 +30,13 @@ export default function Show({ pedido }: Props) {
         <h1 className="text-2xl font-bold mb-4">Detalle del Pedido</h1>
 
         <div className="mb-4">
-          <Button variant="default" className='mr-1' onClick={() => history.back()}>
+          <Button variant="default" className='mr-1' onClick={() => router.visit(`/pedidos`)}>
             Volver
           </Button>
-          <Button variant="default" className='mr-1' onClick={ () => handlePreparar() }>
+          <Button disabled = {estadoPedido!=='pendiente' ? true: false} variant="default" className='mr-1' onClick={ () => handlePreparar('preparado') }>
             Preparar
           </Button>
-          <Button variant="default" className='mr-1' onClick={() => history.back()}>
+          <Button disabled = {estadoPedido!=='preparado' ? true: false}  variant="default" className='mr-1' onClick={ () => handlePreparar('entregado') }>
             Entregar
           </Button>
         </div>
