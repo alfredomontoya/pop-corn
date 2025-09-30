@@ -31,16 +31,42 @@ class PedidoController extends Controller
                     request('direction', 'desc') ?? 'desc'
                 )
                 ->paginate(5);
-            $total_pedidos = Pedido::with(['detalles.producto'])->where('estado', 'pendiente')->get();
+            $pedidos_pendientes = Pedido::with(['detalles.producto'])->where('estado', 'pendiente')->get();
+            $pedidos_preparados = Pedido::with(['detalles.producto'])->where('estado', 'preparado')->get();
+            $pedidos_entregados = Pedido::with(['detalles.producto'])->where('estado', 'entregado')->get();
              // sumar cantidades según el nombre del producto
-            $totales = [
-                'grandes' => $total_pedidos->sum(fn($p) =>
-                    $p->detalles->where('producto.nombre', 'Grande')->where('estado')->sum('cantidad')
+            $totales_pendientes = [
+                'grandes' => $pedidos_pendientes->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
                 ),
-                'medianos' => $total_pedidos->sum(fn($p) =>
+                'medianos' => $pedidos_pendientes->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Mediano')->sum('cantidad')
                 ),
-                'pequenos' => $total_pedidos->sum(fn($p) =>
+                'pequenos' => $pedidos_pendientes->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
+                ),
+            ];
+
+            $totales_preparados = [
+                'grandes' => $pedidos_preparados->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
+                ),
+                'medianos' => $pedidos_preparados->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Mediano')->sum('cantidad')
+                ),
+                'pequenos' => $pedidos_preparados->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
+                ),
+            ];
+
+            $totales_entregados = [
+                'grandes' => $pedidos_entregados->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
+                ),
+                'medianos' => $pedidos_entregados->sum(fn($p) =>
+                    $p->detalles->where('producto.nombre', 'Mediano')->sum('cantidad')
+                ),
+                'pequenos' => $pedidos_entregados->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
                 ),
             ];
@@ -49,7 +75,11 @@ class PedidoController extends Controller
             return Inertia::render('Pedidos/Index', [
                 'pedidos' => $pedidos,
                 'filters' => request()->only('search', 'sort', 'direction'),
-                'totales' => $totales,
+                'totales' => [
+                    'pendientes' => $totales_pendientes,
+                    'preparados' => $totales_preparados,
+                    'entregados' => $totales_entregados
+                ],
             ]);
         } catch (Exception $e) {
             return response()->json([

@@ -12,12 +12,13 @@ class DetallePedidoFactory extends Factory
     protected $model = DetallePedido::class;
 
     public function definition(): array {
-        $precio = $this->faker->randomFloat(2, 5, 20);
+        $producto = Producto::all()->random();
+        $precio = $producto->precioActivo->precio_venta;
         $cantidad = $this->faker->numberBetween(1, 10);
 
         return [
             'pedido_id' => Pedido::all('id')->random(),
-            'producto_id' => Producto::all('id')->random(),
+            'producto_id' => $producto->id,
             'cantidad' => $cantidad,
             'precio' => $precio,
             'subtotal' => $cantidad * $precio,

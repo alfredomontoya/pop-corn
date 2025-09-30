@@ -53,7 +53,7 @@ class ProductoSeeder extends Seeder
         ];
 
         foreach ($productos as $data) {
-            $producto = Producto::factory()->create($data);
+            Producto::factory()->create($data);
         }
 
 

@@ -30,18 +30,34 @@ import usePedido from '@/hooks/Pedido/usePedido';
 import useSearch from '@/hooks/Pedido/useSearch';
 import { Button } from '@/components/ui/button';
 import ResumenProductos from '@/components/Pedidos/ResumenProductos';
+import HeadingSmall from '@/components/heading-small';
 // import TablePedidos from './components/TablePedidos';
 
+interface Totales {
+  grandes: number
+  medianos: number
+  pequenos: number
+}
 
 interface Props {
-    pedidos: Paginated<Pedido>;
-    filters?: { search?: string };
-    totales: {
-        grandes: number;
-        medianos: number;
-        pequenos: number;
-    };
+  pedidos: {
+    data: Pedido[]
+    links: any[]
+    current_page: number
+    last_page: number
+  }
+  filters: {
+    search?: string
+    sort?: string
+    direction?: string
+  }
+  totales: {
+    pendientes: Totales
+    preparados: Totales
+    entregados: Totales
+  }
 }
+
 
 export default function Index({ pedidos, filters, totales }: Props) {
 
@@ -55,7 +71,14 @@ export default function Index({ pedidos, filters, totales }: Props) {
         <h1 className="text-2xl font-bold mb-4">Pedidos</h1>
 
         {/* Componente de resumen arriba */}
-        <ResumenProductos resumen={totales} />
+        <HeadingSmall title='Peidos pendientes' description='Listado de pedidos pendientes'/>
+        <ResumenProductos resumen={totales.pendientes} />
+
+        <HeadingSmall title='Peidos preparados' description='Listado de pedidos preparados'/>
+        <ResumenProductos resumen={totales.preparados} />
+
+        <HeadingSmall title='Peidos entregados' description='Listado de pedidos entregados'/>
+        <ResumenProductos resumen={totales.entregados} />
 
         <Button variant={'default'} onClick={() => router.visit('/pedidos/create')} className="mb-4">
           Nuevo Pedido
