@@ -16,7 +16,8 @@ class ProductoController extends Controller
     // Listado con búsqueda y orden
     public function index(Request $request)
     {
-        $productos = Producto::with([
+        $productos = Producto::select(['id', 'categoria_id', 'nombre', 'stock_actual'])
+            ->with([
                 'categoria',
                 'imagenPrincipal',
                 'imagenes',       // todas las imágenes

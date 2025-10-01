@@ -14,11 +14,25 @@ class ProductoSeeder extends Seeder
     {
         // Producto::factory()->count(15)->create();
         $productos = [
-            // Mesas de billar (categoria_id = 1)
-            ['nombre' => 'Grande', 'categoria_id' => 1, 'descripcion' => 'Mesa estándar disponible para alquiler por una hora.'],
-            ['nombre' => 'Mediano', 'categoria_id' => 1, 'descripcion' => 'Mesa profesional de alta calidad, alquiler por una hora.'],
-            ['nombre' => 'Chico', 'categoria_id' => 1, 'descripcion' => 'Mesa doble ideal para grupos, alquiler por una hora.'],
-
+            [
+                'nombre' => 'Grande', 'categoria_id' => 1,
+                'descripcion' => 'Mesa estándar disponible para alquiler por una hora.',
+                'stock_actual' => 0,
+                'stock_minimo' => 0,
+            ],
+            [
+                'nombre' => 'Mediano', 'categoria_id' => 1,
+                'descripcion' => 'Mesa profesional de alta calidad, alquiler por una hora.',
+                'stock_actual' => 0,
+                'stock_minimo' => 0,
+            ],
+            [
+                'nombre' => 'Chico', 'categoria_id' => 1,
+                'descripcion' => 'Mesa doble ideal para grupos, alquiler por una hora.',
+                'stock_actual' => 0,
+                'stock_minimo' => 0,
+            ],
+        ];
             // // Bebidas (categoria_id = 2)
             // ['nombre' => 'Coca-Cola 500ml', 'categoria_id' => 2, 'descripcion' => 'Botella de Coca-Cola de 500ml.'],
             // ['nombre' => 'Pepsi 500ml', 'categoria_id' => 2, 'descripcion' => 'Botella de Pepsi de 500ml.'],
@@ -50,7 +64,7 @@ class ProductoSeeder extends Seeder
             // ['nombre' => 'Promoción bebidas 3x2', 'categoria_id' => 5, 'descripcion' => 'Compra 3 bebidas y paga solo 2.'],
             // ['nombre' => 'Combo 4: 2 mesas + 4 bebidas', 'categoria_id' => 5, 'descripcion' => 'Alquiler de 2 mesas por 1 hora con 4 bebidas.'],
             // ['nombre' => 'Combo 5: Mesa + snack grande', 'categoria_id' => 5, 'descripcion' => 'Mesa por 1 hora con un snack grande a elección.'],
-        ];
+        // ];
 
         foreach ($productos as $data) {
             Producto::factory()->create($data);

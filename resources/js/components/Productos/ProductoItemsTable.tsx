@@ -44,7 +44,6 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
             <th className="px-4 py-2 border cursor-pointer" onClick={() => handleSort("nombre")}>
               Nombre {renderSortIcon("nombre")}
             </th>
-            <th className="px-4 py-2 border">Descripción</th>
             <th className="px-4 py-2 border cursor-pointer" onClick={() => handleSort("precio")}>
               Precio {renderSortIcon("precio")}
             </th>
@@ -81,7 +80,6 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                   )}
                 </td>
                 <td className="px-4 py-2">{prod.nombre}</td>
-                <td className="px-4 py-2">{prod.descripcion}</td>
                 <td className="px-4 py-2">Bs. {prod.precio_activo?.precio_venta}</td>
                 <td className="px-4 py-2">{prod.stock_actual}</td>
                 <td className="px-4 py-2 space-x-2">
@@ -93,7 +91,7 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                     variant={"warning"}
                     className="px-2 py-1"
                   >
-                    Detail
+                    Detalle
                   </Button>
                   <Button
                     onClick={(e) => {
