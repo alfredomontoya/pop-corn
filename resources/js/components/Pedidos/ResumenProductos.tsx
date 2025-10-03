@@ -3,14 +3,16 @@ interface Props {
     grandes: number;
     medianos: number;
     pequenos: number;
+    total: number;
   };
+  fondo?: string;
 }
 
 export default function ResumenProductos({ resumen }: Props) {
   const items = [
-    { label: "Grandes", value: resumen.grandes },
-    { label: "Medianos", value: resumen.medianos },
-    { label: "Pequeños", value: resumen.pequenos },
+    { label: "Grandes", value: resumen.grandes, color: 'green' },
+    { label: "Medianos", value: resumen.medianos, color: 'red' },
+    { label: "Pequeños", value: resumen.pequenos, color : 'yellow' },
   ];
 
   return (
@@ -18,10 +20,10 @@ export default function ResumenProductos({ resumen }: Props) {
       {items.map((item, i) => (
         <div
           key={i}
-          className="bg-white shadow rounded-xl p-4 text-center"
+          className={`shadow rounded-xl p-4 text-center bg-${item.color}-100`}
         >
-          <h3 className="text-lg font-semibold">{item.label}</h3>
-          <p className="text-2xl font-bold text-blue-600">{item.value}</p>
+          <h3 className={`text-lg font-semibold text-${item.color}-800`}>{item.label}</h3>
+          <p className={`text-2xl font-bold text-blue-600 text-${item.color}-600`}>{item.value}</p>
         </div>
       ))}
     </div>

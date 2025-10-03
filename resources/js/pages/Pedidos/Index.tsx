@@ -37,6 +37,7 @@ interface Totales {
   grandes: number
   medianos: number
   pequenos: number
+  total: number
 }
 
 interface Props {
@@ -71,13 +72,13 @@ export default function Index({ pedidos, filters, totales }: Props) {
         <h1 className="text-2xl font-bold mb-4">Pedidos</h1>
 
         {/* Componente de resumen arriba */}
-        <HeadingSmall title='Peidos pendientes' description='Listado de pedidos pendientes'/>
+        <HeadingSmall title={`Peidos pendientes ${totales.pendientes.total}`} description='Listado de pedidos pendientes'/>
         <ResumenProductos resumen={totales.pendientes} />
 
-        <HeadingSmall title='Peidos preparados' description='Listado de pedidos preparados'/>
+        <HeadingSmall title={`Peidos preparados ${totales.preparados.total}`} description='Listado de pedidos preparados'/>
         <ResumenProductos resumen={totales.preparados} />
 
-        <HeadingSmall title='Peidos entregados' description='Listado de pedidos entregados'/>
+        <HeadingSmall title={`Peidos entregados ${totales.entregados.total}`} description='Listado de pedidos entregados'/>
         <ResumenProductos resumen={totales.entregados} />
 
         <Button variant={'default'} onClick={() => router.visit('/pedidos/create')} className="mb-4">

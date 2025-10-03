@@ -39,16 +39,50 @@ Route::middleware(['auth', SetUserId::class])->group(function () {
     Route::resource('ventas', VentaController::class);
     Route::resource('movimientos', MovimientoController::class);
 
-    Route::prefix('pedidos')->group(function () {
-        Route::get('/', [PedidoController::class, 'index'])->name('pedidos.index');            // Listar pedidos
+    Route::prefix('pedidos')->middleware('auth')->group(function () {
 
-        Route::get('/create', [PedidoController::class, 'create'])->name('pedidos.create');     // Formulario para crear pedido
-        Route::get('/{pedido}/edit', [PedidoController::class, 'edit'])->name('pedidos.edit');   // Formulario para editar pedido
-        Route::post('/store', [PedidoController::class, 'store'])->name('pedidos.store');      // Crear pedido
-        Route::get('/{pedido}', [PedidoController::class, 'show'])->name('pedidos.show');     // Ver un pedido (opcional)
-        Route::put('/update/{pedido}', [PedidoController::class, 'update'])->name('pedidos.update'); // Actualizar pedido
-        Route::delete('/{pedido}', [PedidoController::class, 'destroy'])->name('pedidos.destroy');    // Eliminar pedido
-        Route::put('/{id}/procesar', [PedidoController::class, 'procesar'])->name('pedidos.procesar');
+        // Listar pedidos → solo admin y producción
+        Route::get('/', [PedidoController::class, 'index'])
+            ->middleware('role:admin,user,promotor,produccion,entrega')
+            ->name('pedidos.index');
+
+        // Crear pedido → admin y promotor
+        Route::get('/create', [PedidoController::class, 'create'])
+            ->middleware('role:admin,promotor')
+            ->name('pedidos.create');
+
+        Route::post('/store', [PedidoController::class, 'store'])
+            ->middleware('role:admin,promotor')
+            ->name('pedidos.store');
+
+        // Ver pedido → admin, user y entrega
+        Route::get('/{pedido}', [PedidoController::class, 'show'])
+            ->middleware('role:admin,user,promotor,produccion,entrega')
+            ->name('pedidos.show');
+
+        // Editar pedido → admin y producción
+        Route::get('/{pedido}/edit', [PedidoController::class, 'edit'])
+            ->middleware('role:admin,promotor')
+            ->name('pedidos.edit');
+
+        Route::put('/update/{pedido}', [PedidoController::class, 'update'])
+            ->middleware('role:admin,promotor')
+            ->name('pedidos.update');
+
+        // Eliminar pedido → solo admin
+        Route::delete('/{pedido}', [PedidoController::class, 'destroy'])
+            ->middleware('role:admin')
+            ->name('pedidos.destroy');
+
+        // Preparar pedido → Produccion
+        Route::put('/{id}/preparar', [PedidoController::class, 'preparar'])
+            ->middleware('role:admin,produccion')
+            ->name('pedidos.procesar');
+
+        // Entregar pedido → Produccion
+        Route::put('/{id}/entregar', [PedidoController::class, 'entregar'])
+            ->middleware('role:admin,entrega')
+            ->name('pedidos.entregar');
     });
 
     Route::resource('captaciones', CaptacionController::class);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Cliente } from '@/interfaces/Clientes.Interface';
 import { DetallePedido, PedidoFormData } from '@/interfaces/Pedidos.Interface';
 
@@ -58,15 +58,13 @@ export default function usePedidosCRUD() {
   };
 
   // Preparar pedido
-  const procesarPedido = async (url: string): Promise<AxiosResponse<any> | void> => {
-    if (!confirm('¿Deseas preparar este pedido?')) return;
-    try {
-      const response = await axios.put(url);
-      return  response
-    //   await fetchPedidos(url.replace(`/update/${form['id']}`, ''));
-    } catch (error) {
-      console.error('Error al preparar pedido', error);
-    }
+  const prepararPedido = async (url: string): Promise<AxiosResponse<any>> => {
+    return  await axios.put(url);
+  };
+
+  // Preparar pedido
+  const entregarPedido = async (url: string): Promise<AxiosResponse<any>> => {
+      return  await axios.put(url);
   };
 
   // Eliminar pedido
@@ -80,5 +78,5 @@ export default function usePedidosCRUD() {
     }
   };
 
-  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido, procesarPedido };
+  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido, prepararPedido, entregarPedido };
 }

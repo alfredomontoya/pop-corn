@@ -31,10 +31,10 @@ class PedidoController extends Controller
                     request('direction', 'desc') ?? 'desc'
                 )
                 ->paginate(5);
-            $pedidos_pendientes = Pedido::with(['detalles.producto'])->where('estado', 'pendiente')->get();
+            $pedidos_pendientes = Pedido::with(['detalles.producto', 'user'])->where('estado', 'pendiente')->get();
             $pedidos_preparados = Pedido::with(['detalles.producto'])->where('estado', 'preparado')->get();
-            $pedidos_entregados = Pedido::with(['detalles.producto'])->where('estado', 'entregado')->get();
-             // sumar cantidades según el nombre del producto
+            $pedidos_entregados = Pedido::with(['detalles.producto', 'user'])->where('estado', 'entregado')->get();
+
             $totales_pendientes = [
                 'grandes' => $pedidos_pendientes->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
@@ -44,6 +44,9 @@ class PedidoController extends Controller
                 ),
                 'pequenos' => $pedidos_pendientes->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
+                ),
+                'total' => $pedidos_pendientes->sum(fn($p) =>
+                    $p->detalles->sum('subtotal')
                 ),
             ];
 
@@ -57,6 +60,9 @@ class PedidoController extends Controller
                 'pequenos' => $pedidos_preparados->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
                 ),
+                'total' => $pedidos_preparados->sum(fn($p) =>
+                    $p->detalles->sum('subtotal')
+                ),
             ];
 
             $totales_entregados = [
@@ -68,6 +74,9 @@ class PedidoController extends Controller
                 ),
                 'pequenos' => $pedidos_entregados->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Chico')->sum('cantidad')
+                ),
+                'total' => $pedidos_entregados->sum(fn($p) =>
+                    $p->detalles->sum('subtotal')
                 ),
             ];
             // dd($totales);
@@ -177,17 +186,39 @@ class PedidoController extends Controller
         }
     }
 
-    public function procesar(Request $request, $id) {
+    public function preparar($id) {
         // dd($request->all());
+        $estado = 'preparado';
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado = $request->estado;
+            $pedido->estado = $estado;
             $pedido->save();
 
             return response()->json([
                 'message' => 'Pedido procesado correctamente',
-                'estado' => $request->estado,
+                'estado' => $estado
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al procesar pedido',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function entregar($id) {
+        // dd($request->all());
+        $estado = 'entregado';
+        try {
+            //code...
+            $pedido = Pedido::find($id);
+            $pedido->estado = $estado;
+            $pedido->save();
+
+            return response()->json([
+                'message' => 'Pedido procesado correctamente',
+                'estado' => $estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([

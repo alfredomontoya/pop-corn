@@ -14,7 +14,7 @@
 // }
 
 import { ImgHTMLAttributes } from 'react';
-import logo from '../../assets/pop-corn.jpg'
+import logo from '../../assets/logopopmix.png'
 
 interface AppLogoImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src?: string;

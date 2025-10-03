@@ -50,7 +50,7 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
             <td className="border px-4 py-2">{p.id}</td>
             <td className="border px-4 py-2">{p.cliente?.nombre_razon_social}</td>
             <td className="border px-4 py-2">{p.user?.name}</td>
-            <td className="border px-4 py-2">{p.fecha}</td>
+            <td className="border px-4 py-2">{new Date(p.fecha).toLocaleDateString("es-ES")}</td>
             <td className="border px-4 py-2">{renderEstado(p.estado)}</td>
             <td className="border px-4 py-2">{p.total}</td>
             <td className="border px-4 py-2 space-x-2">
