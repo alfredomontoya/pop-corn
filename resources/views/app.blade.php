@@ -4,6 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+            <!-- Título que se mostrará -->
+        <meta property="og:title" content="PopMix" />
+
+        <!-- Descripción que se mostrará -->
+        <meta property="og:description" content="Sistema de pedidos PopMix." />
+
+        <!-- URL de la página -->
+        <meta property="og:url" content="https://popmix.sofcruz.com" />
+
+        <!-- Imagen que se mostrará (preferible 1200x630px) -->
+        <meta property="og:image" content="https://mi-sitio.com/img/preview.png" />
+
+        <!-- Tipo de contenido -->
+        <meta property="og:type" content="website" />
+
+        <!-- Opcional: para WhatsApp y Telegram -->
+        <meta name="twitter:card" content="summary_large_image" />
+
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>
             (function() {

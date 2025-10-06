@@ -22,7 +22,7 @@ export default function AuthSimpleLayout({ children, title, description }: Props
             {/* Capa de difuminado */}
             {/* <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]"></div> */}
 
-            <div className="relative p-3 rounded z-10 text-center bg-black/50">
+            <div className="relative p-3 rounded z-10 text-center bg-black/40">
                 <div className="w-full max-w-sm">
                     <div className="flex flex-col gap-8">
                         <div className="flex flex-col items-center gap-4">
