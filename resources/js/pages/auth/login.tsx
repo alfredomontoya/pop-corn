@@ -56,7 +56,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                             placeholder="email@popmix.com"
-                            className='bg-white text-black'
+                            className='bg-white/50 text-black !placeholder-gray-700'
                         />
                         <InputError message={errors.email} />
                     </div>
@@ -79,7 +79,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
                             placeholder="Contraseña"
-                            className='bg-white text-black'
+                            className='bg-white/50 text-black !placeholder-gray-700'
                         />
                         <InputError message={errors.password} />
                     </div>
