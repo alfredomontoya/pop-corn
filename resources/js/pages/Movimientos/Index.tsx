@@ -1,10 +1,11 @@
 import { ItemsTable } from "@/components/Movimientos/ItemsTable";
 import { Totales } from "@/components/Movimientos/Totales";
 import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
 import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: "Movimientos", href: "/movimientos" },
@@ -25,24 +26,20 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
         <Totales totalIngresos={totalIngresos} totalEgresos={totalEgresos} saldo={saldo} />
 
         {/* Botones Crear Ingreso / Egreso */}
+
         <div className="flex gap-2 mb-6">
-          <Link
-            href="/movimientos/create?tipo=ingreso"
-            as="button"
-            method="get"
-            className="bg-green-500 text-white px-4 py-2 rounded"
+          <Button
+            variant={'default'}
+            onClick={ () => router.visit("/movimientos/create?tipo=ingreso")}
           >
             Nuevo Ingreso
-          </Link>
-          <Link
-            href="/movimientos/create?tipo=egreso"
-            as="button"
-            method="get"
-            data={{ tipo: "egreso" }}
-            className="bg-red-500 text-white px-4 py-2 rounded"
+          </Button>
+          <Button
+            variant={'secondary'}
+            onClick={ () => router.visit("/movimientos/create?tipo=egreso")}
           >
             Nuevo Egreso
-          </Link>
+          </Button>
         </div>
 
         {/* Tabla */}
