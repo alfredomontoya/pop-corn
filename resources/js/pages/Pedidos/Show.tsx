@@ -69,7 +69,7 @@ export default function Show({ pedido }: Props) {
           </Button>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-4 mb-6">
+        <div className="rounded-xl shadow p-4 mb-6 dark:bg-white/10">
           <h2 className="text-xl font-semibold mb-2">Información del Pedido</h2>
           <p><strong>Número:</strong> {pedido.nro}</p>
           <p><strong>Fecha:</strong> {pedido.fecha}</p>
@@ -80,11 +80,11 @@ export default function Show({ pedido }: Props) {
           <p><strong>Observación:</strong> {pedido.observacion || '-'}</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow p-4">
+        <div className="rounded-xl shadow p-4 dark:bg-white/10">
           <h2 className="text-xl font-semibold mb-2">Detalles</h2>
           <table className="w-full border-collapse border">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-gray">
                 <th className="border px-2 py-1 text-left">Producto</th>
                 <th className="border px-2 py-1 text-right">Cantidad</th>
                 <th className="border px-2 py-1 text-right">Precio</th>

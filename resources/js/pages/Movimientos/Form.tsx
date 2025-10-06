@@ -15,11 +15,7 @@ export default function Form({ movimiento, tipo, clientes }: Props) {
   const { data, setData, post, put, processing, errors } = useForm({
     nro: movimiento?.nro ?? 0,
     tipo: movimiento?.tipo ?? tipo ?? "ingreso",
-    nombre: movimiento?.nombre ?? "",
     descripcion: movimiento?.descripcion ?? "",
-    precio: movimiento?.precio ?? 0,
-    cantidad: movimiento?.cantidad ?? 1,
-    umedida: movimiento?.umedida ?? "unidad",
     fecha: movimiento?.fecha ?? today,
     total: movimiento?.total ?? 0, // total inicial
     cliente_id: movimiento?.cliente_id ?? null, // nuevo campo cliente
@@ -35,13 +31,6 @@ export default function Form({ movimiento, tipo, clientes }: Props) {
     c.nombre_razon_social.toLowerCase().includes(clienteQuery.toLowerCase())
   );
 
-  // Calcular total al cargar o al cambiar precio/cantidad
-  useEffect(() => {
-    const total = Number((data.precio * data.cantidad).toFixed(2));
-    if (total !== data.total) {
-      setData("total", total);
-    }
-  }, [data.precio, data.cantidad]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,32 +90,6 @@ export default function Form({ movimiento, tipo, clientes }: Props) {
       {/* Tipo (no editable) */}
       <input type="hidden" value={data.tipo === "ingreso" ? "Ingreso" : "Egreso"} disabled />
 
-      {/* Nombre */}
-      <div>
-        <label className="block font-semibold mb-1">Nombre</label>
-        {tipo === "ingreso" ? (
-          <select
-            value={data.nombre}
-            onChange={(e) => setData("nombre", e.target.value)}
-            className="border p-2 w-full bg-black text-white"
-          >
-            <option value="">Seleccione una opción</option>
-            <option value="Pipocas Grandes">Pipocas Grandes</option>
-            <option value="Pipocas Medianas">Pipocas Medianas</option>
-            <option value="Pipocas Chicas">Pipocas Chicas</option>
-          </select>
-        ) : (
-          <input
-            type="text"
-            value={data.nombre}
-            onChange={(e) => setData("nombre", e.target.value)}
-            placeholder="Nombre"
-            className="border p-2 w-full"
-          />
-        )}
-        {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre}</p>}
-      </div>
-
       {/* Descripción */}
       <div>
         <label className="block font-semibold mb-1">Descripción</label>
@@ -137,44 +100,6 @@ export default function Form({ movimiento, tipo, clientes }: Props) {
           className="border p-2 w-full"
         />
         {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion}</p>}
-      </div>
-
-      {/* Precio, Cantidad y Unidad de Medida */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block font-semibold mb-1">Precio</label>
-          <input
-            type="number"
-            step="0.01"
-            value={data.precio}
-            onChange={(e) => setData("precio", Number(e.target.value))}
-            className="border p-2 w-full"
-          />
-          {errors.precio && <p className="text-red-500 text-sm">{errors.precio}</p>}
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-1">Cantidad</label>
-          <input
-            type="number"
-            value={data.cantidad}
-            onChange={(e) => setData("cantidad", Number(e.target.value))}
-            className="border p-2 w-full"
-          />
-          {errors.cantidad && <p className="text-red-500 text-sm">{errors.cantidad}</p>}
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-1">Unidad de Medida</label>
-          <input
-            type="text"
-            value={data.umedida}
-            onChange={(e) => setData("umedida", e.target.value)}
-            placeholder="Ej: kg, litros, unidades"
-            className="border p-2 w-full"
-          />
-          {errors.umedida && <p className="text-red-500 text-sm">{errors.umedida}</p>}
-        </div>
       </div>
 
       {/* Fecha */}

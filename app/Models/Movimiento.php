@@ -14,11 +14,7 @@ class Movimiento extends Model
         'cliente_id',
         'nro',
         'fecha',
-        'nombre',
         'descripcion',
-        'cantidad',
-        'umedida',
-        'precio',
         'total',
         'tipo',
     ];

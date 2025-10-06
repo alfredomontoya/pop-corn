@@ -81,11 +81,24 @@ export default function Index({ pedidos, filters, totales }: Props) {
         <HeadingSmall title={`Peidos entregados ${totales.entregados.total}`} description='Listado de pedidos entregados'/>
         <ResumenProductos resumen={totales.entregados} />
 
-        <Button variant={'default'} onClick={() => router.visit('/pedidos/create')} className="mb-4">
-          Nuevo Pedido
-        </Button>
 
-        <SearchComponent search={search} setSearch={setSearch} handleSearch={handleSearch} />
+        <div className="flex items-center gap-2 mb-4">
+            <div className="flex-1">
+                <SearchComponent
+                search={search}
+                setSearch={setSearch}
+                handleSearch={handleSearch}
+                />
+            </div>
+
+            <Button
+                variant="default"
+                onClick={() => router.visit("/pedidos/create")}
+                className='mb-2'
+            >
+                Nuevo Pedido
+            </Button>
+        </div>
         <TablePedidos pedidos={pedidos} onDelete={deletePedido} search={search} />
         <Pagination links={pedidos.links} />
       </div>

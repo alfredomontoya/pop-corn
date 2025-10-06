@@ -97,7 +97,7 @@ const PedidoForm: FC<Props> = ({
       </div>
 
       {/* Estado */}
-      <div>
+      {/* <div>
         <label className="block font-bold">Estado</label>
         <select
           value={form.estado}
@@ -110,7 +110,7 @@ const PedidoForm: FC<Props> = ({
           <option value="entregado">Entregado</option>
         </select>
         {errors.estado && <p className="text-red-500 text-sm">{errors.estado[0]}</p>}
-      </div>
+      </div> */}
 
       {/* Detalles */}
       <PedidoDetalles
@@ -127,7 +127,7 @@ const PedidoForm: FC<Props> = ({
       {/* Total */}
       <div className="text-right">
         <span className="font-bold text-lg">Total: </span>
-        <span className="text-2xl text-blue-600 font-bold">{form.total?.toFixed(2) ?? '0.00'}</span>
+        <span className="text-2xl text-green-600 font-bold">{form.total?.toFixed(2) ?? '0.00'}</span>
       </div>
       {errors.total && <p className="text-red-500 text-sm">{errors.total[0]}</p>}
 

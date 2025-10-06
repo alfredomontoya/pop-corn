@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\Models\Movimiento;
 use App\Models\Pedido;
 use App\Models\Producto;
+use Illuminate\Support\Facades\Auth;
 
 class PedidoObserver
 {
@@ -37,6 +39,7 @@ class PedidoObserver
         }
 
         // Caso 2: entregado → disminuir stock
+        //          Crear movimiento
         if ($pedido->estado === 'entregado') {
             $pedido->detalles->each(function ($detalle) {
                 $producto = Producto::find($detalle->producto_id);
@@ -47,6 +50,16 @@ class PedidoObserver
                     ]);
                 }
             });
+
+            Movimiento::create([
+                'user_id' => Auth::id(),
+                'cliente_id' => $pedido->cliente_id,
+                'tipo' => 'ingreso',
+                'total' => $pedido->total,
+                'descripcion' => "Pedido_$pedido->id",
+                'fecha' => now(),
+
+            ]);
         }
     }
     }

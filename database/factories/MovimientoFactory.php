@@ -17,11 +17,7 @@ class MovimientoFactory extends Factory
         return [
             'nro' => strtoupper($this->faker->bothify('MOV-####')),
             'fecha' => $this->faker->date(),
-            'nombre' => $this->faker->words(2, true),
             'descripcion' => $this->faker->sentence(),
-            'cantidad' => $cantidad,
-            'umedida' => $this->faker->randomElement(['unidad', 'kg', 'litro', 'metro']),
-            'precio' => $precio,
             'total' => $cantidad * $precio,
             'tipo' => $this->faker->randomElement(['ingreso', 'egreso']),
             'user_id' => \App\Models\User::all('id')->random(),

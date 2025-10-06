@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { DetallePedido } from '@/interfaces/Pedidos.Interface';
 import { Producto } from '@/interfaces/Productos.Interface';
 import { Button } from '../ui/button';
+import { Trash } from 'lucide-react';
 
 interface Props {
   detalles: DetallePedido[];
@@ -41,7 +42,7 @@ const PedidoDetalles: FC<Props> = ({detalles, productos, addDetalle, updateDetal
     <div className="mt-4 mb-4">
       <label className="block font-bold mb-2">Detalles</label>
       <table className="w-full border border-gray-300">
-        <thead className="bg-gray-100">
+        <thead className="">
           <tr>
             <th className="border px-2 py-1">Producto</th>
             <th className="border px-2 py-1">Cantidad</th>
@@ -102,13 +103,12 @@ const PedidoDetalles: FC<Props> = ({detalles, productos, addDetalle, updateDetal
                 )}
               </td>
               <td className="border px-2 py-1 text-center">
-                <button
-                  type="button"
-                  onClick={() => removeDetalle(index)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
+                <Button
+                    variant={'destructive'}
+                    onClick={() => removeDetalle(index)}
                 >
-                  X
-                </button>
+                  <Trash size={16} />
+                </Button>
               </td>
             </tr>
           ))}

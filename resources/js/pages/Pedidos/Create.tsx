@@ -44,6 +44,9 @@ export default function Create({ productos }: Props) {
         <Button variant={'default'} onClick={() => router.visit('/pedidos/create')} className="mb-4">
           Nuevo Pedido
         </Button>
+        <Button variant={'secondary'} onClick={()=> router.visit(`/pedidos`)}>
+            Volver
+        </Button>
 
         <PedidoForm
           form={form}

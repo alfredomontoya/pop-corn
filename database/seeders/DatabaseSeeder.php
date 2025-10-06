@@ -39,16 +39,16 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            // ClienteSeeder::class,
-            // CategoriaSeeder::class,
-            // ProductoSeeder::class,
+            ClienteSeeder::class,
+            CategoriaSeeder::class,
+            ProductoSeeder::class,
             // // ProductoImagenSeeder::class,
             // // ProductoPrecioSeeder::class,
             // TipoPagoSeeder::class,
             // VentaSeeder::class,
             // DetalleVentaSeeder::class,
-            // MovimientoSeeder::class,
-            // PedidoSeeder::class,
+            MovimientoSeeder::class,
+            PedidoSeeder::class,
             // CaptacionSeeder::class,
         ]);
     }

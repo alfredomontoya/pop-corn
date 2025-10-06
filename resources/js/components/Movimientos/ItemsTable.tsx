@@ -29,11 +29,8 @@ const ItemsTable = ({ movimientos }: Props) => {
               <th className="p-2 border">Nro</th>
               <th className="p-2 border">Tipo</th>
               <th className="p-2 border">Fecha</th>
-              <th className="p-2 border">Nombre</th>
-              <th className="p-2 border">Precio</th>
-              <th className="p-2 border">Cantidad</th>
-              <th className="p-2 border">U. Medida</th>
               <th className="p-2 border">Total</th>
+              <th className="p-2 border">Descripcion</th>
               <th className="p-2 border">Acciones</th>
             </tr>
           </thead>
@@ -47,12 +44,9 @@ const ItemsTable = ({ movimientos }: Props) => {
                   {m.tipo}
                 </td>
                 <td className="border p-2">{formatDate(m.fecha)}</td>
-                <td className="border p-2">{m.nombre}</td>
-                <td className="border p-2 text-right">{m.precio}</td>
-                <td className="border p-2 text-right">{m.cantidad}</td>
-                <td className="border p-2">{m.umedida}</td>
                 <td className="border p-2 text-right">{m.total}</td>
-                
+                <td className="border p-2 text-left">{m.descripcion}</td>
+
                 <td className="border p-2">
                   <Link
                     href={`/movimientos/${m.id}/edit`}
