@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             'ventas',
             'detalle_ventas',
             'movimientos',
+            'estado_pedidos',
             'pedidos',
             'detalle_pedidos',
         ]);
@@ -48,6 +49,7 @@ class DatabaseSeeder extends Seeder
             // VentaSeeder::class,
             // DetalleVentaSeeder::class,
             MovimientoSeeder::class,
+            EstadoPedidoSeeder::class,
             PedidoSeeder::class,
             // CaptacionSeeder::class,
         ]);

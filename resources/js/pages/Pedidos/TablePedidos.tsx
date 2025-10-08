@@ -14,6 +14,8 @@ interface Props {
 
 const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
 
+    console.log(pedidos)
+
     const renderEstado = (estado: string) => {
         let count = 0;
         if (estado === "pendiente") count = 1;
@@ -65,7 +67,7 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
                     <td className="border px-4 py-2 cursor-pointer">{p.cliente?.nombre_razon_social}</td>
                     <td className="border px-4 py-2 cursor-pointer">{p.user?.name}</td>
                     <td className="border px-4 py-2 cursor-pointer">{new Date(p.fecha).toLocaleDateString("es-ES")}</td>
-                    <td className="border px-4 py-2 cursor-pointer">{renderEstado(p.estado)}</td>
+                    <td className="border px-4 py-2 cursor-pointer">{p.estadoPedido?.estado}</td>
                     <td className="border px-4 py-2 cursor-pointer">{p.total}</td>
                     <td className="border px-4 py-2 space-x-2">
 

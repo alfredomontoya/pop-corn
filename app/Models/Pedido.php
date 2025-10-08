@@ -12,6 +12,7 @@ class Pedido extends Model
     protected $fillable = [
         'cliente_id',
         'user_id',
+        'estado_pedido_id',
         'nro',
         'fecha',
         'estado',
@@ -25,6 +26,10 @@ class Pedido extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function estadoPedido() {
+        return $this->belongsTo(EstadoPedido::class);
     }
 
     public function detalles() {

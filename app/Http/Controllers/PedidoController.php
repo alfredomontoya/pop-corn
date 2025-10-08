@@ -19,7 +19,7 @@ class PedidoController extends Controller
     {
         try {
             $pedidos = Pedido::query()
-                ->with(['cliente', 'user', 'detalles.producto'])
+                ->with(['cliente', 'user', 'detalles.producto', 'estadoPedido'])
                 ->when(request('search'), function ($query, $search) {
                     $query->where('id', 'like', "%{$search}%")
                         ->orWhere('observacion', 'like', "%{$search}%")
@@ -31,9 +31,10 @@ class PedidoController extends Controller
                     request('direction', 'desc') ?? 'desc'
                 )
                 ->paginate(5);
-            $pedidos_pendientes = Pedido::with(['detalles.producto', 'user'])->where('estado', 'pendiente')->get();
-            $pedidos_preparados = Pedido::with(['detalles.producto'])->where('estado', 'preparado')->get();
-            $pedidos_entregados = Pedido::with(['detalles.producto', 'user'])->where('estado', 'entregado')->get();
+
+                $pedidos_pendientes = Pedido::with(['detalles.producto', 'user'])->where('estado_pedido_id', 1)->get();
+                $pedidos_preparados = Pedido::with(['detalles.producto'])->where('estado_pedido_id', 2)->get();
+                $pedidos_entregados = Pedido::with(['detalles.producto', 'user'])->where('estado_pedido_id', 3)->get();
 
             $totales_pendientes = [
                 'grandes' => $pedidos_pendientes->sum(fn($p) =>
@@ -50,6 +51,8 @@ class PedidoController extends Controller
                 ),
             ];
 
+            // dd($totales_pendientes);
+
             $totales_preparados = [
                 'grandes' => $pedidos_preparados->sum(fn($p) =>
                     $p->detalles->where('producto.nombre', 'Grande')->sum('cantidad')
@@ -64,6 +67,8 @@ class PedidoController extends Controller
                     $p->detalles->sum('subtotal')
                 ),
             ];
+
+            // dd($totales_preparados);
 
             $totales_entregados = [
                 'grandes' => $pedidos_entregados->sum(fn($p) =>

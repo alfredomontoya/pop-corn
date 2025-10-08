@@ -1,14 +1,21 @@
 import { Cliente } from "./Clientes.Interface";
 
+export interface EstadoPedido{
+    id: number;
+    estado: string;
+}
+
 export interface Pedido {
   id: number;
   nro: number;
   cliente_id: string;
-  cliente?: Cliente
   user_id: string;
+  estado_pedido_id: string;
+  cliente?: Cliente
+  estado_pedido?: EstadoPedido;
   user?: { name: string };
   fecha: string;
-  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado' | 'pagado';
+  estado: 'activo' | 'anulado';
   observacion?: string;
   total: number;
   detalles: DetallePedido[];
