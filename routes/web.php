@@ -84,6 +84,11 @@ Route::middleware(['auth', SetUserId::class])->group(function () {
         Route::put('/{id}/entregar', [PedidoController::class, 'entregar'])
             ->middleware('role:admin,entrega')
             ->name('pedidos.entregar');
+
+        // Pagar pedido → Produccion
+        Route::put('/{id}/pagar', [PedidoController::class, 'pagar'])
+            ->middleware('role:admin,entrega')
+            ->name('pedidos.pagar');
     });
 
     Route::resource('captaciones', CaptacionController::class);

@@ -217,12 +217,33 @@ class PedidoController extends Controller
             $pedido->save();
 
             return response()->json([
-                'message' => 'Pedido procesado correctamente',
+                'message' => 'Pedido entregado correctamente',
                 'estado' => $estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Error al procesar pedido',
+                'message' => 'Error al entregar pedido',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function pagar($id) {
+        // dd($request->all());
+        $estado = 'pagado';
+        try {
+            //code...
+            $pedido = Pedido::find($id);
+            $pedido->estado = $estado;
+            $pedido->save();
+
+            return response()->json([
+                'message' => 'Pedido pagado correctamente',
+                'estado' => $estado
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error al pagar pedido',
                 'error' => $e->getMessage()
             ], 400);
         }

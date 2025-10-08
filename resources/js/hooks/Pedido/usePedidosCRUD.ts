@@ -67,6 +67,11 @@ export default function usePedidosCRUD() {
       return  await axios.put(url);
   };
 
+  // Preparar pedido
+  const pagarPedido = async (url: string): Promise<AxiosResponse<any>> => {
+      return  await axios.put(url);
+  };
+
   // Eliminar pedido
   const deletePedido = async (url: string, id: number): Promise<void> => {
     if (!confirm('¿Deseas eliminar este pedido?')) return;
@@ -78,5 +83,5 @@ export default function usePedidosCRUD() {
     }
   };
 
-  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido, prepararPedido, entregarPedido };
+  return { pedidos, fetchPedidos, createPedido, updatePedido, deletePedido, prepararPedido, entregarPedido, pagarPedido };
 }

@@ -40,7 +40,7 @@ class PedidoObserver
 
         // Caso 2: entregado → disminuir stock
         //          Crear movimiento
-        if ($pedido->estado === 'entregado') {
+        if ($pedido->estado === 'pagado') {
             $pedido->detalles->each(function ($detalle) {
                 $producto = Producto::find($detalle->producto_id);
 

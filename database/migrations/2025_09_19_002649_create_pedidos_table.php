@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('user_id');
             // $table->integer('nro')->unique()->defu;
             $table->date('fecha');
-            $table->enum('estado', ['pendiente', 'preparado', 'cancelado', 'entregado'])->default('pendiente');
+            $table->enum('estado', ['pendiente', 'preparado', 'cancelado', 'entregado', 'pagado'])->default('pendiente');
             $table->decimal('total', 10, 2)->default(0);
             $table->text('observacion')->nullable();
             $table->timestamps();

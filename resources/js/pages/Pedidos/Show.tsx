@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Show({ pedido }: Props) {
-    const { prepararPedido, entregarPedido } = usePedidosCRUD();
+    const { prepararPedido, entregarPedido, pagarPedido } = usePedidosCRUD();
     const [estadoPedido, setEstadoPedido] = useState(pedido.estado??'pendiente')
 
     const handlePreparar = async () => {
@@ -20,8 +20,8 @@ export default function Show({ pedido }: Props) {
             const response = await prepararPedido(`/pedidos/${pedido.id}/preparar`);
 
             if (response?.status === 200) {
-            setEstadoPedido(response.data.estado);
-            alert("Pedido preparado con éxito");
+                setEstadoPedido(response.data.estado);
+                alert("Pedido preparado con éxito");
             }
         } catch (error: any) {
             // error.response solo existe si es un error de Axios
@@ -49,6 +49,25 @@ export default function Show({ pedido }: Props) {
         }
 
     }
+
+    const handlePagar = async() => {
+        if (!confirm("¿Deseas entregar este pedido?")) return; // manejo del confirm aquí
+
+        try {
+            const response = await pagarPedido(`/pedidos/${pedido.id}/pagar`);
+
+            if (response?.status === 200) {
+            setEstadoPedido(response.data.estado);
+            alert("Pedido pagado con éxito");
+            }
+        } catch (error: any) {
+            // error.response solo existe si es un error de Axios
+            const message = error.response?.data?.message || error.message || "Ocurrió un error al entregar el pedido";
+            console.error("ERROR:", message);
+            alert(message);
+        }
+
+    }
   return (
     <AppLayout breadcrumbs={[
       { title: 'Pedidos', href: '/pedidos' },
@@ -66,6 +85,9 @@ export default function Show({ pedido }: Props) {
           </Button>
           <Button disabled = {estadoPedido!=='preparado' ? true: false}  variant="default" className='mr-1' onClick={ () => handleEntregar() }>
             Entregar
+          </Button>
+          <Button disabled = {estadoPedido!=='entregado' ? true: false}  variant="default" className='mr-1' onClick={ () => handlePagar() }>
+            Pagar
           </Button>
         </div>
 

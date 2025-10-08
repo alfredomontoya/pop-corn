@@ -8,7 +8,7 @@ export interface Pedido {
   user_id: string;
   user?: { name: string };
   fecha: string;
-  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado';
+  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado' | 'pagado';
   observacion?: string;
   total: number;
   detalles: DetallePedido[];
@@ -25,7 +25,7 @@ export interface PedidoFormData {
   cliente_id: string;
   user_id: string;
   fecha: string;
-  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado';
+  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado' | 'pagado';
 //   detalles: DetallePedido[];
   observacion?: string;
   [key: string]: string | DetallePedido[] | undefined; // para tipado flexible
