@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             // TipoPagoSeeder::class,
             // VentaSeeder::class,
             // DetalleVentaSeeder::class,
-            MovimientoSeeder::class,
+            // MovimientoSeeder::class,
             EstadoPedidoSeeder::class,
             PedidoSeeder::class,
             // CaptacionSeeder::class,

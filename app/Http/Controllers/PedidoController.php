@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Pedido\StorePedidoRequest;
 use App\Http\Requests\Pedido\UpdatePedidoRequest;
+use App\Models\EstadoPedido;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,8 @@ class PedidoController extends Controller
                 ->when(request('search'), function ($query, $search) {
                     $query->where('id', 'like', "%{$search}%")
                         ->orWhere('observacion', 'like', "%{$search}%")
-                        ->orWhereHas('cliente', fn($q) => $q->where('nombre_razon_social', 'like', "%{$search}%"));
+                        ->orWhereHas('cliente', fn($q) => $q->where('nombre_razon_social', 'like', "%{$search}%"))
+                        ->orWhereHas('estadoPedido', fn($q) => $q->where('estado', 'like', "%{$search}%"));
                         // ->orWhereHas('observacion', fn($q) => $q->where('observacion', 'like', "%{$search}%"));
                 })
                 ->orderBy(
@@ -109,7 +111,8 @@ class PedidoController extends Controller
         $pedido = Pedido::with([
             'cliente',
             'user',
-            'detalles.producto' // importante: cargar producto en cada detalle
+            'detalles.producto', // importante: cargar producto en cada detalle
+            'estadoPedido',
         ])->findOrFail($id);
 
         return Inertia::render('Pedidos/Show', [
@@ -193,16 +196,16 @@ class PedidoController extends Controller
 
     public function preparar($id) {
         // dd($request->all());
-        $estado = 'preparado';
+        $estadoPedido = EstadoPedido::where('estado', 'preparado')->first();
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado = $estado;
+            $pedido->estado_pedido_id = $estadoPedido->id;
             $pedido->save();
 
             return response()->json([
                 'message' => 'Pedido procesado correctamente',
-                'estado' => $estado
+                'estado' => $estadoPedido->estado,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -214,16 +217,16 @@ class PedidoController extends Controller
 
     public function entregar($id) {
         // dd($request->all());
-        $estado = 'entregado';
+        $estadoPedido = EstadoPedido::where('estado', 'entregado')->first();
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado = $estado;
+            $pedido->estado_pedido_id = $estadoPedido->id;
             $pedido->save();
 
             return response()->json([
                 'message' => 'Pedido entregado correctamente',
-                'estado' => $estado
+                'estado' => $estadoPedido->estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -235,16 +238,16 @@ class PedidoController extends Controller
 
     public function pagar($id) {
         // dd($request->all());
-        $estado = 'pagado';
+        $estadoPedido = EstadoPedido::where('estado', 'pagado')->first();
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado = $estado;
+            $pedido->estado_pedido_id = $estadoPedido->id;
             $pedido->save();
 
             return response()->json([
                 'message' => 'Pedido pagado correctamente',
-                'estado' => $estado
+                'estado' => $estadoPedido->estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([

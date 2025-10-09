@@ -23,45 +23,47 @@ class PedidoObserver
     public function updated(Pedido $pedido): void
     {
         // Solo si cambió el campo estado
-    if ($pedido->wasChanged('estado')) {
+        if ($pedido->wasChanged('estado_pedido_id')) {
 
-        // Caso 1: preparado → aumentar stock
-        if ($pedido->estado === 'preparado') {
-            $pedido->detalles->each(function ($detalle) {
-                $producto = Producto::find($detalle->producto_id);
+            // Caso 1: preparado → aumentar stock
+            if ($pedido->estadoPedido->estado === 'preparado') {
+                $pedido->detalles->each(function ($detalle) {
+                    $producto = Producto::find($detalle->producto_id);
 
-                if ($producto) {
-                    $producto->update([
-                        'stock_actual' => $producto->stock_actual + $detalle->cantidad
-                    ]);
-                }
-            });
+                    if ($producto) {
+                        $producto->update([
+                            'stock_actual' => $producto->stock_actual + $detalle->cantidad
+                        ]);
+                    }
+                });
+            }
+
+            // Caso 2: entregado → disminuir stock
+            if ($pedido->estadoPedido->estado === 'entregado') {
+                $pedido->detalles->each(function ($detalle) {
+                    $producto = Producto::find($detalle->producto_id);
+
+                    if ($producto) {
+                        $producto->update([
+                            'stock_actual' => $producto->stock_actual - $detalle->cantidad
+                        ]);
+                    }
+                });
+
+            }
+            // Caso 3: Crear movimiento
+            if ($pedido->estadoPedido->estado === 'pagado') {
+                Movimiento::create([
+                    'user_id' => Auth::id(),
+                    'cliente_id' => $pedido->cliente_id,
+                    'tipo' => 'ingreso',
+                    'total' => $pedido->total,
+                    'descripcion' => "Pedido_$pedido->id",
+                    'fecha' => now(),
+
+                ]);
+            }
         }
-
-        // Caso 2: entregado → disminuir stock
-        //          Crear movimiento
-        if ($pedido->estado === 'pagado') {
-            $pedido->detalles->each(function ($detalle) {
-                $producto = Producto::find($detalle->producto_id);
-
-                if ($producto) {
-                    $producto->update([
-                        'stock_actual' => $producto->stock_actual - $detalle->cantidad
-                    ]);
-                }
-            });
-
-            Movimiento::create([
-                'user_id' => Auth::id(),
-                'cliente_id' => $pedido->cliente_id,
-                'tipo' => 'ingreso',
-                'total' => $pedido->total,
-                'descripcion' => "Pedido_$pedido->id",
-                'fecha' => now(),
-
-            ]);
-        }
-    }
     }
 
     /**

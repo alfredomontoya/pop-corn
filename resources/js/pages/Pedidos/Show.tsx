@@ -10,8 +10,9 @@ interface Props {
 }
 
 export default function Show({ pedido }: Props) {
+    console.log(pedido)
     const { prepararPedido, entregarPedido, pagarPedido } = usePedidosCRUD();
-    const [estadoPedido, setEstadoPedido] = useState(pedido.estado??'pendiente')
+    const [estadoPedido, setEstadoPedido] = useState(pedido.estado_pedido.estado??'pendiente')
 
     const handlePreparar = async () => {
         if (!confirm("¿Deseas preparar este pedido?")) return; // manejo del confirm aquí
@@ -71,10 +72,10 @@ export default function Show({ pedido }: Props) {
   return (
     <AppLayout breadcrumbs={[
       { title: 'Pedidos', href: '/pedidos' },
-      { title: `Pedido #${pedido.nro}`, href: `/pedidos/${pedido.id}` }
+      { title: `Pedido #${pedido.id}`, href: `/pedidos/${pedido.id}` }
     ]}>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Detalle del Pedido</h1>
+        <h1 className="text-2xl font-bold mb-4">Detalle del Pedido {pedido.id}</h1>
 
         <div className="mb-4">
           <Button variant="default" className='mr-1' onClick={() => router.visit(`/pedidos`)}>
@@ -93,9 +94,10 @@ export default function Show({ pedido }: Props) {
 
         <div className="rounded-xl shadow p-4 mb-6 dark:bg-white/10">
           <h2 className="text-xl font-semibold mb-2">Información del Pedido</h2>
-          <p><strong>Número:</strong> {pedido.nro}</p>
+          <p><strong>Id:</strong> {pedido.id}</p>
           <p><strong>Fecha:</strong> {pedido.fecha}</p>
-          <p><strong>Estado:</strong> {estadoPedido}</p>
+          <p><strong>Estado:</strong> {pedido.estado}</p>
+          <p><strong>Estado Pedido:</strong> {estadoPedido}</p>
           <p><strong>Total:</strong> {pedido.total}</p>
           <p><strong>Cliente:</strong> {pedido.cliente?.nombre_razon_social},  {pedido.cliente?.propietario}</p>
           <p><strong>Usuario:</strong> {pedido.user?.name}</p>

@@ -18,23 +18,49 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
 
     const renderEstado = (estado: string) => {
         let count = 0;
-        if (estado === "pendiente") count = 1;
-        if (estado === "preparado") count = 2;
-        if (estado === "entregado") count = 3;
-        if (estado === "pagado") count = 4;
+        let color = 'blue'
+        let text = 'white'
+        if (estado === "pendiente") {
+            count = 1; //warning
+            color = 'yellow-500'
+            text = 'white'
+        }
+        if (estado === "preparado"){
+            count = 2; //success
+            color = 'green-500'
+            text = 'white'
+        }
+        if (estado === "entregado-500"){
+            count = 3; //primary
+            color = 'blue'
+            text = 'white'
+        }
+        if (estado === "pagado"){
+            count = 4; //secondary
+            color = 'gray-300'
+            text = 'text-gray dark:text-black'
+        }
 
 
 
         return (
-        <div className="flex gap-1 justify-center">
-            {Array.from({ length: count }).map((_, i) => (
-            <Check key={i} className="w-5 h-5 text-green-600" />
-            ))}
-        </div>
+            <div className={`flex gap-1 justify-center bg-${color} ${text} rounded-full px-2`}>
+                {/* {Array.from({ length: count }).map((_, i) => (
+                <Check key={i} className="w-5 h-5 text-green-600" />
+                ))} */}
+                {estado}
+            </div>
         );
     };
 
-    const handleShow = (id: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleShow = (id: number, e: React.MouseEvent<HTMLTableRowElement>) => {
+        e.stopPropagation()
+        const selection = window.getSelection();
+        if (selection && selection.toString().length > 0) {
+            // Hay texto seleccionado → no navegar
+            return;
+        }
+
         router.visit(`/pedidos/${id}`);
     }
 
@@ -62,12 +88,12 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
         </thead>
         <tbody>
             {pedidos.data.map(p => (
-                <tr className='border px-4 py-2 cursor-pointer' key={p.id} onClick={(e) => handleShow(p.id)}>
+                <tr className='border px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-white/20' key={p.id} onClick={(e) => handleShow(p.id, e)}>
                     <td className="border px-4 py-2 cursor-pointer">{p.id}</td>
                     <td className="border px-4 py-2 cursor-pointer">{p.cliente?.nombre_razon_social}</td>
                     <td className="border px-4 py-2 cursor-pointer">{p.user?.name}</td>
                     <td className="border px-4 py-2 cursor-pointer">{new Date(p.fecha).toLocaleDateString("es-ES")}</td>
-                    <td className="border px-4 py-2 cursor-pointer">{p.estadoPedido?.estado}</td>
+                    <td className="border px-4 py-2 cursor-pointer">{renderEstado(p.estado_pedido?.estado)}</td>
                     <td className="border px-4 py-2 cursor-pointer">{p.total}</td>
                     <td className="border px-4 py-2 space-x-2">
 

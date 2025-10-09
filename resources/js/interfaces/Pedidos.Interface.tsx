@@ -7,12 +7,11 @@ export interface EstadoPedido{
 
 export interface Pedido {
   id: number;
-  nro: number;
   cliente_id: string;
   user_id: string;
   estado_pedido_id: string;
   cliente?: Cliente
-  estado_pedido?: EstadoPedido;
+  estado_pedido: EstadoPedido;
   user?: { name: string };
   fecha: string;
   estado: 'activo' | 'anulado';
