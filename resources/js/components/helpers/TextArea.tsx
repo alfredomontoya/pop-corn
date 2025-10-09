@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
 
-interface TextAreaProps {
+interface TextAreaProps{
   label: string;
   placeholder?: string;
   value: any;

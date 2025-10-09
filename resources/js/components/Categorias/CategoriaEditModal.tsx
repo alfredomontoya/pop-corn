@@ -57,7 +57,7 @@ const CategoriaEditModal: React.FC<EditModalProps> = ({ categoria, onClose, onSa
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="p-6 rounded w-96 bg-neutral-100 dark:bg-neutral-800">
+      <div className="p-6 rounded w-96 bg-primary-foreground">
         <h2 className="text-xl font-bold mb-4">Editar Categoría</h2>
         <form onSubmit={handleSubmit}>
           <Input

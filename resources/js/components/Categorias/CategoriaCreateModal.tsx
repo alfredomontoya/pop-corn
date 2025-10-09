@@ -1,17 +1,25 @@
 import React, { useState } from "react"
+import axios from "axios"
 import { router } from "@inertiajs/react"
 import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { TextArea } from "../helpers/TextArea"
+import { Label } from "../ui/label"
+import { Categoria, CreateCategoria } from "@/interfaces/Categorias.Interface"
 
 interface CreateModalProps {
   onClose: () => void
   onSaved: (msg: string) => void
 }
 
-const CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
-  const [nombre, setNombre] = useState("")
+const
+CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
+  const [nombre, setNombre] = useState(null)
   const [descripcion, setDescripcion] = useState("")
   const [imagen, setImagen] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+
+  const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
@@ -24,69 +32,62 @@ const CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) 
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
-    const formData = new FormData()
-    formData.append("nombre", nombre)
-    formData.append("descripcion", descripcion)
-    if (imagen) formData.append("imagen", imagen)
+    // const formData = new FormData()
+    // formData.append("nombre", nombre)
+    // formData.append("descripcion", descripcion)
+    // if (imagen) formData.append("imagen", imagen)
 
-    router.post("/categorias", formData, {
-      onSuccess: () => {
-        onClose()
-        onSaved(`Categoría '${nombre}' creada correctamente ✅`)
-      },
-    })
+    // router.post("/categorias", formData, {
+    //   onSuccess: () => {
+    //     onClose()
+    //     onSaved(`Categoría '${nombre}' creada correctamente ✅`)
+    //   },
+    // })
+
+    const categoria: CreateCategoria = {
+        nombre: nombre,
+        descripcion: descripcion
+    }
+
+    try {
+        await axios.post('/categorias', categoria)
+    } catch (err: any) {
+      console.log('Errores de validación:', err);
+      setErrors(err);
+    }
   }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="p-6 rounded w-96 bg-neutral-100 dark:bg-neutral-800">
+      <div className="p-6 rounded w-96 bg-primary-foreground shadow-lg">
         <h2 className="text-xl font-bold mb-4">Nueva Categoría</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
 
           {/* Nombre con label flotante */}
           <div className="relative">
-            <input
+            <Label htmlFor="nombre">Nombre</Label>
+            <Input
               type="text"
               id="nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Nombre"
-              required
-              className="peer w-full border rounded-lg p-2 pt-5 focus:outline-none focus:border-blue-500"
             />
-            <label
-              htmlFor="nombre"
-              className="absolute left-2 top-2 text-gray-500 text-sm
-                         peer-placeholder-shown:top-5
-                         peer-placeholder-shown:text-gray-400
-                         peer-placeholder-shown:text-base
-                         transition-all"
-            >
-              Nombre
-            </label>
+            {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre[0]}</p>}
+
           </div>
 
           {/* Descripción con label flotante */}
           <div className="relative">
-            <textarea
-              id="descripcion"
+            <TextArea
+                label="descripcion"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
               placeholder="Descripción"
-              className="peer w-full border rounded-lg p-2 pt-5 resize-none focus:outline-none focus:border-blue-500"
             />
-            <label
-              htmlFor="descripcion"
-              className="absolute left-2 top-2 text-gray-500 text-sm
-                         peer-placeholder-shown:top-5
-                         peer-placeholder-shown:text-gray-400
-                         peer-placeholder-shown:text-base
-                         transition-all"
-            >
-              Descripción
-            </label>
+            {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion[0]}</p>}
           </div>
 
           {/* Subir imagen */}

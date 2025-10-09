@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             // DetalleVentaSeeder::class,
             // MovimientoSeeder::class,
             EstadoPedidoSeeder::class,
-            PedidoSeeder::class,
+            // PedidoSeeder::class,
             // CaptacionSeeder::class,
         ]);
     }

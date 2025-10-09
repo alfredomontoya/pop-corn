@@ -14,10 +14,10 @@ class ClienteSeeder extends Seeder
     public function run(): void
     {
         // Crea 10 clientes de ejemplo
-        Cliente::factory()
-            ->count(10)
-            ->create();
+
         Cliente::factory(['nombre_razon_social' => 'Tigo', 'propietario' => 'Gabriela'])
+            ->create();
+        Cliente::factory(['nombre_razon_social' => 'Pentagol', 'propietario' => 'Diego'])
             ->create();
     }
 }

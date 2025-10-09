@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { usePage, router } from "@inertiajs/react";
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { usePage, router  } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import CategoriaItemsTable from "@/components/Categorias/CatgoriaItemsTable";
 import CategoriaCreateModal from "@/components/Categorias/CategoriaCreateModal";
@@ -33,12 +34,29 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
   const [editCategoria, setEditCategoria] = useState<Categoria | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Categoria | null>(null);
   const [detailCategoria, setDetailCategoria] = useState<Categoria | null>(null);
+  const [resultCategorias, setResultCategorias] = useState<PaginatedCategorias>(categorias)
 
-  const handleDelete = (categoria: Categoria) => {
-    router.delete(`/categorias/${categoria.id}`, {
-      onSuccess: () =>
-        setToastMessage(`Categoría '${categoria.nombre}' eliminada correctamente.`),
-    });
+  const handleDelete = async(categoria: Categoria) => {
+    // router.delete(`/categorias/${categoria.id}`, {
+    //     onSuccess: () =>{
+    //         console.log('result eliminar categoria')
+    //         // console.log(result)
+    //         setToastMessage(`Categoría '${categoria.nombre}' eliminada correctamente.`)
+    //     },
+    //     onError: () => {
+    //         console.log('error eliminar categoria')
+    //         // console.log(error)
+    //     },
+    // });
+    try{
+        const {data} = await axios.delete(`/categorias/${categoria.id}`)
+        setResultCategorias(data.categorias)
+
+        setToastMessage(data.message)
+    } catch (error: any){
+        const {response} = await error
+        setToastMessage(response.data.message)
+    }
     setConfirmDelete(null);
   };
 
@@ -68,7 +86,7 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
 
         {/* Tabla de categorías */}
         <CategoriaItemsTable
-          categorias={categorias}
+          categorias={resultCategorias}
           filters={filters}
           onEdit={setEditCategoria}
           onDelete={setConfirmDelete}

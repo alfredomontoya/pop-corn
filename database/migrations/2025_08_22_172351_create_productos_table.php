@@ -20,7 +20,7 @@ return new class extends Migration {
       $table->unsignedBigInteger('updated_by')->nullable(); // último editor
       $table->timestamps();
 
-      $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
+      $table->foreign('categoria_id')->references('id')->on('categorias');
       $table->foreign('user_id')->references('id')->on('users');
       $table->foreign('updated_by')->references('id')->on('users');
     });

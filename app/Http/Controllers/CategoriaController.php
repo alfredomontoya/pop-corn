@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -35,7 +37,7 @@ class CategoriaController extends Controller
     }
 
     // Crear categoría
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
@@ -56,8 +58,13 @@ class CategoriaController extends Controller
         $categoria = Categoria::create($data);
 
         // Redirige con mensaje para el toast
-        return redirect()->route('categorias.index')
-            ->with('success', "Categoría '{$categoria->nombre}' creada con éxito.");
+        return response()->json([
+            'success' => true,
+            'message' => "Categoría '{$categoria->nombre}' creada con éxito.",
+            'categoria' => $categoria
+        ], 200);
+        // return redirect()->route('categorias.index')
+        //     ->with('success', "Categoría '{$categoria->nombre}' creada con éxito.");
     }
 
     // Editar categoría
@@ -84,10 +91,27 @@ class CategoriaController extends Controller
     // Dar de baja categoría
     public function destroy(Categoria $categoria)
     {
-        $nombre = $categoria->nombre;
-        $categoria->delete();
+        try{
+            $nombre = $categoria->nombre;
+            $categoria->delete();
 
-        return redirect()->route('categorias.index')
-            ->with('success', "Categoría '{$nombre}' eliminada correctamente.");
+            return response()->json([
+                'success' => true,
+                'message' => "Categoria '{$nombre}' eliminada con exito",
+                'categoria' => $categoria,
+                'categorias' => Categoria::paginate(5)
+            ], 200);
+
+            // return redirect()->route('categorias.index')
+            //     ->with('success', "Categoría '{$nombre}' eliminada correctamente.");
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar categoria',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+
     }
 }
