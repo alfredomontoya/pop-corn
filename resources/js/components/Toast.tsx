@@ -6,7 +6,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
+const Toast: React.FC<ToastProps> = ({ message, duration = 5000, onClose }) => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Toast: React.FC<ToastProps> = ({ message, duration = 3000, onClose }) => {
 
   return (
     <div className="fixed top-5 right-5 z-50">
-      <div className="bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+      <div className="bg-green-800 px-4 py-2 rounded shadow-lg">
         {message}
       </div>
     </div>

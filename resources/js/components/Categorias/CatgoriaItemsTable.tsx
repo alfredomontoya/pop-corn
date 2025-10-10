@@ -2,7 +2,7 @@ import React from "react";
 import { router } from "@inertiajs/react";
 import Pagination from "@/components/Pagination";
 import { Categoria, PaginatedCategorias } from "@/interfaces/Categorias.Interface";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown, Edit3, Trash} from "lucide-react";
 import { Button } from "../ui/button";
 
 interface Props {
@@ -63,14 +63,14 @@ const CategoriaItemsTable: React.FC<Props> = ({ categorias, filters, onEdit, onD
                   {cat.imagen ? (
                     <img
                       src={cat.imagen?.startsWith('http') ? cat.imagen : `/storage/${cat.imagen}`}
-                      alt={cat.nombre}
+                      alt={cat.nombre??''}
                       className="w-12 h-12 object-cover rounded"
                       loading="lazy"
                     />
                   ) : (
                     <img
                       src={`/images/default-category.png`}
-                      alt={cat.nombre}
+                      alt={cat.nombre??''}
                       className="w-12 h-12 object-cover rounded"
                       loading="lazy"
                     />
@@ -78,7 +78,7 @@ const CategoriaItemsTable: React.FC<Props> = ({ categorias, filters, onEdit, onD
                 </td>
                 <td className="px-4 py-2">{cat.nombre}</td>
                 <td className="px-4 py-2">{cat.descripcion}</td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-4 py-2 space-x-2 text-center">
                   <Button
                     onClick={(e) => {
                         e.stopPropagation();
@@ -87,7 +87,7 @@ const CategoriaItemsTable: React.FC<Props> = ({ categorias, filters, onEdit, onD
                     variant={"warning"}
                     className="px-2 py-1"
                   >
-                    Editar
+                    <Edit3 />
                   </Button>
                   <Button
                     onClick={(e) => {
@@ -97,7 +97,7 @@ const CategoriaItemsTable: React.FC<Props> = ({ categorias, filters, onEdit, onD
                     variant={"destructive"}
                     className="px-2 py-1"
                   >
-                    Eliminar
+                    <Trash />
                   </Button>
                 </td>
               </tr>

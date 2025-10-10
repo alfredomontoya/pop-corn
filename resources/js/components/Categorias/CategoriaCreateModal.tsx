@@ -1,54 +1,57 @@
 import React, { useState } from "react"
 import axios from "axios"
-import { router } from "@inertiajs/react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { TextArea } from "../helpers/TextArea"
 import { Label } from "../ui/label"
-import { Categoria, CreateCategoria } from "@/interfaces/Categorias.Interface"
 
 interface CreateModalProps {
   onClose: () => void
   onSaved: (msg: string) => void
 }
 
-const
-CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved}) => {
-  const [nombre, setNombre] = useState('')
-  const [descripcion, setDescripcion] = useState("")
-  const [imagen, setImagen] = useState<File | null>(null)
+const CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
+  const [form, setForm] = useState({
+    nombre: "",
+    descripcion: "",
+    imagen: null as File | null,
+  })
+
   const [preview, setPreview] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Record<string, string[]>>({})
 
-  const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null
-    setImagen(file)
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setPreview(url)
-    } else {
-      setPreview(null)
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+    setForm(prev => ({ ...prev, [id]: value }))
   }
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    setForm(prev => ({ ...prev, imagen: file }))
+    setPreview(file ? URL.createObjectURL(file) : null)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const categoria: CreateCategoria = {
-        nombre: nombre,
-        descripcion: descripcion
-    }
+
+    const formData = new FormData()
+    Object.entries(form).forEach(([key, value]) => {
+      if (value !== null) formData.append(key, value as any)
+    })
 
     try {
-        const { data } = await axios.post('/categorias', categoria)
-        if (data.success){
-            setErrors({})
-            onClose()
-            onSaved(data.message)
-        }
+      const { data } = await axios.post("/categorias", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+
+      if (data.success) {
+        setErrors({})
+        onSaved(data.message)
+        onClose()
+      }
     } catch (err: any) {
-        console.log('Errores de validación:', err.response.data.errors);
-        setErrors(err.response.data.errors);
+      console.error("Errores de validación:", err.response?.data?.errors)
+      setErrors(err.response?.data?.errors || {})
     }
   }
 
@@ -56,57 +59,46 @@ CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved}) => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="p-6 rounded w-96 bg-primary-foreground shadow-lg">
         <h2 className="text-xl font-bold mb-4">Nueva Categoría</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Nombre con label flotante */}
-          <div className="relative">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
             <Label htmlFor="nombre">Nombre</Label>
             <Input
-              type="text"
               id="nombre"
-              value={nombre??''}
-              onChange={(e) => setNombre(e.target.value)}
+              value={form.nombre}
+              onChange={handleChange}
               placeholder="Nombre"
             />
             {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre[0]}</p>}
-
           </div>
 
-          {/* Descripción con label flotante */}
-          <div className="relative">
-            <TextArea
-                label="descripcion"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Descripción"
-            />
-            {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion[0]}</p>}
-          </div>
+          <TextArea
+            label="Descripción"
+            value={form.descripcion}
+            onChange={(val) => setForm(prev => ({ ...prev, descripcion: val }))}
+            placeholder="Descripción"
+            error={errors.descripcion?.[0]}
+          />
 
-          {/* Subir imagen */}
           <div>
-            <label className="block mb-1 font-medium">Imagen</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} className="mb-2" />
+            <Label htmlFor="imagen">Imagen</Label>
+            <input id="imagen" type="file" accept="image/*" onChange={handleFileChange} />
+            {preview && (
+              <div className="mt-2 flex justify-center">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded border"
+                />
+              </div>
+            )}
           </div>
-
-          {/* Preview de imagen */}
-          {preview && (
-            <div className="mb-4 flex justify-center">
-              <img
-                src={preview}
-                alt="Preview"
-                className="w-32 h-32 object-cover rounded border"
-              />
-            </div>
-          )}
 
           <div className="flex justify-end space-x-2">
             <Button type="button" onClick={onClose} variant="secondary">
               Cancelar
             </Button>
-            <Button type="submit" variant="default">
-              Crear
-            </Button>
+            <Button type="submit">Crear</Button>
           </div>
         </form>
       </div>

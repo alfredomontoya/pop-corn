@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Categoria\CategoriaRequest;
 use App\Models\Categoria;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,14 +39,9 @@ class CategoriaController extends Controller
     }
 
     // Crear categoría
-    public function store(Request $request): JsonResponse
+    public function store(CategoriaRequest $request): JsonResponse
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'imagen' => 'nullable|image|max:2048',
-        ]);
-
+        /** @var \Illuminate\Http\Request $request */
         $data = $request->only('nombre', 'descripcion');
 
         if ($request->hasFile('imagen')) {
@@ -52,9 +49,6 @@ class CategoriaController extends Controller
         }
 
         $data['user_id'] = Auth::user()->id;
-
-        // dd($data);
-
         $categoria = Categoria::create($data);
 
         // Redirige con mensaje para el toast
@@ -63,19 +57,14 @@ class CategoriaController extends Controller
             'message' => "Categoría '{$categoria->nombre}' creada con éxito.",
             'categoria' => $categoria
         ], 200);
-        // return redirect()->route('categorias.index')
-        //     ->with('success', "Categoría '{$categoria->nombre}' creada con éxito.");
+
     }
 
     // Editar categoría
-    public function update(Request $request, Categoria $categoria)
+    public function update(CategoriaRequest $request, Categoria $categoria): JsonResponse
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'imagen' => 'nullable|image|max:2048',
-        ]);
 
+        /** @var \Illuminate\Http\Request $request */
         $data = $request->only('nombre', 'descripcion');
 
         if ($request->hasFile('imagen')) {
@@ -84,34 +73,48 @@ class CategoriaController extends Controller
 
         $categoria->update($data);
 
-        return redirect()->route('categorias.index')
-            ->with('success', "Categoría '{$categoria->nombre}' actualizada con éxito.");
+        return response()->json([
+            'success' => true,
+            'message' => "Categoría '{$categoria->nombre}' actualizada con éxito.",
+            'categoria' => $categoria
+        ], 200);
     }
 
     // Dar de baja categoría
     public function destroy(Categoria $categoria)
     {
-        try{
+        try {
             $nombre = $categoria->nombre;
             $categoria->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => "Categoria '{$nombre}' eliminada con exito",
-                'categoria' => $categoria,
-                'categorias' => Categoria::paginate(5)
+                'message' => "Categoría '{$nombre}' eliminada con éxito.",
             ], 200);
 
-            // return redirect()->route('categorias.index')
-            //     ->with('success', "Categoría '{$nombre}' eliminada correctamente.");
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
+            // Código 23000 => violación de integridad referencial
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'success' => false,
+                    'message' => "No se puede eliminar la categoría '{$categoria->nombre}' porque está asociada a uno o más productos.",
+                ], 409); // 409 Conflict
+            }
+
+            // Otros errores de base de datos
             return response()->json([
                 'success' => false,
-                'message' => 'Error al eliminar categoria',
-                'error' => $e->getMessage()
+                'message' => 'Error en la base de datos al eliminar la categoría.',
+                'error' => $e->getMessage(),
+            ], 500);
+
+        } catch (Exception $e) {
+            // Errores no relacionados con la base de datos
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado al eliminar la categoría.',
+                'error' => $e->getMessage(),
             ], 500);
         }
-
-
     }
 }

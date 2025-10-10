@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import { usePage, router  } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import CategoriaItemsTable from "@/components/Categorias/CatgoriaItemsTable";
@@ -27,7 +27,7 @@ interface BreadcrumbItem {
 }
 
 const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
-  const { flash } = usePage().props as any;
+  const { flash, categorias: categoriasFromServer } = usePage().props as any;
   const [toastMessage, setToastMessage] = useState(flash?.success || null);
 
   const [showCreate, setShowCreate] = useState(false);
@@ -36,11 +36,14 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
   const [detailCategoria, setDetailCategoria] = useState<Categoria | null>(null);
   const [resultCategorias, setResultCategorias] = useState<PaginatedCategorias>(categorias)
 
+  useEffect(() => {
+    setResultCategorias(categoriasFromServer);
+  }, [categoriasFromServer]);
+
   const handleDelete = async(categoria: Categoria) => {
     try{
         const {data} = await axios.delete(`/categorias/${categoria.id}`)
-        setResultCategorias(data.categorias)
-
+        router.reload({only: ['categorias']})
         setToastMessage(data.message)
     } catch (error: any){
         const {response} = await error
