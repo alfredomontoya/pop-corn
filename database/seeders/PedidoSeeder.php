@@ -11,7 +11,7 @@ class PedidoSeeder extends Seeder
 {
     public function run(): void
     {
-        Pedido::factory(3)->create(['total' => 0, 'estado_pedido_id' => 1]);
+        Pedido::factory(5)->create(['total' => 0, 'estado_pedido_id' => 1]);
 
         Pedido::all()->each(function($pedido) {
             $total = 0;

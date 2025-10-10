@@ -13,8 +13,8 @@ interface CreateModalProps {
 }
 
 const
-CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
-  const [nombre, setNombre] = useState(null)
+CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved}) => {
+  const [nombre, setNombre] = useState('')
   const [descripcion, setDescripcion] = useState("")
   const [imagen, setImagen] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -34,28 +34,21 @@ CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
-    // const formData = new FormData()
-    // formData.append("nombre", nombre)
-    // formData.append("descripcion", descripcion)
-    // if (imagen) formData.append("imagen", imagen)
-
-    // router.post("/categorias", formData, {
-    //   onSuccess: () => {
-    //     onClose()
-    //     onSaved(`Categoría '${nombre}' creada correctamente ✅`)
-    //   },
-    // })
-
     const categoria: CreateCategoria = {
         nombre: nombre,
         descripcion: descripcion
     }
 
     try {
-        await axios.post('/categorias', categoria)
+        const { data } = await axios.post('/categorias', categoria)
+        if (data.success){
+            setErrors({})
+            onClose()
+            onSaved(data.message)
+        }
     } catch (err: any) {
-      console.log('Errores de validación:', err);
-      setErrors(err);
+        console.log('Errores de validación:', err.response.data.errors);
+        setErrors(err.response.data.errors);
     }
   }
 
@@ -71,7 +64,7 @@ CategoriaCreateModal: React.FC<CreateModalProps> = ({ onClose, onSaved }) => {
             <Input
               type="text"
               id="nombre"
-              value={nombre}
+              value={nombre??''}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Nombre"
             />

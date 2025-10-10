@@ -37,17 +37,6 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
   const [resultCategorias, setResultCategorias] = useState<PaginatedCategorias>(categorias)
 
   const handleDelete = async(categoria: Categoria) => {
-    // router.delete(`/categorias/${categoria.id}`, {
-    //     onSuccess: () =>{
-    //         console.log('result eliminar categoria')
-    //         // console.log(result)
-    //         setToastMessage(`Categoría '${categoria.nombre}' eliminada correctamente.`)
-    //     },
-    //     onError: () => {
-    //         console.log('error eliminar categoria')
-    //         // console.log(error)
-    //     },
-    // });
     try{
         const {data} = await axios.delete(`/categorias/${categoria.id}`)
         setResultCategorias(data.categorias)
@@ -62,6 +51,7 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
 
   const handleSaved = (msg: string) => {
     setToastMessage(msg);
+    router.reload({only: ['categorias']})
   };
 
 
@@ -118,7 +108,7 @@ const CategoriaIndex: React.FC<Props> = ({ categorias, filters }) => {
 
         {confirmDelete && (
           <ConfirmModal
-            text={confirmDelete.nombre}
+            text={confirmDelete.nombre??''}
             onConfirm={() => handleDelete(confirmDelete)}
             onClose={() => setConfirmDelete(null)}
           />
