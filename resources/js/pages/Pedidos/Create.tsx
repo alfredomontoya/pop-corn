@@ -42,7 +42,7 @@ export default function Create({ productos }: Props) {
   return (
     <AppLayout breadcrumbs={[{ title: 'Pedidos', href: '/pedidos' }]}>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Crear Pedido</h1>
+        <h1 className="text-2xl font-bold mb-4">Crear Pedido Full</h1>
         <Button variant={'default'} onClick={() => router.visit('/pedidos/create')} className="mb-4">
           Nuevo Pedido
         </Button>
