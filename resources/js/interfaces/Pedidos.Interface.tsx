@@ -9,7 +9,7 @@ export interface Pedido {
   id: number;
   cliente_id: string;
   user_id: string;
-  estado_pedido_id: string;
+  estado_pedido_id: number;
   cliente?: Cliente
   estado_pedido: EstadoPedido;
   user?: { name: string };
@@ -28,12 +28,14 @@ export interface DetallePedido {
 }
 
 export interface PedidoFormData {
-  cliente_id: string;
-  user_id: string;
-  fecha: string;
-  estado: 'pendiente' | 'preparado' | 'cancelado' | 'entregado' | 'pagado';
-//   detalles: DetallePedido[];
+  cliente_id: string
+  user_id: string
+  fecha: string
+  estado_pedido_id: string
+  total: string
+  estado: 'activo' | 'anulado';
   observacion?: string;
+//   detalles: DetallePedido[];
   [key: string]: string | DetallePedido[] | undefined; // para tipado flexible
 }
 

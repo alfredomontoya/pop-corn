@@ -14,9 +14,9 @@ class Pedido extends Model
         'user_id',
         'estado_pedido_id',
         'fecha',
-        'estado',
         'total',
         'observacion',
+        'estado',
     ];
 
     public function cliente() {

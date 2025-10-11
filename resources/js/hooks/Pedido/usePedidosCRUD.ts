@@ -34,14 +34,17 @@ export default function usePedidosCRUD() {
     try {
     const res = await axios.post(url, form);
     // refresca la lista si quieres
-    await fetchPedidos(url.replace('/store', ''));
+    // await fetchPedidos(url.replace('/store', ''));
     return res.data; // ✅ devuelve datos al handleSubmit
+    console.log(res.data)
   } catch (error: any) {
     // ✅ devuelve el error para manejarlo afuera
     if (error.response?.status === 422) {
       // errores de validación
       return Promise.reject(error.response.data.errors);
     } else {
+        console.log('Error al crear pedido');
+        console.log(error)
       return Promise.reject(error);
     }
   }

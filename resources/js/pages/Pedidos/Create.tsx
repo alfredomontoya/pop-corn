@@ -16,10 +16,12 @@ export default function Create({ productos }: Props) {
   const { form, setData, addDetalle, updateDetalle, removeDetalle } = usePedido({
     cliente_id: '',
     user_id: '',
+    estado_pedido_id: '1',
+    total: '0',
     fecha: new Date().toISOString().split('T')[0],
-    estado: 'pendiente',
+    estado: 'activo',
+    observacion: '',
     detalles: [],
-    observacion: ''
   } as PedidoFormData);
 
   const { createPedido } = usePedidosCRUD();

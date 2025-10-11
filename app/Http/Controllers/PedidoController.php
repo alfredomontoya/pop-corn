@@ -143,9 +143,10 @@ class PedidoController extends Controller
     public function store(StorePedidoRequest $request): JsonResponse
     {
         // dd($request->all());
+        $data = $request->validated();
         try {
-            $pedido = DB::transaction(function () use ($request) {
-                $pedido = Pedido::create($request->validated());
+            $pedido = DB::transaction(function () use ($request, $data) {
+                $pedido = Pedido::create($data);
 
 
                 foreach ($request->detalles as $detalle) {

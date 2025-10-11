@@ -96,22 +96,6 @@ const PedidoForm: FC<Props> = ({
         {errors.fecha && <p className="text-red-500 text-sm">{errors.fecha[0]}</p>}
       </div>
 
-      {/* Estado */}
-      {/* <div>
-        <label className="block font-bold">Estado</label>
-        <select
-          value={form.estado}
-          onChange={(e) => setData('estado', e.target.value)}
-          className="border p-2 w-full"
-        >
-          <option value="pendiente">Pendiente</option>
-          <option value="confirmado">Confirmado</option>
-          <option value="cancelado">Cancelado</option>
-          <option value="entregado">Entregado</option>
-        </select>
-        {errors.estado && <p className="text-red-500 text-sm">{errors.estado[0]}</p>}
-      </div> */}
-
       {/* Detalles */}
       <PedidoDetalles
         detalles={form.detalles}
@@ -127,7 +111,7 @@ const PedidoForm: FC<Props> = ({
       {/* Total */}
       <div className="text-right">
         <span className="font-bold text-lg">Total: </span>
-        <span className="text-2xl text-green-600 font-bold">{form.total?.toFixed(2) ?? '0.00'}</span>
+        <span className="text-2xl text-green-600 font-bold">{(+form.total || 0).toFixed(2)}</span>
       </div>
       {errors.total && <p className="text-red-500 text-sm">{errors.total[0]}</p>}
 

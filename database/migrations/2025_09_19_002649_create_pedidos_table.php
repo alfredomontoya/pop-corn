@@ -11,11 +11,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('cliente_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estado_pedido_id')->references('id')->on('estado_pedidos')->constrained()->default(1);
-            // $table->integer('nro')->unique()->defu;
             $table->date('fecha');
-            $table->enum('estado', ['activo', 'anulado'])->default('activo');
             $table->decimal('total', 10, 2)->default(0);
             $table->text('observacion')->nullable();
+            $table->enum('estado', ['activo', 'anulado'])->default('activo');
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes')->nullOnDelete();

@@ -14,15 +14,16 @@ class StorePedidoRequest extends FormRequest
         return [
             'cliente_id' => ['required','exists:clientes,id'],
             'user_id' => ['required','exists:users,id'],
-            'fecha' => ['required','date'],
-            'estado' => ['required','in:pendiente,confirmado,cancelado,entregado'],
+            'estado_pedido_id' => ['required', 'exists:estado_pedidos,id'],
+            'estado' => ['required','in:pendiente,activo,anulado'],
             'observacion' => ['nullable','string'],
+            'fecha' => ['required','date'],
+            'total' => ['required', 'numeric', 'min:1'],
             'detalles' => ['required','array','min:1'],
             'detalles.*.producto_id' => ['required','exists:productos,id'],
             'detalles.*.cantidad' => ['required','integer','min:1'],
             'detalles.*.precio' => ['required','numeric','min:1'],
             'detalles.*.subtotal' => ['required','numeric','min:1'],
-            'total' => ['required', 'numeric', 'min:1']
         ];
     }
 
