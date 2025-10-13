@@ -44,6 +44,11 @@ const mainNavItems: NavItem[] = [
         href: '/pedidos',
         icon: LayoutGrid,
     },
+    {
+        title: 'Cajas',
+        href: '/cajas',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

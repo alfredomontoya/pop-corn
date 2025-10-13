@@ -38,4 +38,9 @@ class Venta extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
+
+    public function movimientosCaja() {
+        return $this->morphMany(MovimientoCaja::class, 'referencia');
+    }
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CaptacionController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
@@ -92,6 +93,27 @@ Route::middleware(['auth', SetUserId::class])->group(function () {
     });
 
     Route::resource('captaciones', CaptacionController::class);
+
+     // 📋 Listar cajas
+    Route::get('/cajas', [CajaController::class, 'index'])->name('cajas.index');
+
+    // 🟢 Abrir nueva caja
+    Route::post('/cajas', [CajaController::class, 'store'])->name('cajas.store');
+
+    // 📄 Ver detalles de una caja (con movimientos)
+    Route::get('/cajas/{caja}', [CajaController::class, 'show'])->name('cajas.show');
+
+    // 🔴 Cerrar caja
+    Route::post('/cajas/{caja}/cerrar', [CajaController::class, 'cerrar'])->name('cajas.cerrar');
+
+    // 💵 Registrar movimiento manual en caja
+    Route::post('/cajas/{caja}/movimiento', [CajaController::class, 'registrarMovimiento'])->name('cajas.movimiento');
+
+    // 🟡 Actualizar caja (opcional)
+    Route::put('/cajas/{caja}', [CajaController::class, 'update'])->name('cajas.update');
+
+    // ❌ Eliminar caja (opcional)
+    Route::delete('/cajas/{caja}', [CajaController::class, 'destroy'])->name('cajas.destroy');
 
 
 });

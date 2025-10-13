@@ -34,4 +34,8 @@ class Pedido extends Model
     public function detalles() {
         return $this->hasMany(DetallePedido::class);
     }
+
+    public function movimientosCaja() {
+        return $this->morphMany(MovimientoCaja::class, 'referencia');
+    }
 }

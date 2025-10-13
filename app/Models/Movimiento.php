@@ -39,4 +39,8 @@ class Movimiento extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function movimientosCaja() {
+        return $this->morphMany(MovimientoCaja::class, 'referencia');
+    }
 }
