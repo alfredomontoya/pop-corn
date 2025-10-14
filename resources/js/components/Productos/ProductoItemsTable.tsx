@@ -1,6 +1,6 @@
 import React from "react";
 import { router } from "@inertiajs/react";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationInertia";
 import { Producto, PaginatedProductos } from "@/interfaces/Productos.Interface";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";

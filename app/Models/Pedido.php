@@ -38,4 +38,34 @@ class Pedido extends Model
     public function movimientosCaja() {
         return $this->morphMany(MovimientoCaja::class, 'referencia');
     }
+
+    /**
+     * Marca el pedido como preparado
+     */
+    public function preparar(): bool
+    {
+        $estado = EstadoPedido::where('estado', 'PREPARADO')->firstOrFail();
+        $this->estado_pedido_id = $estado->id;
+        return $this->save();
+    }
+
+    /**
+     * Marca el pedido como entregado
+     */
+    public function entregar(): bool
+    {
+        $estado = EstadoPedido::where('estado', 'ENTREGADO')->firstOrFail();
+        $this->estado_pedido_id = $estado->id;
+        return $this->save();
+    }
+
+    /**
+     * Marca el pedido como pagado
+     */
+    public function pagar(): bool
+    {
+        $estado = EstadoPedido::where('estado', 'PAGADO')->firstOrFail();
+        $this->estado_pedido_id = $estado->id;
+        return $this->save();
+    }
 }

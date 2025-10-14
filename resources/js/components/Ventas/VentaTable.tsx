@@ -1,6 +1,6 @@
 // resources/js/Components/VentaTable.tsx
 import { Link } from '@inertiajs/react'
-import Pagination from '../Pagination'
+import Pagination from '../PaginationInertia'
 import { Paginated, Venta } from '@/interfaces/Venta.Interface'
 
 interface Props {

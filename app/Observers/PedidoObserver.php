@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Movimiento;
+use App\Models\MovimientoCaja;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Support\Facades\Auth;
@@ -53,15 +54,22 @@ class PedidoObserver
             }
             // Caso 3: Crear movimiento
             if ($pedido->estadoPedido->estado === 'pagado') {
-                Movimiento::create([
-                    'user_id' => Auth::id(),
-                    'cliente_id' => $pedido->cliente_id,
-                    'tipo' => 'ingreso',
-                    'total' => $pedido->total,
-                    'descripcion' => "Pedido_$pedido->id",
-                    'fecha' => now(),
-
-                ]);
+                // Movimiento::create([
+                //     'user_id' => Auth::id(),
+                //     'cliente_id' => $pedido->cliente_id,
+                //     'tipo' => 'ingreso',
+                //     'total' => $pedido->total,
+                //     'descripcion' => "Pedido_$pedido->id",
+                //     'fecha' => now(),
+                // ]);
+                // MovimientoCaja::create([
+                //     'user_id' => Auth::id(),
+                //     'tipo' => 'INGRESO',
+                //     'monto' => $pedido->total,
+                //     'concepto' => "Pago del pedido #$pedido->id",
+                //     'referencia_id' => $pedido->id,
+                //     'referencia_type' => Pedido::class,
+                // ]);
             }
         }
     }

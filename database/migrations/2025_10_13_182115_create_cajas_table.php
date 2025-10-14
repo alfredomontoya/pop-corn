@@ -13,10 +13,10 @@ return new class extends Migration {
             $table->dateTime('fecha_apertura');
             $table->dateTime('fecha_cierre')->nullable();
             $table->decimal('saldo_inicial', 12, 2)->default(0);
-            $table->decimal('total_ingresos', 12, 2)->default(0);
-            $table->decimal('total_egresos', 12, 2)->default(0);
+            $table->decimal('total_ingresos', 12, 2)->nullable();
+            $table->decimal('total_egresos', 12, 2)->nullable();
             $table->decimal('saldo_final', 12, 2)->nullable();
-            $table->enum('estado', ['abierta', 'cerrada'])->default('abierta');
+            $table->enum('estado', ['ABIERTA', 'CERRADA'])->default('ABIERTA');
             $table->text('observacion')->nullable();
             $table->timestamps();
         });

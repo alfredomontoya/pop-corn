@@ -1,6 +1,6 @@
 import React from "react";
 import { router } from "@inertiajs/react";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationInertia";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { Cliente, PaginatedClientes } from "@/interfaces/Clientes.Interface";
@@ -98,7 +98,7 @@ const ClienteItemsTable: React.FC<Props> = ({
                 <td className="px-4 py-2">
                   {[cli.email, cli.telefono, cli.direccion]
                     .filter(Boolean)
-                    .join(" | ")} 
+                    .join(" | ")}
                     <p>
                       {cli.ubicacion && (
                       <a

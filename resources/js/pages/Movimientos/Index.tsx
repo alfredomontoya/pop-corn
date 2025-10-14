@@ -1,6 +1,6 @@
 import { ItemsTable } from "@/components/Movimientos/ItemsTable";
 import { Totales } from "@/components/Movimientos/Totales";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationInertia";
 import { Button } from "@/components/ui/button";
 import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import AppLayout from "@/layouts/app-layout";

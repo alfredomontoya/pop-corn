@@ -25,7 +25,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Paginated } from '@/interfaces/Venta.Interface';
 import { Link, router } from '@inertiajs/react';
 import SearchComponent from '@/components/helpers/SearchComponent';
-import Pagination from '@/components/Pagination';
+import Pagination from '@/components/PaginationInertia';
 import usePedido from '@/hooks/Pedido/usePedido';
 import useSearch from '@/hooks/Pedido/useSearch';
 import { Button } from '@/components/ui/button';

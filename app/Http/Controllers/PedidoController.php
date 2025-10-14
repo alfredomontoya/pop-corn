@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Pedido\StorePedidoRequest;
 use App\Http\Requests\Pedido\UpdatePedidoRequest;
+use App\Models\Caja;
 use App\Models\EstadoPedido;
+use App\Models\Movimiento;
+use App\Models\MovimientoCaja;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PedidoController extends Controller
@@ -195,17 +199,14 @@ class PedidoController extends Controller
     }
 
     public function preparar($id) {
-        // dd($request->all());
-        $estadoPedido = EstadoPedido::where('estado', 'preparado')->first();
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado_pedido_id = $estadoPedido->id;
-            $pedido->save();
+            $pedido->preparar();
 
             return response()->json([
                 'message' => 'Pedido procesado correctamente',
-                'estado' => $estadoPedido->estado,
+                'estado' => $pedido->estadoPedido->estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -216,17 +217,14 @@ class PedidoController extends Controller
     }
 
     public function entregar($id) {
-        // dd($request->all());
-        $estadoPedido = EstadoPedido::where('estado', 'entregado')->first();
         try {
             //code...
             $pedido = Pedido::find($id);
-            $pedido->estado_pedido_id = $estadoPedido->id;
-            $pedido->save();
+            $pedido->entregar();
 
             return response()->json([
                 'message' => 'Pedido entregado correctamente',
-                'estado' => $estadoPedido->estado
+                'estado' => $pedido->estadoPedido->estado
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -236,20 +234,60 @@ class PedidoController extends Controller
         }
     }
 
-    public function pagar($id) {
-        // dd($request->all());
-        $estadoPedido = EstadoPedido::where('estado', 'pagado')->first();
+    public function pagar($id)
+    {
+        DB::beginTransaction();
+
         try {
-            //code...
-            $pedido = Pedido::find($id);
-            $pedido->estado_pedido_id = $estadoPedido->id;
-            $pedido->save();
+            $pedido = Pedido::findOrFail($id);
+
+            // Buscar caja activa del usuario
+            $cajaActiva = Caja::where('user_id', Auth::id())
+                ->where('estado', 'ABIERTA')
+                ->whereNull('fecha_cierre')
+                ->first();
+
+            if (!$cajaActiva) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'No hay una caja activa para el usuario actual.'
+                ], 400);
+            }
+
+            // Cambiar estado del pedido (método personalizado del modelo)
+            $pedido->pagar();
+
+            // Crear movimiento general
+            Movimiento::create([
+                'user_id' => Auth::id(),
+                'cliente_id' => $pedido->cliente_id,
+                'tipo' => 'ingreso',
+                'total' => $pedido->total,
+                'descripcion' => "Pedido_$pedido->id",
+                'fecha' => now(),
+            ]);
+
+            // Crear movimiento en caja activa
+            MovimientoCaja::create([
+                'caja_id' => $cajaActiva->id,
+                'user_id' => Auth::id(),
+                'tipo' => 'INGRESO',
+                'monto' => $pedido->total,
+                'concepto' => "Pago del pedido #$pedido->id",
+                'referencia_id' => $pedido->id,
+                'referencia_type' => Pedido::class,
+            ]);
+
+            DB::commit();
 
             return response()->json([
                 'message' => 'Pedido pagado correctamente',
-                'estado' => $estadoPedido->estado
+                'estado' => $pedido->estadoPedido->estado
             ], 200);
+
         } catch (Exception $e) {
+            DB::rollBack();
+
             return response()->json([
                 'message' => 'Error al pagar pedido',
                 'error' => $e->getMessage()

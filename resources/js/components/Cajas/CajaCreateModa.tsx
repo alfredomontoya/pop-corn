@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
+import { Alert, AlertDescription } from "@/components/ui/alert" // 👈 asegúrate de tener este componente
 import CajaForm from "./CajaForm"
 import { useCaja } from "@/hooks/useCaja"
 import { Caja } from "@/interfaces/Caja.Ingerface"
@@ -41,11 +42,13 @@ export default function CajaCreateModal({ open, onClose, onSuccess }: Props) {
   // Manejar envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await createCaja(data)
-    await fetchCajas()
-    reset()
-    if (onSuccess) onSuccess()
-    onClose()
+    const ok = await createCaja(data)
+    if (ok) {
+      reset()
+      onSuccess?.()
+      onClose()
+    }
+    // Si hay error, el hook ya setea `errors.msg` y el Alert lo mostrará automáticamente
   }
 
   return (
@@ -57,6 +60,13 @@ export default function CajaCreateModal({ open, onClose, onSuccess }: Props) {
             Complete los datos para aperturar una nueva caja.
           </DialogDescription>
         </DialogHeader>
+
+        {/* 🔴 Mostrar mensaje de error general */}
+        {errors.msg && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertDescription>{errors.msg}</AlertDescription>
+          </Alert>
+        )}
 
         <CajaForm
           data={data}

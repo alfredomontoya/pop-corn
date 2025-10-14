@@ -16,7 +16,7 @@ class MovimientoSeeder extends Seeder
             'total_ingresos' => 0,
             'total_egresos' => 0,
             'saldo_final' => 0,
-            'estado' => 'abierta',
+            'estado' => 'ABIERTA',
             'observacion' => 'Caja inicial',
         ]);
 
@@ -33,14 +33,14 @@ class MovimientoSeeder extends Seeder
             ]);
         });
 
-        // dd($movimientos);
-        $caja->update([
-            'fecha_cierre' => now(),
-            'total_ingresos' => $caja->movimientos()->where('tipo', 'INGRESO')->sum('monto'),
-            'total_egresos' => $caja->movimientos()->where('tipo', 'EGRESO')->sum('monto'),
-            'saldo_final' => $caja->movimientos()->where('tipo', 'INGRESO')->sum('monto') - $caja->movimientos()->where('tipo', 'EGRESO')->sum('monto'),
-            'estado' => 'cerrada',
-        ]);
+        // // dd($movimientos);
+        // $caja->update([
+        //     'fecha_cierre' => now(),
+        //     'total_ingresos' => $caja->movimientos()->where('tipo', 'INGRESO')->sum('monto'),
+        //     'total_egresos' => $caja->movimientos()->where('tipo', 'EGRESO')->sum('monto'),
+        //     'saldo_final' => $caja->saldo_inicial + $caja->movimientos()->where('tipo', 'INGRESO')->sum('monto') - $caja->movimientos()->where('tipo', 'EGRESO')->sum('monto'),
+        //     'estado' => 'CERRADA',
+        // ]);
 
 
     }

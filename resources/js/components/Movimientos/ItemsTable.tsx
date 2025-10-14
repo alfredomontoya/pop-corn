@@ -1,5 +1,5 @@
 import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
-import Pagination from "../Pagination";
+import Pagination from "../PaginationInertia";
 import { Link } from "@inertiajs/react";
 
 interface Props {

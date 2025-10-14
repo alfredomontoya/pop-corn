@@ -1,6 +1,6 @@
 import React from "react";
 import { router } from "@inertiajs/react";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/PaginationInertia";
 import { Categoria, PaginatedCategorias } from "@/interfaces/Categorias.Interface";
 import { ChevronUp, ChevronDown, Edit3, Trash} from "lucide-react";
 import { Button } from "../ui/button";
