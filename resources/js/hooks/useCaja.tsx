@@ -13,6 +13,8 @@ export function useCaja() {
   const [loading, setLoading] = useState<boolean>(false)
   const [errors, setErrors] = useState<ValidationErrors>({})
 
+
+
   // 🟢 Listar todas las cajas
   const fetchCajas = async (): Promise<void> => {
     try {

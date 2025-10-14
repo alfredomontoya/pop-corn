@@ -17,8 +17,8 @@ class Caja extends Model
         'total_ingresos',
         'total_egresos',
         'saldo_final',
-        'estado',
         'observacion',
+        'estado',
     ];
 
     public function user() {
