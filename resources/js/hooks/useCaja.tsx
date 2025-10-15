@@ -36,6 +36,21 @@ export function useCaja() {
     }
 }
 
+// 🟢 Obtener detalle de una caja (usa método show del controlador)
+  const getCaja = async (id: number): Promise<Caja | null> => {
+    try {
+      setLoading(true)
+      const { data } = await axios.get<Caja>(`/cajas/${id}`)
+      return data
+    } catch (error) {
+      console.error("Error al obtener caja:", error)
+      setErrors({ msg: "No se pudo obtener el detalle de la caja" })
+      return null
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // 🟢 Crear una nueva caja
   const createCaja = async (values: Partial<Caja>): Promise<boolean> => {
     console.log("Creating caja with values:", values)
@@ -110,35 +125,36 @@ export function useCaja() {
   }
 
   // 🟣 Cerrar caja
-    const cerrarCaja = async (id: number): Promise<boolean> => {
-        try {
-        setLoading(true);
-        const { data } = await axios.post(`/cajas/${id}/cerrar`);
-        if (data.success) {
-            // actualizar caja cerrada en el estado
-            setCajas((prev) => ({
-            ...prev,
-            data: prev.data.map((caja) => (caja.id === id ? data.caja : caja)),
-            }));
-            return true;
-        } else {
-            setErrors({ msg: data.message });
-            return false;
-        }
-        } catch (error) {
-        const err = error as AxiosError<any>;
-        setErrors({ msg: err.response?.data?.message || "Error al cerrar la caja" });
-        return false;
-        } finally {
-        setLoading(false);
-        }
-    };
+  const cerrarCaja = async (id: number): Promise<boolean> => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`/cajas/${id}/cerrar`);
+      if (data.success) {
+          // actualizar caja cerrada en el estado
+          setCajas((prev) => ({
+          ...prev,
+          data: prev.data.map((caja) => (caja.id === id ? data.caja : caja)),
+          }));
+          return true;
+      } else {
+          setErrors({ msg: data.message });
+          return false;
+      }
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      setErrors({ msg: err.response?.data?.message || "Error al cerrar la caja" });
+      return false;
+    } finally {
+    setLoading(false);
+    }
+  };
 
   return {
     cajas,
     loading,
     errors,
     fetchCajas,
+    getCaja,
     createCaja,
     updateCaja,
     deleteCaja,

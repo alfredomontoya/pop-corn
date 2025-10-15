@@ -103,10 +103,19 @@ class CajaController extends Controller
      */
     public function show(Caja $caja)
     {
+        // Cargar relaciones necesarias
         $caja->load(['user', 'movimientos.user']);
 
-        return Inertia::render('Cajas/Show', [
-            'caja' => $caja,
+         // Calcular los campos
+        $caja->ingresos_calculados; // invoca el accessor
+        $caja->egresos_calculados;
+        $caja->saldo_final_calculado;
+
+        dd($caja);
+
+        // Retornar JSON con la caja y relaciones
+        return response()->json([
+            'caja' => $caja
         ]);
     }
 

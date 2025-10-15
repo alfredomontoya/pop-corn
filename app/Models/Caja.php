@@ -21,6 +21,9 @@ class Caja extends Model
         'estado',
     ];
 
+    // 🔹 Accessors calculados sin sobrescribir columnas
+    protected $appends = [];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -31,5 +34,30 @@ class Caja extends Model
 
     public function ventas() {
         return $this->hasMany(Venta::class);
+    }
+
+    public function getIngresosCalculadosAttribute()
+    {
+        if ($this->relationLoaded('movimientos')) {
+            return $this->movimientos->where('tipo', 'INGRESO')->sum('monto');
+        }
+
+        return $this->movimientos()->where('tipo', 'INGRESO')->sum('monto');
+    }
+
+    public function getEgresosCalculadosAttribute()
+    {
+        if ($this->relationLoaded('movimientos')) {
+            return $this->movimientos->where('tipo', 'EGRESO')->sum('monto');
+        }
+
+        return $this->movimientos()->where('tipo', 'EGRESO')->sum('monto');
+    }
+
+    public function getSaldoFinalCalculadoAttribute()
+    {
+        return ($this->saldo_inicial ?? 0)
+            + $this->ingresos_calculados
+            - $this->egresos_calculados;
     }
 }

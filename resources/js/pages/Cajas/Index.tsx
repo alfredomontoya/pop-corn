@@ -1,40 +1,53 @@
-import React, { useEffect, useState } from "react"
-import { useCaja } from "@/hooks/useCaja"
-import { Caja } from "@/interfaces/Caja.Ingerface"
-import AppLayout from "@/layouts/app-layout"
-import { Button } from "@/components/ui/button"
-import CajaCreateModal from "@/components/Cajas/CajaCreateModa"
-import CerrarCajaModal from "@/components/Cajas/CerrarCajaModal"
-import CajasItemsTable from "@/components/Cajas/CajasItemsTable"
+import React, { useEffect, useState } from "react";
+import { useCaja } from "@/hooks/useCaja";
+import { Caja } from "@/interfaces/Caja.Ingerface";
+import AppLayout from "@/layouts/app-layout";
+import { Button } from "@/components/ui/button";
+import CajaCreateModal from "@/components/Cajas/CajaCreateModa";
+import CerrarCajaModal from "@/components/Cajas/CerrarCajaModal";
+import CajaShowModal from "@/components/Cajas/CajaShowModal";
+import CajasItemsTable from "@/components/Cajas/CajasItemsTable";
 
 export const CajaIndex: React.FC = () => {
-  const { cajas, loading, fetchCajas, cerrarCaja } = useCaja()
-  const [refreshing, setRefreshing] = useState(false)
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [cajaToClose, setCajaToClose] = useState<Caja | null>(null)
-  const [isCerrarModalOpen, setIsCerrarModalOpen] = useState(false)
+  const { cajas, loading, fetchCajas } = useCaja();
+  const [refreshing, setRefreshing] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  // 🔹 Para cerrar caja
+  const [cajaToClose, setCajaToClose] = useState<Caja | null>(null);
+  const [isCerrarModalOpen, setIsCerrarModalOpen] = useState(false);
+
+  // 🔹 Para ver caja
+  const [cajaToShow, setCajaToShow] = useState<Caja | null>(null);
+  const [isShowModalOpen, setIsShowModalOpen] = useState(false);
 
   // 🟢 Cargar cajas al montar el componente
   useEffect(() => {
-    fetchCajas()
-  }, [])
+    fetchCajas();
+  }, []);
 
   // 🟢 Refrescar lista después de crear una caja
   const handleCreateSuccess = async () => {
-    setIsCreateModalOpen(false)
-    await fetchCajas()
-  }
+    setIsCreateModalOpen(false);
+    await fetchCajas();
+  };
 
   // 🟢 Abrir modal de cerrar caja
   const openCerrarCajaModal = (caja: Caja) => {
-    setCajaToClose(caja)
-    setIsCerrarModalOpen(true)
-  }
+    setCajaToClose(caja);
+    setIsCerrarModalOpen(true);
+  };
+
+  // 🟢 Abrir modal de mostrar caja
+  const openShowCajaModal = (caja: Caja) => {
+    setCajaToShow(caja);
+    setIsShowModalOpen(true);
+  };
 
   // 🟢 Manejar apertura del modal de crear caja
   const handleAperturarCaja = () => {
-    setIsCreateModalOpen(true)
-  }
+    setIsCreateModalOpen(true);
+  };
 
   return (
     <AppLayout breadcrumbs={[{ title: "Captaciones", href: route("captaciones.index") }]}>
@@ -50,10 +63,11 @@ export const CajaIndex: React.FC = () => {
         </div>
 
         <CajasItemsTable
-            cajas={cajas.data}
-            loading={loading}
-            refreshing={refreshing}   // <-- agregar esto
-            onCerrarCaja={openCerrarCajaModal}
+          cajas={cajas.data}
+          loading={loading}
+          refreshing={refreshing}
+          onCerrarCaja={openCerrarCajaModal}
+          onShowCaja={openShowCajaModal} // <-- nuevo
         />
       </div>
 
@@ -71,8 +85,15 @@ export const CajaIndex: React.FC = () => {
         caja={cajaToClose}
         onSuccess={fetchCajas} // refresca la lista al cerrar
       />
-    </AppLayout>
-  )
-}
 
-export default CajaIndex
+      {/* Modal de mostrar caja */}
+      <CajaShowModal
+        open={isShowModalOpen}
+        onClose={() => setIsShowModalOpen(false)}
+        caja={cajaToShow}
+      />
+    </AppLayout>
+  );
+};
+
+export default CajaIndex;

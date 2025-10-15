@@ -1,5 +1,8 @@
 // =========================
 // Interfaz para MovimientoCaja
+
+import { User } from "@/types"
+
 // =========================
 export interface MovimientoCaja {
   id: number
@@ -20,6 +23,7 @@ export interface MovimientoCaja {
 export interface Caja {
   id: number
   user_id: number
+  user: User
   fecha_apertura: string
   fecha_cierre?: string | null
   saldo_inicial: number
@@ -28,9 +32,15 @@ export interface Caja {
   saldo_final?: number | null
   estado: "ABIERTA" | "CERRADA"
   observacion?: string | null
+
   created_at?: string
   updated_at?: string
 
   // Relaciones
   movimientos?: MovimientoCaja[]  // Movimientos asociados a la caja
+
+   // 🔹 Campos calculados del backend
+  ingresos_calculados?: number;
+  egresos_calculados?: number;
+  saldo_final_calculado?: number;
 }
