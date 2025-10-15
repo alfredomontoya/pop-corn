@@ -113,14 +113,14 @@ const ClienteItemsTable: React.FC<Props> = ({
                     )}
                     </p>
                 </td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-4 text-center">
                   <Button
                     onClick={(e) => {
                       e.stopPropagation();
                       onEdit(cli);
                     }}
                     variant={"warning"}
-                    className="px-2 py-1"
+                    className="mb-1 w-20"
                   >
                     Editar
                   </Button>
@@ -130,7 +130,7 @@ const ClienteItemsTable: React.FC<Props> = ({
                       onDelete(cli);
                     }}
                     variant={"destructive"}
-                    className="px-2 py-1"
+                    className="mb-1 w-20"
                   >
                     Eliminar
                   </Button>

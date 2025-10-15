@@ -9,7 +9,8 @@ import CajaShowModal from "@/components/Cajas/CajaShowModal";
 import CajasItemsTable from "@/components/Cajas/CajasItemsTable";
 
 export const Index: React.FC = () => {
-  const { cajas, loading, fetchCajas } = useCaja();
+  console.log(new Date().toLocaleString());
+  const { cajas, loading, fetchCajas, fecha } = useCaja();
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -56,7 +57,7 @@ export const Index: React.FC = () => {
           <h1 className="text-2xl font-bold">Cajas</h1>
           <Button
             onClick={handleAperturarCaja}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            variant={'default'}
           >
             Abrir Caja
           </Button>

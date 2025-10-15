@@ -12,7 +12,7 @@ class MovimientoController extends Controller
 {
     public function index()
     {
-        $movimientos = Movimiento::orderBy('nro', 'desc')->paginate(10);
+        $movimientos = Movimiento::orderBy('id', 'desc')->paginate(10);
 
         $totalIngresos = Movimiento::where('tipo', 'ingreso')->sum('total');
         $totalEgresos  = Movimiento::where('tipo', 'egreso')->sum('total');

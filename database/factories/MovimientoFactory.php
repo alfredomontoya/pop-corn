@@ -16,7 +16,7 @@ class MovimientoFactory extends Factory
 
         return [
             'nro' => strtoupper($this->faker->bothify('MOV-####')),
-            'fecha' => $this->faker->date(),
+            'fecha' => now(),
             'descripcion' => $this->faker->sentence(),
             'total' => $cantidad * $precio,
             'tipo' => $this->faker->randomElement(['ingreso', 'egreso']),

@@ -90,7 +90,7 @@ class PedidoController extends Controller
                     $p->detalles->sum('subtotal')
                 ),
             ];
-            // dd($totales);
+
 
             return Inertia::render('Pedidos/Index', [
                 'pedidos' => $pedidos,

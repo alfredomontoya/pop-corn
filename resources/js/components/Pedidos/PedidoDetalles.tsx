@@ -25,16 +25,16 @@ const PedidoDetalles: FC<Props> = ({detalles, productos, addDetalle, updateDetal
       ...detalles[index],
       producto_id: productoId,
       precio,
-      subtotal: cantidad * precio,
+      subtotal: Number(cantidad) * precio,
     });
   };
 
-  const handleCantidadChange = (index: number, cantidad: number) => {
+  const handleCantidadChange = (index: number, cantidad: string) => {
     const precio = detalles[index].precio;
     updateDetalle(index, {
       ...detalles[index],
       cantidad,
-      subtotal: cantidad * precio,
+      subtotal: Number(cantidad) * Number(precio),
     });
   };
 
@@ -75,12 +75,12 @@ const PedidoDetalles: FC<Props> = ({detalles, productos, addDetalle, updateDetal
                     )}
                 </td>
                 <td className="border px-2 py-1">
-                    <input
-                    type="number"
+                  <input
+                    type="text"
                     value={detalle.cantidad}
-                    onChange={(e) => handleCantidadChange(index, Number(e.target.value))}
+                    onChange={(e) => handleCantidadChange(index, e.target.value)}
                     className="border p-1 w-full"
-                    />
+                  />
                     {errors[`detalles.${index}.cantidad`] && (
                     <p className="text-red-500 text-sm">
                         {errors[`detalles.${index}.cantidad`][0]}
@@ -96,7 +96,7 @@ const PedidoDetalles: FC<Props> = ({detalles, productos, addDetalle, updateDetal
                     )}
                 </td>
                 <td className="border px-2 py-1 text-right">
-                    {(detalle.subtotal ?? detalle.cantidad * detalle.precio).toFixed(2)}
+                    {(detalle.subtotal ?? Number(detalle.cantidad) * Number(detalle.precio)).toFixed(2)}
                     {errors[`detalles.${index}.subtotal`] && (
                     <p className="text-red-500 text-sm">
                         {errors[`detalles.${index}.subtotal`][0]}

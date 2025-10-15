@@ -101,8 +101,9 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
                         <Button
                             variant={'warning'}
                             onClick={ (e) => handleEditar(p.id, e)}
+                            className='mb-1 w-20'
                         >
-                            <Edit size={16} />
+                            {/* <Edit size={16} /> */}
                             <span>Editar</span>
                         </Button>
 
@@ -113,8 +114,9 @@ const TablePedidos: FC<Props> = ({ pedidos, onDelete, search }) => {
                                 e.stopPropagation()
                                 onDelete(`/api/pedidos/${p.id}`, p.id)
                             }}
+                            className='mb-1 w-20'
                         >
-                            <Trash size={16} />
+                            {/* <Trash size={16} /> */}
                             <span>Eliminar</span>
                         </Button>
                     </td>

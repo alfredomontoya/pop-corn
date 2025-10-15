@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->enum('tipo', ['ingreso', 'egreso']); // diferencia entre ingresos y egresos
             $table->unsignedBigInteger('cliente_id')->nullable(); // relación con clientes
             $table->unsignedBigInteger('user_id'); // relación con usuarios
-            $table->date('fecha')->default(now());
+            $table->dateTime('fecha')->default(now());
             $table->timestamps();
 
             // Foreign keys

@@ -22,7 +22,7 @@ export interface Pedido {
 
 export interface DetallePedido {
   producto_id: string;
-  cantidad: number;
+  cantidad: string;
   precio: number;
   subtotal?: number; // opcional, puede calcularse como cantidad * precio
 }

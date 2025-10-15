@@ -15,38 +15,40 @@ class CajaController extends Controller
      * 📋 Listar todas las cajas
      */
     public function index(Request $request)
-{
-    $cajas = Caja::with('user')
-        ->latest('fecha_apertura')
-        ->paginate(10)
-        ->through(function ($caja) {
-            return [
-                'id' => $caja->id,
-                'user_id' => $caja->user_id,
-                'saldo_inicial' => (float) $caja->saldo_inicial,
-                'total_ingresos' => (float) $caja->total_ingresos,
-                'total_egresos' => (float) $caja->total_egresos,
-                'saldo_final' => $caja->saldo_final !== null ? (float) $caja->saldo_final : null,
-                'estado' => $caja->estado,
-                'fecha_apertura' => $caja->fecha_apertura,
-                'fecha_cierre' => $caja->fecha_cierre,
-                'observacion' => $caja->observacion,
-                'user' => $caja->user,
-                'created_at' => $caja->created_at,
-                'updated_at' => $caja->updated_at,
-            ];
-        });
+    {
+        //  dd(now()->format('d/m/Y H:i:s'));
 
-    // 🧠 Si la solicitud viene de Axios o API (no de Inertia)
-    if ($request->expectsJson() || $request->wantsJson()) {
-        return response()->json($cajas);
+        $cajas = Caja::with('user')
+            ->latest('fecha_apertura')
+            ->paginate(10)
+            ->through(function ($caja) {
+                return [
+                    'id' => $caja->id,
+                    'user_id' => $caja->user_id,
+                    'saldo_inicial' => (float) $caja->saldo_inicial,
+                    'total_ingresos' => (float) $caja->total_ingresos,
+                    'total_egresos' => (float) $caja->total_egresos,
+                    'saldo_final' => $caja->saldo_final !== null ? (float) $caja->saldo_final : null,
+                    'estado' => $caja->estado,
+                    'fecha_apertura' => $caja->fecha_apertura,
+                    'fecha_cierre' => $caja->fecha_cierre,
+                    'observacion' => $caja->observacion,
+                    'user' => $caja->user,
+                    'created_at' => $caja->created_at,
+                    'updated_at' => $caja->updated_at,
+                ];
+            });
+
+        // 🧠 Si la solicitud viene de Axios o API (no de Inertia)
+        if ($request->expectsJson() || $request->wantsJson()) {
+            return response()->json($cajas);
+        }
+
+        // 🪶 Si la solicitud viene desde Inertia (navegación web)
+        return Inertia::render('Cajas/Index', [
+            'cajas' => $cajas,
+        ]);
     }
-
-    // 🪶 Si la solicitud viene desde Inertia (navegación web)
-    return Inertia::render('Cajas/Index', [
-        'cajas' => $cajas,
-    ]);
-}
 
     /**
      * 🟢 Abrir una nueva caja
@@ -56,7 +58,7 @@ class CajaController extends Controller
         try {
             $validated = $request->validate([
                 'saldo_inicial' => 'required|numeric|min:0',
-                'observacion' => 'required|string|max:255',
+                'observacion' => 'nullable|string|max:255',
             ]);
 
             // Verificar si el usuario ya tiene una caja abierta
@@ -124,6 +126,7 @@ class CajaController extends Controller
      */
     public function cerrar(Request $request, Caja $caja)
     {
+
         if ($caja->estado === 'CERRADA') {
             return response()->json([
                 'success' => false,

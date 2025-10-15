@@ -39,7 +39,7 @@ const PedidoForm: FC<Props> = ({
         'detalles',
         pedido.detalles.map((d) => ({
           producto_id: String(d.producto_id),
-          cantidad: Number(d.cantidad),
+          cantidad: d.cantidad,
           precio: Number(d.precio),
           subtotal: Number(d.subtotal),
         }))
@@ -55,7 +55,7 @@ const PedidoForm: FC<Props> = ({
         const precio = Number(p.precio_activo?.precio_venta ?? 0);
         return {
           producto_id: String(p.id),
-          cantidad: 0,
+          cantidad: "0",
           precio,
           subtotal: 0,
         };
@@ -71,7 +71,7 @@ const PedidoForm: FC<Props> = ({
   }, [form.detalles]);
 
   const handleUpdateDetalle = (index: number, detalle: DetallePedido) => {
-    const subtotal = detalle.cantidad * detalle.precio;
+    const subtotal = Number(detalle.cantidad) * Number(detalle.precio);
     updateDetalle(index, { ...detalle, subtotal });
   };
 
@@ -101,7 +101,7 @@ const PedidoForm: FC<Props> = ({
         detalles={form.detalles}
         productos={productos}
         addDetalle={(detalle) => {
-          addDetalle({ ...detalle, subtotal: detalle.cantidad * detalle.precio });
+          addDetalle({ ...detalle, subtotal: Number(detalle.cantidad) * Number(detalle.precio) });
         }}
         updateDetalle={handleUpdateDetalle}
         removeDetalle={removeDetalle}

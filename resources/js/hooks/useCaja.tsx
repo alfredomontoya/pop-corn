@@ -10,13 +10,15 @@ interface PaginatedCajas {
   data: Caja[]
   links?: any[]
   current_page?: number
-  last_page?: number
+  last_page?: number,
+  fecha?: string
 }
 
 export function useCaja() {
   const [cajas, setCajas] = useState<PaginatedCajas>({ data: [] })
   const [loading, setLoading] = useState<boolean>(false)
   const [errors, setErrors] = useState<ValidationErrors>({})
+  const [fecha, setFecha] = useState<string>("")
 
 //   useEffect(() => {
 //     console.log("Cajas actualizadas:", cajas)
@@ -29,6 +31,7 @@ export function useCaja() {
         console.log("Fetching cajas...")
         const { data } = await axios.get<PaginatedCajas>(url)
         setCajas(data)
+        setFecha(data.fecha || "")
     } catch (error) {
         console.error("Error al obtener cajas:", error)
     } finally {
@@ -159,5 +162,6 @@ export function useCaja() {
     updateCaja,
     deleteCaja,
     cerrarCaja,
+    fecha,
   }
 }
