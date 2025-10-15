@@ -8,7 +8,7 @@ import CerrarCajaModal from "@/components/Cajas/CerrarCajaModal";
 import CajaShowModal from "@/components/Cajas/CajaShowModal";
 import CajasItemsTable from "@/components/Cajas/CajasItemsTable";
 
-export const CajaIndex: React.FC = () => {
+export const Index: React.FC = () => {
   const { cajas, loading, fetchCajas } = useCaja();
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -96,4 +96,4 @@ export const CajaIndex: React.FC = () => {
   );
 };
 
-export default CajaIndex;
+export default Index;

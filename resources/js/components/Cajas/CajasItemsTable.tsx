@@ -21,6 +21,11 @@ const CajasItemsTable: React.FC<Props> = ({
         <tr>
           <th>ID</th>
           <th>Usuario</th>
+          <th>Fecha apertura</th>
+          <th>Fecha cierre</th>
+          <th>Total Ingresos</th>
+          <th>Total Egresos</th>
+          <th>Saldo Final</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
@@ -30,6 +35,11 @@ const CajasItemsTable: React.FC<Props> = ({
           <tr key={caja.id}>
             <td>{caja.id}</td>
             <td>{caja.user?.name || "Desconocido"}</td>
+            <td>{caja.fecha_apertura}</td>
+            <td>{caja.fecha_cierre || "Abierta"}</td>
+            <td>{caja.total_ingresos || "N/A"}</td>
+            <td>{caja.total_egresos || "N/A"}</td>
+            <td>{caja.saldo_final || "N/A"}</td>
             <td>{caja.estado}</td>
             <td className="flex space-x-2">
               <button
