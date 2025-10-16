@@ -9,16 +9,14 @@ class MovimientoSeeder extends Seeder
 {
     public function run(): void
     {
-        $caja = Caja::create([
-            'user_id' => 1,
-            'fecha_apertura' => now(),
-            'saldo_inicial' => 0,
-            'total_ingresos' => 0,
-            'total_egresos' => 0,
-            'saldo_final' => 0,
-            'estado' => 'ABIERTA',
-            'observacion' => 'Caja inicial',
-        ]);
+        $cajas = Caja::factory(10)->create();
+
+        $cajas->each(function (Caja $caja) {
+            Movimiento::factory()->count(5)->create([
+                'caja_id' => $caja->id,
+            ]);
+        });
+
 
         $movimientos = Movimiento::factory()->count(20)->create();
 

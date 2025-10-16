@@ -29,11 +29,7 @@ class Caja extends Model
     }
 
     public function movimientos() {
-        return $this->hasMany(MovimientoCaja::class);
-    }
-
-    public function ventas() {
-        return $this->hasMany(Venta::class);
+        return $this->hasMany(Movimiento::class);
     }
 
     public function getIngresosCalculadosAttribute()
@@ -59,5 +55,31 @@ class Caja extends Model
         return ($this->saldo_inicial ?? 0)
             + $this->ingresos_calculados
             - $this->egresos_calculados;
+    }
+
+    public function cerrar()
+    {
+        // Si ya está cerrada, no hacer nada
+        if ($this->estado === 'CERRADA') {
+            return false;
+        }
+
+        // Calcular totales desde los movimientos
+        $totalIngresos = $this->movimientos()->where('tipo', 'INGRESO')->sum('monto');
+        $totalEgresos  = $this->movimientos()->where('tipo', 'EGRESO')->sum('monto');
+
+        // Calcular saldo final
+        $saldoFinal = ($this->saldo_inicial ?? 0) + $totalIngresos - $totalEgresos;
+
+        // Actualizar campos
+        $this->update([
+            'fecha_cierre'   => now(),
+            'total_ingresos' => $totalIngresos,
+            'total_egresos'  => $totalEgresos,
+            'saldo_final'    => $saldoFinal,
+            'estado'         => 'CERRADA',
+        ]);
+
+        return true;
     }
 }

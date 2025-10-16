@@ -11,12 +11,14 @@ class Movimiento extends Model
 
     protected $fillable = [
         'user_id',
-        'cliente_id',
+        'caja_id',
+        'referencia_id',
+        'referencia_type',
         'nro',
-        'fecha',
         'descripcion',
         'total',
         'tipo',
+        'fecha',
     ];
 
 
@@ -30,17 +32,13 @@ class Movimiento extends Model
         });
     }
 
-    public function cliente()
+    public function caja()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Caja::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function movimientosCaja() {
-        return $this->morphMany(MovimientoCaja::class, 'referencia');
     }
 }
