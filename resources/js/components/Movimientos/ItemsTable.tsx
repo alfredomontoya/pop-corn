@@ -16,9 +16,10 @@ const ItemsTable = ({ movimientos }: Props) => {
         <thead>
           <tr>
             <th className="p-2 border">Nro</th>
+            <th className="p-2 border">Caja</th>
             <th className="p-2 border">Tipo</th>
             <th className="p-2 border">Fecha</th>
-            <th className="p-2 border">Total</th>
+            <th className="p-2 border">Monto</th>
             <th className="p-2 border">Descripcion</th>
             <th className="p-2 border">Acciones</th>
           </tr>
@@ -27,13 +28,14 @@ const ItemsTable = ({ movimientos }: Props) => {
           {movimientos.data.map((m: any) => (
             <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20">
               <td className="p-2">{m.nro}</td>
+              <td className="p-2 text-right">{m.caja_id}</td>
               <td
-                className={`p-2 ${m.tipo === "ingreso" ? "text-green-600" : "text-red-600"}`}
+                className={`p-2 ${m.tipo === "INGRESO" ? "text-green-600" : "text-red-600"}`}
               >
                 {m.tipo}
               </td>
               <td className="p-2">{dayjs(m.fecha).format("DD/MM/YYYY HH:mm")}</td>
-              <td className="p-2 text-right">{m.total}</td>
+              <td className="p-2 text-right">{m.monto}</td>
               <td className="p-2 text-left">{m.descripcion}</td>
 
               <td className="p-2 text-center">
@@ -55,10 +57,7 @@ const ItemsTable = ({ movimientos }: Props) => {
         </tbody>
       </table>
 
-      {/* Paginación */}
-      <div className="flex gap-2 mt-4">
-        <Pagination links={movimientos?.links ?? []} />
-      </div>
+
     </div>
   )
 };

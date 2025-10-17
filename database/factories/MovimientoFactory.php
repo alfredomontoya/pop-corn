@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Caja;
 use App\Models\Movimiento;
+use App\Models\Pedido;
+use App\Models\User;
+use App\Models\Venta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MovimientoFactory extends Factory
@@ -11,17 +15,19 @@ class MovimientoFactory extends Factory
 
     public function definition(): array
     {
-        $cantidad = $this->faker->numberBetween(1, 10);
-        $precio = $this->faker->randomFloat(2, 10, 500);
+         // Tipos de movimiento
+        $tipo = $this->faker->randomElement(['INGRESO', 'EGRESO']);
 
         return [
-            'nro' => strtoupper($this->faker->bothify('MOV-####')),
-            'fecha' => now(),
+            'user_id' => User::all('id')->random()->id,
+            'caja_id' => Caja::all('id')->random()->id,
+            'referencia_id' => null,
+            'referencia_type' => null,
+            'nro' => Movimiento::getSiguienteNroAttribute(),
             'descripcion' => $this->faker->sentence(),
-            'total' => $cantidad * $precio,
-            'tipo' => $this->faker->randomElement(['ingreso', 'egreso']),
-            'user_id' => \App\Models\User::all('id')->random(),
-            'cliente_id' => \App\Models\Cliente::all('id')->random(),
+            'monto' => $this->faker->randomFloat(2, 10, 5000),
+            'tipo' => $tipo,
+            'fecha' => $this->faker->dateTimeBetween('-1 month', 'now'),
         ];
     }
 }

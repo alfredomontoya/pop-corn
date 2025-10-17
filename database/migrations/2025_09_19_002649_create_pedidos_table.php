@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('cliente_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('estado_pedido_id')->references('id')->on('estado_pedidos')->constrained()->default(1);
-            $table->date('fecha');
+            $table->datetime('fecha');
             $table->decimal('total', 10, 2)->default(0);
             $table->text('observacion')->nullable();
             $table->enum('estado', ['activo', 'anulado'])->default('activo');

@@ -16,7 +16,7 @@ class Movimiento extends Model
         'referencia_type',
         'nro',
         'descripcion',
-        'total',
+        'monto',
         'tipo',
         'fecha',
     ];
@@ -30,6 +30,12 @@ class Movimiento extends Model
             $ultimo = Movimiento::max('nro') ?? 0;
             $movimiento->nro = $ultimo + 1; // autoincremental desde 1
         });
+    }
+
+    static public function getSiguienteNroAttribute()
+    {
+        $ultimo = Movimiento::max('nro') ?? 0;
+        return $ultimo + 1;
     }
 
     public function caja()

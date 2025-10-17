@@ -12,14 +12,14 @@ class PedidoFactory extends Factory
 {
     protected $model = Pedido::class;
 
+
     public function definition(): array {
+        $estado_pedido = EstadoPedido::where('estado', 'PENDIENTE')->first();
         return [
             'cliente_id' => Cliente::all('id')->random(),
             'user_id' => User::all('id')->random(),
-            'estado_pedido_id' => EstadoPedido::all('id')->random(),
-            // 'nro' => $this->faker->unique()->numberBetween(1, 9999),
+            'estado_pedido_id' => $estado_pedido->id,
             'fecha' => $this->faker->date(),
-            // 'estado' => $this->faker->randomElement(['pendiente','confirmado','cancelado','entregado']),
             'estado' => 'activo',
             'total' => $this->faker->randomFloat(2, 50, 500),
             'observacion' => $this->faker->sentence(),

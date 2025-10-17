@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class Pedido extends Model
 {
@@ -35,20 +38,6 @@ class Pedido extends Model
         return $this->hasMany(DetallePedido::class);
     }
 
-    public function movimientosCaja() {
-        return $this->morphMany(MovimientoCaja::class, 'referencia');
-    }
-
-    /**
-     * Marca el pedido como preparado
-     */
-    public function preparar(): bool
-    {
-        $estado = EstadoPedido::where('estado', 'PREPARADO')->firstOrFail();
-        $this->estado_pedido_id = $estado->id;
-        return $this->save();
-    }
-
     /**
      * Marca el pedido como entregado
      */
@@ -62,10 +51,37 @@ class Pedido extends Model
     /**
      * Marca el pedido como pagado
      */
-    public function pagar(): bool
+    public function pagar($caja_id): bool
     {
-        $estado = EstadoPedido::where('estado', 'PAGADO')->firstOrFail();
-        $this->estado_pedido_id = $estado->id;
-        return $this->save();
+        try {
+            return DB::transaction(function () use ($caja_id) {
+                $estado = EstadoPedido::where('estado', 'PAGADO')->firstOrFail();
+
+                // Evita pagos duplicados
+                if ($this->estadoPedido?->estado === 'PAGADO') {
+                    throw new \Exception('El pedido ya está pagado.');
+                }
+
+                $this->estado_pedido_id = $estado->id;
+
+                Movimiento::create([
+                    'user_id' => $this->user_id,
+                    'caja_id' => $caja_id,
+                    'tipo' => 'INGRESO',
+                    'referencia_id' => $this->id,
+                    'referencia_type' => self::class,
+                    'descripcion' => 'Pago de pedido Nro. ' . $this->id,
+                    'monto' => $this->total,
+                    'fecha' => now(),
+                ]);
+
+                return $this->save();
+            });
+        } catch (Throwable $e) {
+            // Rollback automático ya ocurrió
+            Log::error('Error al pagar pedido: ' . $e->getMessage());
+            echo 'Error al pagar pedido: ' . $e->getMessage();
+            return false;
+        }
     }
 }

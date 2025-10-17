@@ -10,13 +10,33 @@ use Inertia\Inertia;
 
 class MovimientoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $movimientos = Movimiento::orderBy('id', 'desc')->paginate(10);
+        $query = Movimiento::orderBy('id', 'desc');
 
-        $totalIngresos = Movimiento::where('tipo', 'ingreso')->sum('total');
-        $totalEgresos  = Movimiento::where('tipo', 'egreso')->sum('total');
-        $saldo         = $totalIngresos - $totalEgresos;
+        // 🔹 Filtrar por fecha si vienen parámetros
+        if ($request->filled('fechaInicio')) {
+            $query->whereDate('fecha', '>=', $request->fechaInicio);
+        }
+
+        if ($request->filled('fechaFin')) {
+            $query->whereDate('fecha', '<=', $request->fechaFin);
+        }
+
+        $movimientos = $query->paginate(10);
+
+        // 🔹 Calcular totales según el filtro
+        $totalIngresos = Movimiento::where('tipo', 'ingreso')
+            ->when($request->filled('fechaInicio'), fn($q) => $q->whereDate('fecha', '>=', $request->fechaInicio))
+            ->when($request->filled('fechaFin'), fn($q) => $q->whereDate('fecha', '<=', $request->fechaFin))
+            ->sum('monto');
+
+        $totalEgresos = Movimiento::where('tipo', 'egreso')
+            ->when($request->filled('fechaInicio'), fn($q) => $q->whereDate('fecha', '>=', $request->fechaInicio))
+            ->when($request->filled('fechaFin'), fn($q) => $q->whereDate('fecha', '<=', $request->fechaFin))
+            ->sum('monto');
+
+        $saldo = $totalIngresos - $totalEgresos;
 
         return Inertia::render('Movimientos/Index', [
             'movimientos'   => $movimientos,

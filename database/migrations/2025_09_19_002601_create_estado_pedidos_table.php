@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('estado_pedidos', function (Blueprint $table) {
             $table->id();
-            $table->string('estado', 16)->default('pendiente');
+            $table->string('estado', 16)->default('PENDIENTE');
             $table->timestamps();
         });
     }

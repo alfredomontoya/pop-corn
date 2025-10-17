@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('caja_id');
-            $table->morphs('referencia'); // referencia_id y referencia_type
+            $table->nullableMorphs('referencia'); // referencia_id y referencia_type
             $table->unsignedBigInteger('nro')->unique();
             $table->text('descripcion')->nullable();
             $table->decimal('monto', 14, 2)->default(0);

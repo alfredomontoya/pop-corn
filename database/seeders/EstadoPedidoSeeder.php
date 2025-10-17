@@ -15,11 +15,10 @@ class EstadoPedidoSeeder extends Seeder
     {
         //
         $estados = [
-            ['estado' => 'pendiente'],
-            ['estado' => 'preparado'],
-            ['estado' => 'entregado'],
-            ['estado' => 'pagado'],
-            ['estado' => 'cancelado'],
+            ['estado' => 'PENDIENTE'],
+            ['estado' => 'ENTREGADO'],
+            ['estado' => 'PAGADO'],
+            ['estado' => 'CANCELADO'],
         ];
 
         foreach ($estados as $estado) {

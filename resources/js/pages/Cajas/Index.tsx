@@ -22,6 +22,10 @@ export const Index: React.FC = () => {
   const [cajaToShow, setCajaToShow] = useState<Caja | null>(null);
   const [isShowModalOpen, setIsShowModalOpen] = useState(false);
 
+  // 🔹 Filtros de fecha
+  const [fechaInicio, setFechaInicio] = useState<string | null>(null);
+  const [fechaFin, setFechaFin] = useState<string | null>(null);
+
   // 🟢 Cargar cajas al montar el componente
   useEffect(() => {
     fetchCajas();
@@ -62,6 +66,32 @@ export const Index: React.FC = () => {
             Abrir Caja
           </Button>
         </div>
+        {/* filtro de fecha */}
+        <div className="flex items-center space-x-2">
+          <label>Desde:</label>
+          <input
+            type="date"
+            value={fechaInicio || ""}
+            onChange={(e) => setFechaInicio(e.target.value)}
+            className="border rounded px-2 py-1"
+          />
+
+          <label>Hasta:</label>
+          <input
+            type="date"
+            value={fechaFin || ""}
+            onChange={(e) => setFechaFin(e.target.value)}
+            className="border rounded px-2 py-1"
+          />
+
+          <Button
+            onClick={() => fetchCajas({ fechaInicio, fechaFin })}
+            variant="outline"
+          >
+            Filtrar
+          </Button>
+        </div>
+
 
         <CajasItemsTable
           cajas={cajas.data}

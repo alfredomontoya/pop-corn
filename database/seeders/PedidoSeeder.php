@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Caja;
 use Illuminate\Database\Seeder;
 use App\Models\Pedido;
 use App\Models\DetallePedido;
@@ -11,9 +12,13 @@ class PedidoSeeder extends Seeder
 {
     public function run(): void
     {
-        Pedido::factory(5)->create(['total' => 0, 'estado_pedido_id' => 1]);
+        //El seeder de estado pedidos debe haberse ejecutado antes
+        // Crear 50 pedidos con estado 'PENDIENTE' y total 0
+        $pedidos = Pedido::factory(50)->create(['total' => 0, 'estado_pedido_id' => 1]);
 
-        Pedido::all()->each(function($pedido) {
+
+        // Para cada pedido, agregar detalles de pedido con productos aleatorios
+        $pedidos->each(function($pedido) {
             $total = 0;
             Producto::all()->each(function ($producto) use ($pedido, &$total){
                 $cantidad = random_int(5, 24);
@@ -30,8 +35,15 @@ class PedidoSeeder extends Seeder
             });
             $pedido->total = $total;
             $pedido->save();
-            // dd($pedido);
+        });
 
+        $pedidos->each(function ($pedido){
+            $pedido->entregar();
+            $pedido->pagar(Caja::all('id')->random()->id);
+        });
+
+        Caja::all()->each(function (Caja $caja) {
+            $caja->cerrar();
         });
 
     }

@@ -16,28 +16,34 @@ class CajaController extends Controller
      */
     public function index(Request $request)
     {
-        //  dd(now()->format('d/m/Y H:i:s'));
+        $query = Caja::with('user')->latest('fecha_apertura');
 
-        $cajas = Caja::with('user')
-            ->latest('fecha_apertura')
-            ->paginate(10)
-            ->through(function ($caja) {
-                return [
-                    'id' => $caja->id,
-                    'user_id' => $caja->user_id,
-                    'saldo_inicial' => (float) $caja->saldo_inicial,
-                    'total_ingresos' => (float) $caja->total_ingresos,
-                    'total_egresos' => (float) $caja->total_egresos,
-                    'saldo_final' => $caja->saldo_final !== null ? (float) $caja->saldo_final : null,
-                    'estado' => $caja->estado,
-                    'fecha_apertura' => $caja->fecha_apertura,
-                    'fecha_cierre' => $caja->fecha_cierre,
-                    'observacion' => $caja->observacion,
-                    'user' => $caja->user,
-                    'created_at' => $caja->created_at,
-                    'updated_at' => $caja->updated_at,
-                ];
-            });
+        // 🔹 Filtrar por fecha si vienen parámetros
+        if ($request->filled('fechaInicio')) {
+            $query->whereDate('fecha_apertura', '>=', $request->fechaInicio);
+        }
+
+        if ($request->filled('fechaFin')) {
+            $query->whereDate('fecha_apertura', '<=', $request->fechaFin);
+        }
+
+        $cajas = $query->paginate(10)->through(function ($caja) {
+            return [
+                'id' => $caja->id,
+                'user_id' => $caja->user_id,
+                'saldo_inicial' => (float) $caja->saldo_inicial,
+                'total_ingresos' => (float) $caja->total_ingresos,
+                'total_egresos' => (float) $caja->total_egresos,
+                'saldo_final' => $caja->saldo_final !== null ? (float) $caja->saldo_final : null,
+                'estado' => $caja->estado,
+                'fecha_apertura' => $caja->fecha_apertura,
+                'fecha_cierre' => $caja->fecha_cierre,
+                'observacion' => $caja->observacion,
+                'user' => $caja->user,
+                'created_at' => $caja->created_at,
+                'updated_at' => $caja->updated_at,
+            ];
+        });
 
         // 🧠 Si la solicitud viene de Axios o API (no de Inertia)
         if ($request->expectsJson() || $request->wantsJson()) {
@@ -49,6 +55,7 @@ class CajaController extends Controller
             'cajas' => $cajas,
         ]);
     }
+
 
     /**
      * 🟢 Abrir una nueva caja
