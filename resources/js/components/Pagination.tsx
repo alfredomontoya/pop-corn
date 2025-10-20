@@ -16,9 +16,8 @@ const Pagination: React.FC<Props> = ({ currentPage, lastPage, onPageChange }) =>
         <Button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`px-3 py-1 border rounded ${
-            page === currentPage ? "bg-blue-500 text-white" : "bg-white"
-          }`}
+          variant={`${page===currentPage?"default":"secondary"}`}
+          className={`${page==currentPage?"":"cursor-pointer"}`}
         >
           {page}
         </Button>

@@ -116,6 +116,17 @@ Route::middleware(['auth', SetUserId::class])->group(function () {
     Route::delete('/cajas/{caja}', [CajaController::class, 'destroy'])->name('cajas.destroy');
 
 
+    Route::prefix('cajas')->name('cajas.')->group(function () {
+    Route::get('/', [CajaController::class, 'index'])->name('index');
+
+    // Exportar PDF
+    Route::get('/export/pdf', [CajaController::class, 'exportPdf'])->name('export.pdf');
+
+    // Exportar Excel
+    Route::get('/export/excel', [CajaController::class, 'exportExcel'])->name('export.excel');
+});
+
+
 });
 
 require __DIR__.'/settings.php';

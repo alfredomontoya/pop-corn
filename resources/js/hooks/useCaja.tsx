@@ -20,34 +20,35 @@ export function useCaja() {
   const [errors, setErrors] = useState<ValidationErrors>({})
   const [fecha, setFecha] = useState<string>("")
 
-//   useEffect(() => {
-//     console.log("Cajas actualizadas:", cajas)
-//     }, [cajas])
-
   // 🟢 Listar todas las cajas
-const fetchCajas = async (params?: { fechaInicio?: string; fechaFin?: string }): Promise<void> => {
-  try {
-    setLoading(true);
-    console.log("Fetching cajas...");
+  const fetchCajas = async (params?: {
+    fechaInicio?: string;
+    fechaFin?: string;
+    page?: number;
+  }): Promise<void> => {
+    try {
+      setLoading(true);
+      console.log("Fetching cajas...");
 
-    // Construir URL con query params si hay fechas
-    let url = "/cajas";
-    if (params?.fechaInicio || params?.fechaFin) {
+      // Construir la URL base
+      let url = "/cajas";
       const query = new URLSearchParams();
-      if (params.fechaInicio) query.append("fechaInicio", params.fechaInicio);
-      if (params.fechaFin) query.append("fechaFin", params.fechaFin);
-      url += `?${query.toString()}`;
-    }
 
-    const { data } = await axios.get<PaginatedCajas>(url);
-    setCajas(data);
-    setFecha(data.fecha || "");
-  } catch (error) {
-    console.error("Error al obtener cajas:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (params?.fechaInicio) query.append("fechaInicio", params.fechaInicio);
+      if (params?.fechaFin) query.append("fechaFin", params.fechaFin);
+      if (params?.page) query.append("page", params.page.toString());
+
+      if (query.toString()) url += `?${query.toString()}`;
+
+      const { data } = await axios.get<PaginatedCajas>(url);
+      setCajas(data);
+      setFecha(data.fecha || "");
+    } catch (error) {
+      console.error("Error al obtener cajas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 // 🟢 Obtener detalle de una caja (usa método show del controlador)

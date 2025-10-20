@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Pedido;
 use App\Models\DetallePedido;
 use App\Models\Producto;
+use Carbon\Carbon;
+
 
 class PedidoSeeder extends Seeder
 {
@@ -42,8 +44,13 @@ class PedidoSeeder extends Seeder
             $pedido->pagar(Caja::all('id')->random()->id);
         });
 
-        Caja::all()->each(function (Caja $caja) {
-            $caja->cerrar();
+        $start = Carbon::now()->startOfMonth(); // Primer día del mes
+        $end   = Carbon::now()->endOfMonth();   // Último día del mes
+
+        $randomDate = Carbon::createFromTimestamp(rand($start->timestamp, $end->timestamp));
+
+        Caja::all()->each(function (Caja $caja) use ($randomDate) {
+            $caja->cerrar($randomDate);
         });
 
     }

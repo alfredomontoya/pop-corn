@@ -57,8 +57,10 @@ class Caja extends Model
             - $this->egresos_calculados;
     }
 
-    public function cerrar()
+    public function cerrar($fecha_cierre = null)
     {
+        $fecha_cierre = $fecha_cierre ?? now();
+
         // Si ya está cerrada, no hacer nada
         if ($this->estado === 'CERRADA') {
             return false;
@@ -73,7 +75,7 @@ class Caja extends Model
 
         // Actualizar campos
         $this->update([
-            'fecha_cierre'   => now(),
+            'fecha_cierre'   => $fecha_cierre,
             'total_ingresos' => $totalIngresos,
             'total_egresos'  => $totalEgresos,
             'saldo_final'    => $saldoFinal,

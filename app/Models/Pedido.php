@@ -72,7 +72,8 @@ class Pedido extends Model
                     'referencia_type' => self::class,
                     'descripcion' => 'Pago de pedido Nro. ' . $this->id,
                     'monto' => $this->total,
-                    'fecha' => now(),
+                    // 'fecha' => now(),
+                    'fecha' => Util::randomDateInRange('2025-10-01', '2025-10-31'), // PARA TESTING
                 ]);
 
                 return $this->save();
