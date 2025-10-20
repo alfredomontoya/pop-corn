@@ -24,6 +24,7 @@ return array(
     '47e1160838b5e5a10346ac4084b58c23' => $vendorDir . '/laravel/prompts/src/helpers.php',
     '35a6ad97d21e794e7e22a17d806652e4' => $vendorDir . '/nunomaduro/termwind/src/Functions.php',
     'e39a8b23c42d4e1452234d762b03835a' => $vendorDir . '/ramsey/uuid/src/functions.php',
+    '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     '476ca15b8d69b04665cd879be9cb4c68' => $vendorDir . '/laravel/framework/src/Illuminate/Collections/functions.php',
     '265b4faa2b3a9766332744949e83bf97' => $vendorDir . '/laravel/framework/src/Illuminate/Collections/helpers.php',
     'c7a3c339e7e14b60e06a2d7fcce9476b' => $vendorDir . '/laravel/framework/src/Illuminate/Events/functions.php',
