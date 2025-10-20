@@ -12,6 +12,9 @@ class MovimientoSeeder extends Seeder
         //El seeder de cajas debe haberse ejecutado antes
         $cajas = Caja::all();
 
+
+
+
         $cajas->each(function (Caja $caja) {
             Movimiento::factory()->count(5)->create([
                 'caja_id' => $caja->id,
