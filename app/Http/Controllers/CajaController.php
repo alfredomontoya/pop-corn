@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Exports\CajasExport;
+use Barryvdh\DomPDF\Facade\Pdf; // ← import correcto
+use Maatwebsite\Excel\Facades\Excel;
 
 class CajaController extends Controller
 {
@@ -27,7 +30,7 @@ class CajaController extends Controller
             $query->whereDate('fecha_apertura', '<=', $request->fechaFin);
         }
 
-        $cajas = $query->paginate(10)->through(function ($caja) {
+        $cajas = $query->paginate(5)->through(function ($caja) {
             return [
                 'id' => $caja->id,
                 'user_id' => $caja->user_id,
@@ -197,5 +200,35 @@ class CajaController extends Controller
         ]);
 
         return back()->with('success', 'Movimiento registrado correctamente.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $cajas = $this->getFilteredCajas($request)->get();
+        $fechaInicio = $request->fechaInicio;
+        $fechaFin = $request->fechaFin;
+        $pdf = PDF::loadView('pdf.cajas', compact('cajas', 'fechaInicio', 'fechaFin'));
+        return $pdf->download('cajas.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(new CajasExport($request), 'cajas.xlsx');
+    }
+
+    // Helper interno para reutilizar filtros:
+    protected function getFilteredCajas($request)
+    {
+        $query = Caja::query();
+
+        if ($request->filled('fechaInicio')) {
+            $query->whereDate('fecha_apertura', '>=', $request->fechaInicio);
+        }
+
+        if ($request->filled('fechaFin')) {
+            $query->whereDate('fecha_apertura', '<=', $request->fechaFin);
+        }
+
+        return $query->with('user');
     }
 }

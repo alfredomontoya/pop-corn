@@ -30,12 +30,11 @@ npm run build
 
 # Instalar dependencias PHP (solo locales, no se suben)
 echo "📦 Instalando dependencias PHP (localmente, no en prod)..."
-composer install
+composer install --no-dev --optimize-autoloader
 
 # Forzar añadir los archivos de build y vendor (aunque estén en .gitignore)
 echo "📤 Preparando archivos para deploy..."
 git add -f $BUILD_DIR
-git add -f vendor
 git add -f bootstrap/cache
 git add composer.lock
 git commit -m "🚀 Build y dependencias PHP listas para deploy ($(date '+%Y-%m-%d %H:%M:%S'))" || echo "🟡 Sin cambios nuevos para commitear"

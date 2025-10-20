@@ -7,22 +7,19 @@ import CajaCreateModal from "@/components/Cajas/CajaCreateModa";
 import CerrarCajaModal from "@/components/Cajas/CerrarCajaModal";
 import CajaShowModal from "@/components/Cajas/CajaShowModal";
 import CajasItemsTable from "@/components/Cajas/CajasItemsTable";
+import Pagination from "@/components/Pagination";
 
 export const Index: React.FC = () => {
-  console.log(new Date().toLocaleString());
   const { cajas, loading, fetchCajas, fecha } = useCaja();
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // 🔹 Para cerrar caja
   const [cajaToClose, setCajaToClose] = useState<Caja | null>(null);
   const [isCerrarModalOpen, setIsCerrarModalOpen] = useState(false);
 
-  // 🔹 Para ver caja
   const [cajaToShow, setCajaToShow] = useState<Caja | null>(null);
   const [isShowModalOpen, setIsShowModalOpen] = useState(false);
 
-  // 🔹 Filtros de fecha
   const [fechaInicio, setFechaInicio] = useState<string | null>(null);
   const [fechaFin, setFechaFin] = useState<string | null>(null);
 
@@ -31,43 +28,40 @@ export const Index: React.FC = () => {
     fetchCajas();
   }, []);
 
-  // 🟢 Refrescar lista después de crear una caja
   const handleCreateSuccess = async () => {
     setIsCreateModalOpen(false);
     await fetchCajas();
   };
 
-  // 🟢 Abrir modal de cerrar caja
   const openCerrarCajaModal = (caja: Caja) => {
     setCajaToClose(caja);
     setIsCerrarModalOpen(true);
   };
 
-  // 🟢 Abrir modal de mostrar caja
   const openShowCajaModal = (caja: Caja) => {
     setCajaToShow(caja);
     setIsShowModalOpen(true);
   };
 
-  // 🟢 Manejar apertura del modal de crear caja
   const handleAperturarCaja = () => {
     setIsCreateModalOpen(true);
   };
+
+  // 🔹 Totales
+  const totalIngresos = cajas?.data?.reduce((sum, c) => sum + (c.total_ingresos || 0), 0) || 0;
+  const totalEgresos = cajas?.data?.reduce((sum, c) => sum + (c.total_egresos || 0), 0) || 0;
+  const totalSaldoFinal = cajas?.data?.reduce((sum, c) => sum + (c.saldo_final || 0), 0) || 0;
 
   return (
     <AppLayout breadcrumbs={[{ title: "Captaciones", href: route("captaciones.index") }]}>
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Cajas</h1>
-          <Button
-            onClick={handleAperturarCaja}
-            variant={'default'}
-          >
-            Abrir Caja
-          </Button>
+          <Button onClick={handleAperturarCaja} variant="outline">Abrir Caja</Button>
         </div>
-        {/* filtro de fecha */}
-        <div className="flex items-center space-x-2">
+
+        {/* Filtros de fecha */}
+        <div className="flex items-center space-x-2 mb-4">
           <label>Desde:</label>
           <input
             type="date"
@@ -75,7 +69,6 @@ export const Index: React.FC = () => {
             onChange={(e) => setFechaInicio(e.target.value)}
             className="border rounded px-2 py-1"
           />
-
           <label>Hasta:</label>
           <input
             type="date"
@@ -85,39 +78,82 @@ export const Index: React.FC = () => {
           />
 
           <Button
-            onClick={() => fetchCajas({ fechaInicio, fechaFin })}
+            onClick={() => fetchCajas({ fechaInicio: fechaInicio || undefined, fechaFin: fechaFin || undefined })}
             variant="outline"
           >
             Filtrar
           </Button>
+
+          <Button
+            onClick={() => {
+              setFechaInicio(null);
+              setFechaFin(null);
+              fetchCajas();
+            }}
+            variant="secondary"
+          >
+            Limpiar
+          </Button>
         </div>
 
+        {/* Exportar PDF / Excel */}
+        <div className="flex space-x-2 mb-4">
+          <Button
+            variant="outline"
+            onClick={() => window.open(route("cajas.export.pdf", {
+              fechaInicio: fechaInicio || "",
+              fechaFin: fechaFin || ""
+            }), "_blank")}
+          >
+            Exportar PDF
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => window.open(route("cajas.export.excel", {
+              fechaInicio: fechaInicio || "",
+              fechaFin: fechaFin || ""
+            }), "_blank")}
+          >
+            Exportar Excel
+          </Button>
+        </div>
 
+        {/* Tabla de cajas */}
         <CajasItemsTable
           cajas={cajas.data}
           loading={loading}
           refreshing={refreshing}
           onCerrarCaja={openCerrarCajaModal}
-          onShowCaja={openShowCajaModal} // <-- nuevo
+          onShowCaja={openShowCajaModal}
+          totales={{
+            totalIngresos,
+            totalEgresos,
+            totalSaldoFinal
+          }}
+        />
+
+        {/* Paginación */}
+        <Pagination
+          currentPage={cajas?.current_page || 1}
+          lastPage={cajas?.last_page || 1}
+          onPageChange={(page) =>
+            fetchCajas({ page, fechaInicio: fechaInicio || undefined, fechaFin: fechaFin || undefined })
+          }
         />
       </div>
 
-      {/* Modal de crear caja */}
+      {/* Modales */}
       <CajaCreateModal
         open={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSuccess={handleCreateSuccess}
       />
-
-      {/* Modal de cerrar caja */}
       <CerrarCajaModal
         open={isCerrarModalOpen}
         onClose={() => setIsCerrarModalOpen(false)}
         caja={cajaToClose}
-        onSuccess={fetchCajas} // refresca la lista al cerrar
+        onSuccess={fetchCajas}
       />
-
-      {/* Modal de mostrar caja */}
       <CajaShowModal
         open={isShowModalOpen}
         onClose={() => setIsShowModalOpen(false)}

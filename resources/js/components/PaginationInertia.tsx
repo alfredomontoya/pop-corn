@@ -1,41 +1,33 @@
-import React from "react"
-import { Button } from "./ui/button"
+import { PaginationLink } from "@/interfaces/Venta.Interface";
+import React from "react";
 
-interface Link {
-  url: string | null
-  label: string
-  active: boolean
-}
+type PaginationProps = {
+  links: PaginationLink[];
+  onPageChange: (url: string) => void;
+};
 
-interface Props {
-  links: Link[]
-  onPageChange: (url: string | null) => void
-}
-
-const PaginationInertia: React.FC<Props> = ({ links, onPageChange }) => {
-  if (!links || links.length <= 1) return null
+const PaginationInertia: React.FC<PaginationProps> = ({ links, onPageChange }) => {
+  if (!links || links.length <= 1) return null;
 
   return (
-    <div className="flex justify-center mt-4 space-x-2">
+    <div className="flex justify-center space-x-1 mt-4">
       {links.map((link, index) => {
-        // Laravel/Inertia a veces devuelve etiquetas con HTML, limpiamos los símbolos
-        const label = link.label.replace(/&laquo;|&raquo;/g, "").trim()
-
+        const label = link.label.replace(/&laquo;/g, "«").replace(/&raquo;/g, "»");
         return (
-          <Button
+          <button
             key={index}
-            onClick={() => onPageChange(link.url)}
             disabled={!link.url}
-            className={`px-3 py-1 ${
-              link.active ? "bg-blue-500 text-white" : "bg-white text-blue-500"
+            onClick={() => link.url && onPageChange(link.url)}
+            className={`px-3 py-1 border rounded ${
+              link.active ? "bg-blue-500 text-white" : "hover:bg-gray-200"
             }`}
           >
             {label}
-          </Button>
-        )
+          </button>
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
-export default PaginationInertia
+export default PaginationInertia;
