@@ -67,7 +67,6 @@ class ClienteController extends Controller
             'ubicacion' => ['nullable', 'string', 'max:255'],
             'telefono' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:clientes,email'],
-            'estado' => ['required', Rule::in(['activo', 'inactivo'])],
             'notas' => ['nullable', 'string'],
         ]);
 
