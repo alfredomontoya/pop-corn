@@ -1,1 +1,0 @@
-import{r as t,j as r}from"./app-CdaVaMdr.js";const c=({message:e,duration:s=5e3,onClose:o})=>{const[a,i]=t.useState(!0);return t.useEffect(()=>{const n=setTimeout(()=>{i(!1),o()},s);return()=>clearTimeout(n)},[]),!a||!e?null:r.jsx("div",{className:"fixed top-5 right-5 z-50",children:r.jsx("div",{className:"bg-green-800 px-4 py-2 rounded shadow-lg",children:e})})};export{c as T};
