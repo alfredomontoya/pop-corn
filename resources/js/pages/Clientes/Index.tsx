@@ -1,157 +1,133 @@
 import React, { useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
+import { usePage, router } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
-import { BreadcrumbItem } from "@/types";
-import { useClientes } from "@/hooks/Clientes/useClientes";
-import ClientesSearchForm from "./ClientesSearchForm";
-import ClientesTable from ".//ClientesTable";
-import ClientesPagination from "./ClientesPagination";
-import ClienteDetailModal from "./ClienteDetailModal";
-import { Cliente } from "@/interfaces/Clientes.Interface";
-import CreateClienteModal from "./ClienteCreateModal";
+import ClienteItemsTable from "@/components/Clientes/ClienteItemsTable";
+import ClienteCreateModal from "@/components/Clientes/ClienteCreateModal";
+import ClienteEditModal from "@/components/Clientes/ClienteEditModal";
+import ClienteDetailModal from "@/components/Clientes/ClienteDetailModal";
+import ConfirmModal from "@/components/ConfirmModal";
+import Toast from "@/components/Toast";
+import Search from "@/components/Clientes/ClienteSearch";
+import { Cliente, PaginatedClientes } from "@/interfaces/Clientes.Interface";
 import { Button } from "@/components/ui/button";
-import ConfirmacionRegistro from "@/components/ConfirmacionRegistro";
-import ClienteUpdateModal from "./ClienteUpdateModal";
-import DeleteModal from "@/components/DeleteModal";
-import SuccessModal from "@/components/SuccessModal";
+import PaginationInertia from "@/components/PaginationInertia";
 
 interface Props {
-  clientes: {
-    data: Cliente[];
-    links: { url: string | null; label: string; active: boolean }[];
+  clientes: PaginatedClientes;
+  filters: {
+    search?: string;
+    sort?: string;
+    direction?: string;
   };
-  filters?: { search?: string };
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Clientes", href: "/clientes" },
-];
+interface BreadcrumbItem {
+  title: string;
+  href: string;
+}
 
-export default function Index({ clientes, filters }: Props) {
-  const { search, setSearch, handleSearch } = useClientes(filters?.search || "");
-  const [clienteSeleccionado, setClienteSeleccionado] = useState<Cliente | null>(null);
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openUpdateModal, setOpenUpdateModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [openSuccessModal, setOpenSuccessModal] = useState(false);
+const Index: React.FC<Props> = ({ clientes, filters }) => {
+  const { flash } = usePage().props as any;
+  const [toastMessage, setToastMessage] = useState(flash?.success || null);
+
+  const [showCreate, setShowCreate] = useState(false);
+  const [editCliente, setEditCliente] = useState<Cliente | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<Cliente | null>(null);
+  const [detailCliente, setDetailCliente] = useState<Cliente | null>(null);
+
+  const [url, setUrl] = useState("/api/ventas")
+
+  const handleDelete = (cliente: Cliente) => {
+    router.delete(`/clientes/${cliente.id}`, {
+      onSuccess: () =>
+        setToastMessage(
+          `Cliente '${cliente.nombre_razon_social}' eliminado correctamente.`
+        ),
+    });
+    setConfirmDelete(null);
+  };
+
+  const handleSaved = (msg: string) => {
+    setToastMessage(msg);
+  };
+
+  const handlePageChange = (newUrl: string) => {
+    if (newUrl) {
+      router.visit(newUrl, {
+        preserveScroll: true,
+        preserveState: true,
+      });
+    }
+  }
+  const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Clientes", href: "/clientes" },
+  ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Clientes" />
-      <div className="p-6">
-        <h1 className="text-xl font-bold mb-4"> Clientes
-        </h1>
-        <div className="flex gap-2">
-            <ClientesSearchForm
-                search={search}
-                setSearch={setSearch}
-                handleSearch={handleSearch}
-            />
+      <div className="p-4">
+        {/* Botón para crear nuevo cliente */}
+        <Button
+          onClick={() => setShowCreate(true)}
+          variant={"default"}
+          className="mb-4"
+        >
+          Nuevo Cliente
+        </Button>
 
-            {/* <Link
-                href={route("clientes.create")}
-                className="bg-secondary text-black px-3 py-1 rounded-sm gap-2 mb-4"
-            >
-                Nuevo
-            </Link> */}
-            <Button className="mb-4" variant={"secondary"} size={"sm"} onClick={() => setOpenCreateModal(true)}>Nuevo Cliente</Button>
-        </div>
+        {/* Componente de búsqueda */}
+        <Search initialSearch={filters.search} />
 
-
-        <ClientesTable
-            clientes={clientes.data}
-            onSelect={(cliente) => {
-                setClienteSeleccionado(cliente);
-                setOpenDetailModal(true); // para abrir detalle
-            }}
-            onEdit={(cliente) => {
-                setClienteSeleccionado(cliente);
-                setOpenUpdateModal(true); // para abrir modal de edición
-            }}
-            onDelete={(cliente) => {
-                setClienteSeleccionado(cliente);
-                setOpenDeleteModal(true);
-            }}
+        {/* Tabla de clientes */}
+        <ClienteItemsTable
+          clientes={clientes}
+          filters={filters}
+          onEdit={setEditCliente}
+          onDelete={setConfirmDelete}
+          onDetail={setDetailCliente}
         />
 
-        <ClientesPagination links={clientes.links} />
+         {/* Paginación */}
+        <PaginationInertia links={clientes?.links ?? []} onPageChange={handlePageChange}/>
 
-        {/* Ver detalle de cliente */}
-        {openDetailModal && clienteSeleccionado && (
-            <ClienteDetailModal
-                cliente={clienteSeleccionado}
-                onClose={() => {
-                    setOpenDetailModal(false)
-                    setClienteSeleccionado(null)
-                }}
-            />
+        {/* Modales */}
+        {showCreate && (
+          <ClienteCreateModal
+            onClose={() => setShowCreate(false)}
+            onSaved={(msg: string) => handleSaved(msg)}
+          />
         )}
 
-        {/* Create Cliente Modal */}
-        <CreateClienteModal
-            open={openCreateModal}
-            onClose={() => setOpenCreateModal(false)}
-            onSuccess={() => {
-              setOpenCreateModal(false);
-              setShowConfirm(true);
-            }}
-        />
-
-        {/* Update Cliente Modal */}
-        {openUpdateModal && clienteSeleccionado && (
-            <ClienteUpdateModal
-                open={openUpdateModal}
-                cliente={clienteSeleccionado}
-                onClose={() => {
-                    setOpenUpdateModal(false)
-                    setClienteSeleccionado(null)
-                }}
-                onSuccess={() => {
-                    setOpenUpdateModal(false)
-                    setClienteSeleccionado(null);
-                    setShowConfirm(true);
-                }}
-            />
+        {editCliente && (
+          <ClienteEditModal
+            cliente={editCliente}
+            onClose={() => setEditCliente(null)}
+            onSaved={(msg: string) => handleSaved(msg)}
+          />
         )}
 
-        {/* Eliminar cliente */}
-        <DeleteModal
-            open={openDeleteModal}
-            onClose={() => {
-                setOpenDeleteModal(false);
-                setClienteSeleccionado(null);
-            }}
-            onConfirm={() => {
-                if (clienteSeleccionado) {
-                    router.delete(route("clientes.destroy", clienteSeleccionado.id), {
-                        onSuccess: () => {
-                            setOpenDeleteModal(false);
+        {detailCliente && (
+          <ClienteDetailModal
+            cliente={detailCliente}
+            onClose={() => setDetailCliente(null)}
+          />
+        )}
 
-                            setOpenSuccessModal(true);
-                        },
-                        onError: () => {
-                            // Manejar error
-                        }
-                    });
+        {confirmDelete && (
+          <ConfirmModal
+            text={confirmDelete.nombre_razon_social}
+            onConfirm={() => handleDelete(confirmDelete)}
+            onClose={() => setConfirmDelete(null)}
+          />
+        )}
 
-                }
-            }}
-            itemName={clienteSeleccionado?.nombre_razon_social || ""}
-        />
-
-        <SuccessModal
-            open={openSuccessModal}
-            onClose={() => {
-                setOpenSuccessModal(false)
-                setClienteSeleccionado(null);
-            }}
-            message={`El cliente ${clienteSeleccionado?.nombre_razon_social ?? ""} fue eliminado correctamente.`}
-        />
-
-        <ConfirmacionRegistro open={showConfirm} onClose={() => setShowConfirm(false)} />
+        {/* Toast de confirmación */}
+        {toastMessage && (
+          <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+        )}
       </div>
     </AppLayout>
   );
-}
+};
+
+export default Index;

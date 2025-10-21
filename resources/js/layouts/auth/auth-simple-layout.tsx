@@ -1,7 +1,9 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
-import fondo from '../../../assets/fondo-login.jpg'
+import fondoSmall from "../../../assets/fondo-login-small.jpg";
+import fondoMedium from "../../../assets/fondo-login-medium.jpg";
+import fondoLarge from "../../../assets/fondo-login-large.jpg";
 
 interface AuthLayoutProps {
     name?: string;
@@ -11,14 +13,7 @@ interface AuthLayoutProps {
 
 export default function AuthSimpleLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
     return (
-        <div
-            className="relative flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 overflow-hidden"
-            style={{
-                backgroundImage: `url(${fondo})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-        >
+        <div className="auth-bg relative flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 overflow-hidden">
             {/* Capa de difuminado */}
             {/* <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]"></div> */}
 
@@ -42,6 +37,23 @@ export default function AuthSimpleLayout({ children, title, description }: Props
                     </div>
                 </div>
             </div>
+            <style>{`
+              .auth-bg {
+                background-image: url(${fondoSmall});
+                background-size: cover;
+                background-position: center;
+              }
+              @media (min-width: 768px) {
+                .auth-bg {
+                  background-image: url(${fondoMedium});
+                }
+              }
+              @media (min-width: 1920px) {
+                .auth-bg {
+                  background-image: url(${fondoLarge});
+                }
+              }
+            `}</style>
         </div>
     );
 }

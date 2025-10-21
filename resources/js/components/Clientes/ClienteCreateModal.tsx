@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Label } from "../ui/label";
 
 interface ClienteCreateModalProps {
   onClose: () => void;
@@ -92,6 +93,7 @@ const ClienteCreateModal: React.FC<ClienteCreateModalProps> = ({
             required
           /> */}
 
+          <Label>Nombre / Razón Social</Label>
           <Input
             type="text"
             placeholder="Nombre / Razón Social"
@@ -99,6 +101,7 @@ const ClienteCreateModal: React.FC<ClienteCreateModalProps> = ({
             onChange={(e) => setNombreRazonSocial(e.target.value)}
             required
           />
+          <Label>Propietario</Label>
           <Input
             type="text"
             placeholder="Propietario"
@@ -106,6 +109,7 @@ const ClienteCreateModal: React.FC<ClienteCreateModalProps> = ({
             onChange={(e) => setPropietario(e.target.value)}
           />
 
+          <Label>Dirección</Label>
           <Input
             type="text"
             placeholder="Dirección"
@@ -113,13 +117,14 @@ const ClienteCreateModal: React.FC<ClienteCreateModalProps> = ({
             onChange={(e) => setDireccion(e.target.value)}
           />
 
+          <Label>Ubicación</Label>
           <Input
             type="text"
             placeholder="Ubicación"
             value={ubicacion}
             onChange={(e) => setUbicacion(e.target.value)}
           />
-
+          <Label>Teléfono</Label>
           <Input
             type="text"
             placeholder="Teléfono"
@@ -133,23 +138,13 @@ const ClienteCreateModal: React.FC<ClienteCreateModalProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           /> */}
-
-          <Select value={estado} onValueChange={(v: "activo" | "inactivo") => setEstado(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="activo">Activo</SelectItem>
-              <SelectItem value="inactivo">Inactivo</SelectItem>
-            </SelectContent>
-          </Select>
-
+          {/* <Label>Notas</Label>
           <textarea
             placeholder="Notas"
             className="border p-2 w-full"
             value={notas}
             onChange={(e) => setNotas(e.target.value)}
-          />
+          /> */}
 
           <div className="flex justify-end space-x-2 mt-2">
             <Button type="button" onClick={onClose} variant="secondary">Cancelar</Button>

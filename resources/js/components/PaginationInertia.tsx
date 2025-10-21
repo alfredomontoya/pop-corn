@@ -1,5 +1,6 @@
 import { PaginationLink } from "@/interfaces/Venta.Interface";
 import React from "react";
+import { Button } from "./ui/button";
 
 type PaginationProps = {
   links: PaginationLink[];
@@ -12,18 +13,20 @@ const PaginationInertia: React.FC<PaginationProps> = ({ links, onPageChange }) =
   return (
     <div className="flex justify-center space-x-1 mt-4">
       {links.map((link, index) => {
-        const label = link.label.replace(/&laquo;/g, "«").replace(/&raquo;/g, "»");
+        let label = link.label
+          .replace(/&laquo;/g, "«")
+          .replace(/&raquo;/g, "»")
+          .replace(/Previous/i, "Anterior")
+          .replace(/Next/i, "Siguiente");
         return (
-          <button
+          <Button
             key={index}
             disabled={!link.url}
+            variant={`${link.active ? "default" : "secondary"}`}
             onClick={() => link.url && onPageChange(link.url)}
-            className={`px-3 py-1 border rounded ${
-              link.active ? "bg-blue-500 text-white" : "hover:bg-gray-200"
-            }`}
           >
             {label}
-          </button>
+          </Button>
         );
       })}
     </div>
