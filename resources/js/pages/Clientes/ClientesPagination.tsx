@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function ClientesPagination({ links }: Props) {
+  console.log("links", links);
   const renderLabel = (label: string) => {
     const labelLower = label.toLowerCase();
 

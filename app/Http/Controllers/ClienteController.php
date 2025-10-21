@@ -30,7 +30,7 @@ class ClienteController extends Controller
             ->paginate(5) // puedes cambiar el tamaño de página
             ->withQueryString(); // mantiene search, sort y direction en los links
         // Retorno con Inertia
-        return Inertia::render('Clientes/ClienteIndex', [
+        return Inertia::render('Clientes/Index', [
             'clientes' => $clientes,
             'filters'  => $request->only('search', 'sort', 'direction'),
         ]);

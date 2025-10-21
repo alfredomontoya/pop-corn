@@ -4,6 +4,7 @@ import Pagination from "@/components/PaginationInertia";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { Cliente, PaginatedClientes } from "@/interfaces/Clientes.Interface";
+import PaginationInertia from "@/components/PaginationInertia";
 
 interface Props {
   clientes: PaginatedClientes;
@@ -75,7 +76,8 @@ const ClienteItemsTable: React.FC<Props> = ({
               Nombre/Razón Social {renderSortIcon("nombre_razon_social")}
             </th>
             <th className="px-4 py-2 border">Propietario</th>
-            <th className="px-4 py-2 border">Referencias</th>
+            <th className="px-4 py-2 border">Teléfono</th>
+            <th className="px-4 py-2 border">Dirección</th>
             <th className="px-4 py-2 border">Acciones</th>
           </tr>
         </thead>
@@ -87,31 +89,26 @@ const ClienteItemsTable: React.FC<Props> = ({
                 className="border-t hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
                 onClick={() => onDetail(cli)}
               >
-                {/* <td className="px-4 py-2">{cli.id}</td> */}
-                {/* <td className="px-4 py-2">
-                  {`${cli.tipo ?? ""} ${cli.tipo_documento ?? ""} ${
-                    cli.numero_documento ?? ""
-                  }`}
-                </td> */}
                 <td className="px-4 py-2">{cli.nombre_razon_social}</td>
                 <td className="px-4 py-2">{cli.propietario}</td>
                 <td className="px-4 py-2">
-                  {[cli.email, cli.telefono, cli.direccion]
-                    .filter(Boolean)
-                    .join(" | ")}
-                    <p>
+                  {cli.telefono}
+                </td>
+                <td>
+                  {cli.direccion}&nbsp;
+                  <span>
                       {cli.ubicacion && (
-                      <a
-                        href={cli.ubicacion}
-                        target="_blank"        // abrir en nueva pestaña
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                            window.open(`https://www.google.com/maps?q=${cli.ubicacion}`, "_blank", "noopener,noreferrer");
+                        }}
                         rel="noopener noreferrer" // seguridad al abrir nueva pestaña
-                        onClick={(e) => e.stopPropagation()} // detener propagación del click
-                        className="text-blue-500 underline"
                       >
                         Ver en mapa
-                      </a>
+                      </Button>
                     )}
-                    </p>
+                    </span>
                 </td>
                 <td className="px-4 text-center">
                   <Button
@@ -120,7 +117,7 @@ const ClienteItemsTable: React.FC<Props> = ({
                       onEdit(cli);
                     }}
                     variant={"warning"}
-                    className="mb-1 w-20"
+                    className="my-1 w-20"
                   >
                     Editar
                   </Button>
@@ -130,7 +127,7 @@ const ClienteItemsTable: React.FC<Props> = ({
                       onDelete(cli);
                     }}
                     variant={"destructive"}
-                    className="mb-1 w-20"
+                    className="my-1 w-20"
                   >
                     Eliminar
                   </Button>
@@ -150,8 +147,7 @@ const ClienteItemsTable: React.FC<Props> = ({
         </tbody>
       </table>
 
-      {/* Paginación */}
-      <Pagination links={clientes?.links ?? []} />
+
     </div>
   );
 };
