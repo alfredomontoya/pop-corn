@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import { router } from "@inertiajs/react";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-
+import ClienteForm, { ClienteFormValues } from "./ClienteForm";
 import { Cliente } from "@/interfaces/Clientes.Interface";
+import { X } from "lucide-react";
 
 interface EditModalProps {
   cliente: Cliente;
@@ -19,129 +12,71 @@ interface EditModalProps {
 }
 
 const ClienteEditModal: React.FC<EditModalProps> = ({ cliente, onClose, onSaved }) => {
-  const [numeroDocumento, setNumeroDocumento] = useState(cliente.numero_documento);
-  const [nombreRazonSocial, setNombreRazonSocial] = useState(cliente.nombre_razon_social);
-  const [direccion, setDireccion] = useState(cliente.direccion);
-  const [telefono, setTelefono] = useState(cliente.telefono);
-  const [email, setEmail] = useState(cliente.email);
-  const [notas, setNotas] = useState(cliente.notas || "");
+  // Inicializamos los valores con los datos del cliente
+  const [values, setValues] = useState<ClienteFormValues>({
+    tipo_documento: (cliente.tipo_documento as "CI" | "NIT") || "CI",
+    tipo: (cliente.tipo as "NATURAL" | "JURIDICO") || "NATURAL",
+    numero_documento: cliente.numero_documento || "",
+    nombre_razon_social: cliente.nombre_razon_social || "",
+    propietario: cliente.propietario || "",
+    direccion: cliente.direccion || "",
+    ubicacion: cliente.ubicacion || "",
+    telefono: cliente.telefono || "",
+    email: cliente.email || "",
+    notas: cliente.notas || "",
+  });
 
-  const [tipoDocumento, setTipoDocumento] = useState(cliente.tipo_documento || "CI");
-  const [tipo, setTipo] = useState(cliente.tipo || "activo");
-  const [estado, setEstado] = useState(cliente.estado || "activo");
+  const handleChange = (field: keyof ClienteFormValues, value: any) => {
+    setValues(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // FormData para PUT
     const formData = new FormData();
-    formData.append("numero_documento", numeroDocumento);
-    formData.append("nombre_razon_social", nombreRazonSocial);
-    formData.append("direccion", direccion);
-    formData.append("telefono", telefono);
-    formData.append("email", email);
-    formData.append("notas", notas);
-    formData.append("tipo_documento", tipoDocumento);
-    formData.append("tipo", tipo);
-    formData.append("estado", estado);
-    formData.append("_method", "PUT");
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formData.append(key, String(value));
+      }
+    });
+    formData.append("_method", "PUT"); // Indica que es actualización
 
     router.post(`/clientes/${cliente.id}`, formData, {
       onSuccess: () => {
-        onSaved(`Cliente '${nombreRazonSocial}' actualizado correctamente ✅`);
+        onSaved(`Cliente '${values.nombre_razon_social}' actualizado correctamente ✅`);
         onClose();
+      },
+      onError: (errors) => {
+        console.error(errors);
+        alert("Error al actualizar el cliente. Ver consola para más detalles.");
       },
     });
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="p-6 rounded w-96 bg-neutral-100 dark:bg-neutral-800">
+      <div className="relative p-6 rounded w-96 max-h-[80vh] overflow-y-auto bg-neutral-100 dark:bg-neutral-800">
+        {/* Botón de cerrar */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-2 right-2"
+          onClick={onClose}
+        >
+          <X className="w-5 h-5" />
+        </Button>
         <h2 className="text-xl font-bold mb-4">Editar Cliente</h2>
-        <form onSubmit={handleSubmit} className="space-y-2">
-
-          <Input
-            type="text"
-            placeholder="Número de documento"
-            value={numeroDocumento}
-            onChange={(e) => setNumeroDocumento(e.target.value)}
-            required
-          />
-
-          <Select value={tipoDocumento} onValueChange={(v) => setTipoDocumento(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Tipo de documento" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="CI">CI</SelectItem>
-              <SelectItem value="NIT">NIT</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Input
-            type="text"
-            placeholder="Nombre o Razón Social"
-            value={nombreRazonSocial}
-            onChange={(e) => setNombreRazonSocial(e.target.value)}
-            required
-          />
-
-          <Input
-            type="text"
-            placeholder="Dirección"
-            value={direccion}
-            onChange={(e) => setDireccion(e.target.value)}
-          />
-
-          <Input
-            type="text"
-            placeholder="Teléfono"
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
-          />
-
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <textarea
-            placeholder="Notas"
-            className="border p-2 w-full"
-            value={notas}
-            onChange={(e) => setNotas(e.target.value)}
-          />
-
-          <Select value={tipo} onValueChange={(v) => setTipo(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Tipo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="activo">Activo</SelectItem>
-              <SelectItem value="inactivo">Inactivo</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={estado} onValueChange={(v) => setEstado(v)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="activo">Activo</SelectItem>
-              <SelectItem value="inactivo">Inactivo</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <div className="flex justify-end space-x-2 mt-2">
-            <Button onClick={onClose} variant="secondary">
-              Cancelar
-            </Button>
-            <Button type="submit" variant="default">
-              Guardar
-            </Button>
-          </div>
-        </form>
+        <ClienteForm
+          values={values}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          submitLabel="Actualizar"
+          onClose={onClose}
+        />
+        <div className="flex justify-end mt-2">
+          <Button onClick={onClose} variant="secondary">Cancelar</Button>
+        </div>
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('tipo_documento', ['CI', 'NIT'])->default('CI');
-            $table->enum('tipo', ['NATURAL', 'JURIDICO'])->default('NATURAL');
+            $table->enum('tipo_documento', ['CI', 'NIT'])->nullable();
+            $table->enum('tipo', ['NATURAL', 'JURIDICO'])->nullable();
             $table->string('numero_documento')->unique()->nullable();
             $table->string('nombre_razon_social');
             $table->string('propietario')->nullable();

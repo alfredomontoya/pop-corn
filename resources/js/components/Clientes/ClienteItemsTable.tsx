@@ -34,10 +34,15 @@ const ClienteItemsTable: React.FC<Props> = ({
         // Si es otra columna nueva, empiezo con asc
         direction = "asc";
     }
+    console.log(direction);
 
     router.get(
         "/clientes",
-        { sort: field, direction },
+        {
+           ...filters, // mantiene filtros previos (como search)
+          sort: field,
+          direction,
+        },
         { preserveState: true }
     );
     };
@@ -57,7 +62,7 @@ const ClienteItemsTable: React.FC<Props> = ({
       <table className="min-w-full text-sm text-left border">
         <thead className="bg-default">
           <tr>
-            {/* <th
+            <th
               className="px-4 py-2 border cursor-pointer"
               onClick={() => handleSort("id")}
             >
@@ -65,20 +70,19 @@ const ClienteItemsTable: React.FC<Props> = ({
             </th>
             <th
               className="px-4 py-2 border cursor-pointer"
-              onClick={() => handleSort("numero_documento")}
-            >
-              Documento {renderSortIcon("numero_documento")}
-            </th> */}
-            <th
-              className="px-4 py-2 border cursor-pointer"
               onClick={() => handleSort("nombre_razon_social")}
             >
               Nombre/Razón Social {renderSortIcon("nombre_razon_social")}
             </th>
-            <th className="px-4 py-2 border">Propietario</th>
+            <th
+              className="px-4 py-2 border cursor-pointer"
+              onClick={() => handleSort("propietario")}
+            >
+              Propietario
+            </th>
             <th className="px-4 py-2 border">Teléfono</th>
             <th className="px-4 py-2 border">Dirección</th>
-            <th className="px-4 py-2 border">Acciones</th>
+            <th className="px-4 py-2 border text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -89,6 +93,7 @@ const ClienteItemsTable: React.FC<Props> = ({
                 className="border-t hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
                 onClick={() => onDetail(cli)}
               >
+                <td className="px-4 py-2">{cli.id}</td>
                 <td className="px-4 py-2">{cli.nombre_razon_social}</td>
                 <td className="px-4 py-2">{cli.propietario}</td>
                 <td className="px-4 py-2">
@@ -99,6 +104,8 @@ const ClienteItemsTable: React.FC<Props> = ({
                   <span>
                       {cli.ubicacion && (
                       <Button
+                        variant={'default'}
+                        size={'sm'}
                         onClick={(e) => {
                           e.stopPropagation();
                             window.open(`https://www.google.com/maps?q=${cli.ubicacion}`, "_blank", "noopener,noreferrer");

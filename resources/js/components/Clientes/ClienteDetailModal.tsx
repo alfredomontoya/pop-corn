@@ -27,8 +27,12 @@ const ClienteDetailModal: React.FC<ClienteDetailModalProps> = ({ cliente, onClos
             {cliente.nombre_razon_social}
           </div>
           <div>
+            <span className="font-semibold">Tipo cliente:</span>{" "}
+            {`${cliente.tipo ?? ""}`}
+          </div>
+          <div>
             <span className="font-semibold">Documento:</span>{" "}
-            {`${cliente.tipo ?? ""} ${cliente.tipo_documento ?? ""} ${cliente.numero_documento ?? ""}`}
+            {`${cliente.tipo_documento ?? "n/d"} ${cliente.numero_documento ?? "N/D"}`}
           </div>
           <div>
             <span className="font-semibold">Email:</span> {cliente.email || "—"}
@@ -40,11 +44,30 @@ const ClienteDetailModal: React.FC<ClienteDetailModalProps> = ({ cliente, onClos
             <span className="font-semibold">Dirección:</span> {cliente.direccion || "—"}
           </div>
           <div>
-            <span className="font-semibold">Creado:</span>{" "}
+            <span className="font-semibold">Ubicación:</span> {cliente.ubicacion || "—"} &nbsp;
+            {cliente.ubicacion && (
+              <Button
+                variant={'default'}
+                size={'sm'}
+                onClick={(e) => {
+                  e.stopPropagation();
+                    window.open(`https://www.google.com/maps?q=${cliente.ubicacion}`, "_blank", "noopener,noreferrer");
+                }}
+                rel="noopener noreferrer" // seguridad al abrir nueva pestaña
+              >
+                Ver en mapa
+              </Button>
+            )}
+          </div>
+          <div>
+            <span className="font-semibold">Creado por:</span> {cliente.user.email || "—"}
+          </div>
+          <div>
+            <span className="font-semibold">Fecha creación:</span>{" "}
             {cliente.created_at ? new Date(cliente.created_at).toLocaleString() : "—"}
           </div>
           <div>
-            <span className="font-semibold">Actualizado:</span>{" "}
+            <span className="font-semibold">Fecha actualización:</span>{" "}
             {cliente.updated_at ? new Date(cliente.updated_at).toLocaleString() : "—"}
           </div>
         </div>

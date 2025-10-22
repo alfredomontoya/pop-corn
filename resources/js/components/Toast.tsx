@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 interface ToastProps {
+  title?: string;
   message: string;
   duration?: number;
   onClose: () => void;
 }
 
-const Toast: React.FC<ToastProps> = ({ message, duration = 5000, onClose }) => {
+const Toast: React.FC<ToastProps> = ({ title='Mensaje', message, duration = 5000, onClose }) => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -22,8 +23,9 @@ const Toast: React.FC<ToastProps> = ({ message, duration = 5000, onClose }) => {
 
   return (
     <div className="fixed top-5 right-5 z-50">
-      <div className="bg-green-800 px-4 py-2 rounded shadow-lg">
-        {message}
+      <div className="bg-foreground text-secondary px-4 py-2 rounded-sm shadow-lg">
+        <h3 className="font-semibold">{title}</h3>
+        <p className="text-sm">{message}</p>
       </div>
     </div>
   );

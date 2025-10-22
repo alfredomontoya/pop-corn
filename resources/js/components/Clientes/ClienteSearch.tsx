@@ -17,7 +17,7 @@ const ClienteSearch: React.FC<Props> = ({ initialSearch = '' }) => {
   return (
     <form onSubmit={handleSearch} className="mb-4 flex space-x-2">
       <input
-        type="text"
+        type="search"
         placeholder="Buscar cliente..."
         className="border p-2 flex-1"
         value={search}

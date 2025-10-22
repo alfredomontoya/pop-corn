@@ -12,21 +12,27 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
+        $sort = $request->get('sort', 'id');
+        $direction = strtolower($request->get('direction', 'desc'));
+
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
         $clientes = Cliente::query()
+            ->with('user') // Carga el usuario relacionado
             // 🔍 Búsqueda condicional
             ->when($request->search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('nombre_razon_social', 'like', "%{$search}%")
+                    ->orWhere('propietario', 'like', "%{$search}%")
                     ->orWhere('numero_documento', 'like', "%{$search}%")
+                    ->orWhere('direccion', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('telefono', 'like', "%{$search}%");
                 });
             })
             // ↕️ Orden dinámico
-            ->orderBy(
-                $request->get('sort', 'id'),      // campo por defecto: id
-                $request->get('direction', 'desc') // dirección por defecto: desc
-            )
+            ->orderBy($sort, $direction)
             ->paginate(5) // puedes cambiar el tamaño de página
             ->withQueryString(); // mantiene search, sort y direction en los links
         // Retorno con Inertia
@@ -54,12 +60,13 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
     // Validación
+        // dd($request->all());
         $request['user_id'] = Auth::id();
 
         $validated = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'tipo_documento' => ['required', Rule::in(['CI', 'NIT'])],
-            'tipo' => ['required', Rule::in(['NATURAL', 'JURIDICO'])],
+            'tipo_documento' => ['nullable', Rule::in(['CI', 'NIT'. ''])],
+            'tipo' => ['nullable', Rule::in(['NATURAL', 'JURIDICO', ''])],
             'numero_documento' => ['nullable', 'string', 'max:255', 'unique:clientes,numero_documento'],
             'nombre_razon_social' => ['required', 'string', 'max:255'],
             'propietario' => ['required', 'string', 'max:255'],
@@ -89,14 +96,15 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $data = $request->validate([
-            'tipo_documento' => ['required', Rule::in(['CI', 'NIT'])],
-            'tipo' => ['required', Rule::in(['NATURAL', 'JURIDICO'])],
-            'numero_documento' => ['required', 'string', 'max:255', 'unique:clientes,numero_documento,' . $cliente->id],
+            'tipo_documento' => ['nullable', Rule::in(['CI', 'NIT'])],
+            'tipo' => ['nullable', Rule::in(['NATURAL', 'JURIDICO'])],
+            'numero_documento' => ['nullable', 'string', 'max:255', 'unique:clientes,numero_documento,' . $cliente->id],
             'nombre_razon_social' => ['required', 'string', 'max:255'],
             'direccion' => ['nullable', 'string', 'max:255'],
+            'ubicacion' => ['nullable', 'string', 'max:255'],
             'telefono' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:clientes,email,' . $cliente->id],
-            'estado' => ['required', Rule::in(['activo', 'inactivo'])],
+            // 'estado' => ['required', Rule::in(['activo', 'inactivo'])],
             'notas' => ['nullable', 'string'],
         ]);
 
