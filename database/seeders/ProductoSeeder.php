@@ -7,6 +7,7 @@ use App\Models\Producto;
 use App\Models\ProductoPrecio;
 use App\Models\Categoria;
 use App\Models\User;
+use Database\Factories\ProductoFactory;
 
 class ProductoSeeder extends Seeder
 {
@@ -85,6 +86,8 @@ class ProductoSeeder extends Seeder
             'producto_id' => 3,
             'precio_venta' => 3.00,
         ]);
+
+        Producto::factory(20)->create();
 
     }
 }

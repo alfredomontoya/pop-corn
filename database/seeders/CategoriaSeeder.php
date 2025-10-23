@@ -26,5 +26,7 @@ class CategoriaSeeder extends Seeder
         foreach ($categorias as $data) {
             Categoria::factory()->create($data);
         }
+
+        Categoria::factory(10)->create();
     }
 }

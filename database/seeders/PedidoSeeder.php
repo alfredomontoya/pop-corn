@@ -24,7 +24,7 @@ class PedidoSeeder extends Seeder
             $total = 0;
             Producto::all()->each(function ($producto) use ($pedido, &$total){
                 $cantidad = random_int(5, 24);
-                $precio = $producto->precioActivo->precio_venta ;
+                $precio = $producto->precioActivo->precio_venta ?? 0;
                 $subtotal = $precio * $cantidad;
                 $total = $total + $subtotal;
                 DetallePedido::create([

@@ -23,21 +23,21 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Cinthia',
             'email' => 'cinthia@popmix.com',
-            'role' => 'entrega',
+            'role' => 'admin',
         ]);
 
         User::factory()->create([
             'name' => 'Geraldine',
             'email' => 'geraldine@popmix.com',
-            'role' => 'produccion',
+            'role' => 'admin',
         ]);
 
         User::factory()->create([
             'name' => 'Gabriela',
             'email' => 'gabriela@popmix.com',
-            'role' => 'promotor',
+            'role' => 'admin',
         ]);
 
-        User::factory(9)->create();
+        // User::factory(9)->create();
     }
 }

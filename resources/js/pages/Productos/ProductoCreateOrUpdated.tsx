@@ -160,7 +160,7 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
           </div>
 
           {/* Código */}
-          <div>
+          {/* <div>
             <TextInput
               label="Código"
               type="text"
@@ -169,7 +169,7 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("codigo", val)}
               error={errors.codigo}
             />
-          </div>
+          </div> */}
 
           {/* Descripción */}
           <div className="md:col-span-2 lg:col-span-3">
@@ -183,7 +183,7 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
           </div>
 
           {/* Stock Actual */}
-          <div>
+          {/* <div>
             <TextInput
               label="Stock Actual"
               type="number"
@@ -191,10 +191,10 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("stock_actual", Number(val))}
               error={errors.stock_actual}
             />
-          </div>
+          </div> */}
 
           {/* Stock Mínimo */}
-          <div>
+          {/* <div>
             <TextInput
               label="Stock Mínimo"
               type="number"
@@ -202,10 +202,10 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("stock_minimo", Number(val))}
               error={errors.stock_minimo}
             />
-          </div>
+          </div> */}
 
           {/* Unidad de Medida */}
-          <div>
+          {/* <div>
             <TextInput
               label="Unidad de Medida"
               type="text"
@@ -214,10 +214,10 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("unidad_medida", val)}
               error={errors.unidad_medida}
             />
-          </div>
+          </div> */}
 
           {/* Precio de Compra */}
-          <div>
+          {/* <div>
             <TextInput
               label="Precio de Compra"
               type="number"
@@ -225,10 +225,10 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("precio_compra", Number(val))}
               error={errors.precio_compra}
             />
-          </div>
+          </div> */}
 
           {/* Precio de Venta */}
-          <div>
+          {/* <div>
             <TextInput
               label="Precio de Venta"
               type="number"
@@ -236,12 +236,12 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
               onChange={(val) => setData("precio_venta", Number(val))}
               error={errors.precio_venta}
             />
-          </div>
+          </div> */}
 
 
 
           {/* Activo */}
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Checkbox
               id="activo"
               name="activo"
@@ -251,7 +251,7 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
             <label htmlFor="activo" className="text-sm">
               Activo
             </label>
-          </div>
+          </div> */}
         </div>
 
         {/* Botón Guardar */}
@@ -263,20 +263,20 @@ const ProductoCreate = ({ categorias, onSaved, producto }: Props) => {
 
         <div className="mb-6"></div>
 
-        <ProductoImagenesManager
+        {/* <ProductoImagenesManager
             productoId={producto?.id || initialData.id}
             imagenesGuardadas={producto?.imagenes || []}
             onUpdated={ (message) => {
               setToastMessage(message)
             }}
-            />
-        <ProductoPrecioManager
+            /> */}
+        {/* <ProductoPrecioManager
             productoId={producto?.id || initialData.id}
             preciosGuardados={producto?.precios || []}
             onUpdated={ (message) => {
               setToastMessage(message)
             }}
-        />
+        /> */}
 
         {/* Toast */}
         {toastMessage && (

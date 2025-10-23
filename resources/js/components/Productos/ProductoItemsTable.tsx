@@ -4,6 +4,7 @@ import Pagination from "@/components/PaginationInertia";
 import { Producto, PaginatedProductos } from "@/interfaces/Productos.Interface";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
+import PaginationInertia from "@/components/PaginationInertia";
 
 interface Props {
   productos: PaginatedProductos;
@@ -32,6 +33,10 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
     );
   };
 
+  const handlePageChange = (url: string) => {
+    router.get(url, {}, { preserveState: true, replace: true });
+  }
+
   return (
     <div className="overflow-x-auto bg-default rounded-lg shadow">
       <table className="min-w-full text-sm text-left border">
@@ -48,13 +53,10 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
             <th className="px-4 py-2 border cursor-pointer" onClick={() => handleSort("nombre")}>
               Nombre {renderSortIcon("nombre")}
             </th>
-            <th className="px-4 py-2 border cursor-pointer" onClick={() => handleSort("precio")}>
+            <th className="px-4 py-2 border cursor-pointer text-right" onClick={() => handleSort("precio")}>
               Precio {renderSortIcon("precio")}
             </th>
-            <th className="px-4 py-2 border cursor-pointer" onClick={() => handleSort("stock")}>
-              Stock {renderSortIcon("stock")}
-            </th>
-            <th className="px-4 py-2 border">Acciones</th>
+            <th className="px-4 py-2 border text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -85,9 +87,8 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                 </td>
                 <td className="px-4 py-2">{prod.categoria?.nombre}</td>
                 <td className="px-4 py-2">{prod.nombre}</td>
-                <td className="px-4 py-2">Bs. {prod.precio_activo?.precio_venta}</td>
-                <td className="px-4 py-2">{prod.stock_actual}</td>
-                <td className="px-4 py-2 space-x-2">
+                <td className="px-4 py-2 text-right">Bs. {prod.precio_activo?.precio_venta}</td>
+                <td className="px-4 py-2 space-x-2 text-center">
                   <Button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -142,7 +143,7 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
       </table>
 
       {/* Paginación */}
-      <Pagination links={productos?.links ?? []} />
+      <PaginationInertia links={productos?.links ?? []} onPageChange={handlePageChange} />
     </div>
   );
 };
