@@ -9,8 +9,7 @@ export interface Producto {
   stock_actual: number | null;
   stock_minimo: number | null;
   unidad_medida: string | null;
-  activo: boolean;
-
+  activo?: boolean;
   // Relaciones
   imagenes?: ProductoImagen[];
   imagen_principal?: ProductoImagen; // alias de imagenPrincipal en Eloquent
@@ -24,23 +23,26 @@ export interface Producto {
   updated_at: string;
 }
 
+
+
 /** Para creación (sin id, timestamps ni relaciones) */
-export interface ProductoCrear extends Omit<
-  Producto,
-  | "created_at"
-  | "updated_at"
-  | "imagenes"
-  | "imagen_principal"
-  | "precios"
-  | "precio_activo"
-  | "categoria"
-  | "user"
-  | "updated_by_user"
-> {
-  saludo?: string;
-  precio_compra?: number | null;
-  precio_venta?: number | null;
+export interface ProductoCrear {
+  categoria_id: number
+  nombre: string
+  descripcion: string
+  precio_venta: number | null
+  [key: string]: any; // 🔹 esto satisface FormDataType
 }
+
+export interface SimpleProductoEdit {
+  id: number
+  categoria_id: number
+  nombre: string
+  descripcion: string
+  precio_venta: number | null
+  [key: string]: any; // 🔹 esto satisface FormDataType
+}
+
 
 /** Paginación */
 export interface PaginatedProductos {

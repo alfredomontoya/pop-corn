@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePage, router, Link } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import ProductoItemsTable from "@/components/Productos/ProductoItemsTable";
@@ -22,19 +22,27 @@ interface Props {
 }
 
 
-const ProductoIndex: React.FC<Props> = ({ productos, categorias, filters }) => {
-  const { flash } = usePage().props as any;
+const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
+
+  const { flash } = usePage().props as { flash?: { success?: string; error?: string } };
+
   const [toastMessage, setToastMessage] = useState(flash?.success || null);
 
-  const [showCreate, setShowCreate] = useState(false);
-  const [editProducto, setEditProducto] = useState<Producto | null>(null);
+  // 🔹 Detectar cambio en flash.success (cuando se redirige desde store)
+  useEffect(() => {
+    if (flash?.success) {
+      setToastMessage(flash.success);
+    }
+  }, [flash?.success]);
+
   const [confirmDelete, setConfirmDelete] = useState<Producto | null>(null);
   const [detailProducto, setDetailProducto] = useState<Producto | null>(null);
 
-    const [selectedProduct, setSelectedProduct] = useState<Producto | null>(productos.data[0]);
+  const [selectedProduct, setSelectedProduct] = useState<Producto | null>(productos.data[0]);
+  const currentPage = new URLSearchParams(window.location.search).get("page") || "1";
 
   const handleDelete = (producto: Producto) => {
-    router.delete(`/productos/${producto.id}`, {
+      router.delete(`/productos/${producto.id}?page=${currentPage}`, {
       onSuccess: () =>
         setToastMessage(`Producto '${producto.nombre}' eliminado correctamente.`),
     });
@@ -63,13 +71,14 @@ const ProductoIndex: React.FC<Props> = ({ productos, categorias, filters }) => {
         <ProductoItemsTable
           productos={productos}
           filters={filters}
-          onEdit={setEditProducto}
           onDelete={setConfirmDelete}
           onDetail={setDetailProducto}
           onSelect={(prod) => {
             setSelectedProduct(prod);
             // setShowImagenes(true);
           }}
+          page={Number(currentPage)}
+
         />
 
         {detailProducto && (

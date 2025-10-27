@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             ProductoSeeder::class,
             CajaSeeder::class,
             // // ProductoImagenSeeder::class,
-            // // ProductoPrecioSeeder::class,
+            ProductoPrecioSeeder::class,
             // TipoPagoSeeder::class,
             // VentaSeeder::class,
             // DetalleVentaSeeder::class,

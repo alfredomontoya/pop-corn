@@ -44,12 +44,11 @@ export interface User {
 }
 
 import "@inertiajs/core";
-declare module "@inertiajs/core" {
-  interface PageProps {
+export declare module "@inertiajs/core" {
+  export interface PageProps {
     flash: {
       success?: string;
       error?: string;
-      producto_id?: number;
     };
     auth?: {
       user?: {

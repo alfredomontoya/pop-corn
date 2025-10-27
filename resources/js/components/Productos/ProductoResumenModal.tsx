@@ -80,7 +80,7 @@ const ProductoResumenModal: React.FC<DetailModalProps> = ({ producto, onClose })
                 Activo: {producto.precio_activo?.activo ? "Sí" : "No"}
               </span>
             </div>
-            <div><span className="font-semibold">Creado:</span> {formatoFecha(producto.created_at)}</div>
+            <div><span className="font-semibold">Creado:</span> {producto.created_at}- {formatoFecha(producto.created_at)}</div>
             <div><span className="font-semibold">Actualizado:</span> {formatoFecha(producto.updated_at)}</div>
           </div>
 

@@ -12,13 +12,14 @@ interface Props {
     sort?: string;
     direction?: string;
   };
-  onEdit: (producto: Producto) => void;
+  page?: number;
   onDelete: (producto: Producto) => void;
   onDetail: (producto: Producto) => void;
   onSelect: (producto: Producto) => void;
 }
 
-const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDelete, onDetail, onSelect }) => {
+const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onDelete, onDetail, onSelect, page }) => {
+  console.log('ProductoItemsTable page prop:', page);
   const handleSort = (field: string) => {
     const direction = filters.sort === field && filters.direction === "asc" ? "desc" : "asc";
     router.get("/productos", { sort: field, direction }, { preserveState: true });
@@ -89,7 +90,7 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                 <td className="px-4 py-2">{prod.nombre}</td>
                 <td className="px-4 py-2 text-right">Bs. {prod.precio_activo?.precio_venta}</td>
                 <td className="px-4 py-2 space-x-2 text-center">
-                  <Button
+                  {/* <Button
                     onClick={(e) => {
                       e.stopPropagation();
                       router.visit(`/productos/${prod.id}`)
@@ -98,26 +99,16 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                     className="px-2 py-1"
                   >
                     Detalle
-                  </Button>
+                  </Button> */}
                   <Button
                     onClick={(e) => {
                         e.stopPropagation();
-                        router.get(`/productos/${prod.id}/edit`);
+                        router.get(`/productos/${prod.id}/edit?page=${page}`);
                     }}
                     variant={"warning"}
-                    className="px-2 py-1"
+                    className="px-2 py-1 w-15 m-2"
                   >
                     Editar
-                  </Button>
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelect(prod);
-                    }}
-                    variant={"warning"}
-                    className="px-2 py-1"
-                  >
-                    Imagenes
                   </Button>
                   <Button
                     onClick={(e) => {
@@ -125,7 +116,7 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onEdit, onDel
                       onDelete(prod);
                     }}
                     variant={"destructive"}
-                    className="px-2 py-1"
+                    className="px-2 py-1 w-15"
                   >
                     Eliminar
                   </Button>

@@ -61,104 +61,57 @@ class ProductoController extends Controller
 
     public function create(){
         $categorias = \App\Models\Categoria::all();
-        return Inertia::render('Productos/ProductoCreateOrUpdated', [
+        return Inertia::render('Productos/Create', [
             'categorias' => $categorias, // <-- agregado
         ]);
     }
 
-    public function edit($id){
+    public function edit($id, Request $request){
         $categorias = \App\Models\Categoria::all();
         $producto = Producto::with(['categoria', 'precioActivo', 'imagenes', 'precios'])->find($id);
-        return Inertia::render('Productos/ProductoCreateOrUpdated', [
+        return Inertia::render('Productos/Edit', [
             'categorias' => $categorias, // <-- agregado
-            'producto' => $producto
+            'producto' => $producto,
+            'page' => $request->query('page', 1),
         ]);
     }
 
-    public function createOrUpdate(Request $request){
-        $categorias = \App\Models\Categoria::all();
-        $producto = null;
+    // public function createOrUpdate(Request $request){
+    //     $categorias = \App\Models\Categoria::all();
+    //     $producto = null;
 
-        if ($request->id) {
-            $producto = Producto::find($request->id);
-        }
+    //     if ($request->id) {
+    //         $producto = Producto::find($request->id);
+    //     }
 
-        return Inertia::render('Productos/ProductoCreateOrUpdated', [
-            'categorias' => $categorias, // <-- agregado
-            'producto' => $producto
-        ]);
-    }
+    //     return Inertia::render('Productos/ProductoCreateOrUpdated', [
+    //         'categorias' => $categorias, // <-- agregado
+    //         'producto' => $producto
+    //     ]);
+    // }
 
 
     // Crear producto
-    public function store(Request $request)
+    public function store(ProductoRequest $request)
     {
         // dd('$request->all()');
         // Validación básica
-        $validated = $request->validate([
-            'id' => 'nullable|exists:productos,id',
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'categoria_id' => 'required|exists:categorias,id',
-            'codigo' => 'nullable|string|max:50',
-            'stock_actual' => 'required|numeric|min:0',
-            'stock_minimo' => 'required|numeric|min:0',
-            'unidad_medida' => 'required|string|max:20',
-            'activo' => 'required|boolean',
-            'imagenes.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'precio' => 'nullable|array',
-            'precio.precio_venta' => 'nullable|numeric|min:0',
-            'precio.precio_compra' => 'nullable|numeric|min:0',
-        ]);
+        $validated = $request->validated();
 
         // Crear producto
-        $producto = Producto::updateOrCreate(
-            ['id' => $validated['id'] ?? null], // condición de búsqueda
+        $producto = Producto::create(
             [
+                'categoria_id' => $validated['categoria_id'],
                 'nombre' => $validated['nombre'],
                 'descripcion' => $validated['descripcion'] ?? null,
-                'categoria_id' => $validated['categoria_id'],
-                'codigo' => $validated['codigo'] ?? null,
-                'stock_actual' => $validated['stock_actual'],
-                'stock_minimo' => $validated['stock_minimo'],
-                'unidad_medida' => $validated['unidad_medida'],
-                'activo' => $validated['activo'],
                 'user_id' => Auth::id(),
             ]
         );
 
-        // Guardar imágenes
-        if ($request->hasFile('imagenes')) {
-            foreach ($request->file('imagenes') as $index => $file) {
-                $path = $file->store('productos', 'public');
-                ProductoImagen::create([
-                    'producto_id' => $producto->id,
-                    'imagen' => $path,
-                    'es_principal' => $index === 0, // la primera imagen será principal por defecto
-                    'user_id' => Auth::id(),
-                ]);
-            }
-        }
+        $this->guardarPrecios($producto, $validated['precio_venta'] ?? 0, $validated['precio_compra'] ?? 0);
 
-        // Guardar precio inicial si existe
-        if ($request->filled('precio')) {
-            $precioData = $request->input('precio');
-            if (!empty($precioData['precio_venta']) || !empty($precioData['precio_compra'])) {
-                ProductoPrecio::create([
-                    'producto_id' => $producto->id,
-                    'precio_venta' => $precioData['precio_venta'] ?? 0,
-                    'precio_compra' => $precioData['precio_compra'] ?? 0,
-                    'activo' => true,
-                    'fecha_inicio' => now(),
-                    'user_id' => Auth::id(),
-                ]);
-            }
-        }
-
-        return response()->json([
-            'success' => 'Producto creado/actualizado correctamente.',
-            'producto' => $producto,
-        ]);
+        return redirect()->route('productos.index')
+        ->with('success', 'Producto creado correctamente');
     }
 
     // Editar producto
@@ -173,10 +126,10 @@ class ProductoController extends Controller
         // Guardar precios si cambian
         $this->guardarPrecios($producto, $validated['precio_venta'] ?? 0, $validated['precio_compra'] ?? 0);
 
-        return response()->json([
-            'success' => "Producto {$producto->id} actualizado correctamente.",
-            'producto' => $producto
-        ]);
+        $page = $request->query('page', 1);
+
+        return redirect()->route('productos.index', ['page' => $page])
+            ->with('success', 'Producto actualizado correctamente');
     }
 
     public function storeImages(Request $request, $productoId)
@@ -250,11 +203,6 @@ class ProductoController extends Controller
                 'nombre' => $validated['nombre'],
                 'descripcion' => $validated['descripcion'] ?? null,
                 'categoria_id' => $validated['categoria_id'],
-                'codigo' => $validated['codigo'] ?? null,
-                'stock_actual' => $validated['stock_actual'],
-                'stock_minimo' => $validated['stock_minimo'],
-                'unidad_medida' => $validated['unidad_medida'],
-                'activo' => $validated['activo'],
                 'user_id' => Auth::id(),
             ]
         );
@@ -266,12 +214,13 @@ class ProductoController extends Controller
 
 
     // Eliminar producto
-    public function destroy(Producto $producto)
+    public function destroy(Producto $producto, Request $request)
     {
         $nombre = $producto->nombre;
         $producto->delete();
+        $page = $request->query('page', 1);
 
-        return redirect()->route('productos.index')
+        return redirect()->route('productos.index', ['page' => $page])
             ->with('success', "Producto '{$nombre}' eliminado correctamente.");
     }
 }

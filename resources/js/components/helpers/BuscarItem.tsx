@@ -64,7 +64,7 @@ export default function BuscarItem<T>({
         <>
             <Card
             onClick={() => setOpen(true)}
-            className="cursor-pointer px-4 py-1 pt-2 text-gray-600"
+            className="cursor-pointer px-4 py-1 pt-2"
             >
             {selected
                 ? displayKey
@@ -79,7 +79,7 @@ export default function BuscarItem<T>({
 
       {/* Input + lista cuando está abierto */}
       {open && (
-        <div className="absolute z-10 w-full bg-white border rounded-md shadow-md">
+        <div className="absolute z-10 w-full bg-secondary border rounded-md shadow-md">
           <Input
             type="text"
             value={query}
@@ -97,13 +97,13 @@ export default function BuscarItem<T>({
                   setQuery("");
                   setOpen(false);
                 }}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 hover:bg-gray-100/50 cursor-pointer"
               >
                 {displayKey ? displayKey(item) : String(item[labelKey])}
               </li>
             ))}
             {filtered.length === 0 && (
-              <li className="px-4 py-2 text-gray-400">No se encontraron resultados</li>
+              <li className="px-4 py-2">No se encontraron resultados</li>
             )}
           </ul>
         </div>
