@@ -39,6 +39,7 @@ const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
   const [detailProducto, setDetailProducto] = useState<Producto | null>(null);
 
   const [selectedProduct, setSelectedProduct] = useState<Producto | null>(productos.data[0]);
+
   const currentPage = new URLSearchParams(window.location.search).get("page") || "1";
 
   const handleDelete = (producto: Producto) => {
@@ -73,10 +74,6 @@ const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
           filters={filters}
           onDelete={setConfirmDelete}
           onDetail={setDetailProducto}
-          onSelect={(prod) => {
-            setSelectedProduct(prod);
-            // setShowImagenes(true);
-          }}
           page={Number(currentPage)}
 
         />

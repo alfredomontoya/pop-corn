@@ -14,8 +14,7 @@ const formatoFecha = (fecha: string | null | undefined) => {
   return new Date(fecha).toLocaleDateString();
 };
 
-const ProductoResumenModal: React.FC<DetailModalProps> = ({ producto, onClose }) => {
-  const [showZoom, setShowZoom] = useState(false);
+const ProductoResumenModal: React.FC<DetailModalProps> = ({ producto, onClose }) => {  const [showZoom, setShowZoom] = useState(false);
   const [zoomSrc, setZoomSrc] = useState("");
 
   if (!producto) return null;
@@ -80,8 +79,9 @@ const ProductoResumenModal: React.FC<DetailModalProps> = ({ producto, onClose })
                 Activo: {producto.precio_activo?.activo ? "Sí" : "No"}
               </span>
             </div>
-            <div><span className="font-semibold">Creado:</span> {producto.created_at}- {formatoFecha(producto.created_at)}</div>
-            <div><span className="font-semibold">Actualizado:</span> {formatoFecha(producto.updated_at)}</div>
+            <div><span className="font-semibold">Fecha creación:</span> {formatoFecha(producto.created_at)}</div>
+            <div><span className="font-semibold">Fecha actualización:</span> {formatoFecha(producto.updated_at)}</div>
+            <div><span className="font-semibold">Usuario:</span> {producto.user?.email}</div>
           </div>
 
           {/* Botón cerrar abajo */}

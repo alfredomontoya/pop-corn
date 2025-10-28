@@ -50,14 +50,21 @@ class ProductoController extends Controller
 
     public function show($id)
     {
-        // Obtener el producto con relaciones necesarias
-        $producto = Producto::with(['categoria', 'imagenes', 'precios', 'precioActivo'])->findOrFail($id);
+        // Obtener el producto con sus relaciones
+        $producto = Producto::with(['categoria', 'imagenes', 'precios', 'precioActivo', 'user'])
+            ->findOrFail($id);
 
-        // Retornar a la vista de Inertia
+        // Si la petición viene de Axios o Fetch (espera JSON)
+        if (request()->expectsJson()) {
+            return response()->json($producto);
+        }
+
+        // Si la petición viene de Inertia (navegación)
         return Inertia::render('Productos/ProductoShow', [
             'producto' => $producto,
         ]);
     }
+
 
     public function create(){
         $categorias = \App\Models\Categoria::all();

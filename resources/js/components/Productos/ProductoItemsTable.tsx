@@ -5,6 +5,8 @@ import { Producto, PaginatedProductos } from "@/interfaces/Productos.Interface";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import PaginationInertia from "@/components/PaginationInertia";
+import axios from 'axios';
+
 
 interface Props {
   productos: PaginatedProductos;
@@ -15,14 +17,21 @@ interface Props {
   page?: number;
   onDelete: (producto: Producto) => void;
   onDetail: (producto: Producto) => void;
-  onSelect: (producto: Producto) => void;
+  // onSelect: (producto: Producto) => void;
 }
 
-const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onDelete, onDetail, onSelect, page }) => {
-  console.log('ProductoItemsTable page prop:', page);
+const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onDelete, onDetail, page }) => {
+
   const handleSort = (field: string) => {
     const direction = filters.sort === field && filters.direction === "asc" ? "desc" : "asc";
     router.get("/productos", { sort: field, direction }, { preserveState: true });
+  };
+
+  const handleDetail = async(id: number) => {
+    const { data: producto } = await axios.get(route('productos.show', id), {
+      headers: { Accept: 'application/json' },
+    });
+    onDetail(producto);
   };
 
   const renderSortIcon = (field: string) => {
@@ -66,7 +75,7 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onDelete, onD
               <tr
                 key={prod.id}
                 className="border-t hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
-                onClick={() => onDetail(prod)}
+                onClick={() => handleDetail(prod.id)}
               >
                 <td className="px-4 py-2">{prod.id}</td>
                 <td className="px-4 py-2">
@@ -90,16 +99,6 @@ const ProductoItemsTable: React.FC<Props> = ({ productos, filters, onDelete, onD
                 <td className="px-4 py-2">{prod.nombre}</td>
                 <td className="px-4 py-2 text-right">Bs. {prod.precio_activo?.precio_venta}</td>
                 <td className="px-4 py-2 space-x-2 text-center">
-                  {/* <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.visit(`/productos/${prod.id}`)
-                    }}
-                    variant={"warning"}
-                    className="px-2 py-1"
-                  >
-                    Detalle
-                  </Button> */}
                   <Button
                     onClick={(e) => {
                         e.stopPropagation();
