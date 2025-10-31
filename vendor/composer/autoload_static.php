@@ -10,18 +10,18 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        '47e1160838b5e5a10346ac4084b58c23' => __DIR__ . '/..' . '/laravel/prompts/src/helpers.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '47e1160838b5e5a10346ac4084b58c23' => __DIR__ . '/..' . '/laravel/prompts/src/helpers.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
@@ -35,6 +35,7 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         '7f7ac2ddea9cc3fb4b2cc201d63dbc10' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Log/functions.php',
         '493c6aea52f6009bab023b26c21a386a' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/functions.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '2ceb5c5a6fb4dfb2119b186b81970c21' => __DIR__ . '/..' . '/laravel-lang/routes/helpers/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '98caa11a197f6516a8e48aa4abb5ccc6' => __DIR__ . '/..' . '/inertiajs/inertia-laravel/helpers.php',
@@ -152,14 +153,22 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
             'Laravel\\Mcp\\Server\\' => 19,
             'Laravel\\Mcp\\' => 12,
             'Laravel\\Boost\\' => 14,
+            'LaravelLang\\StarterKits\\' => 24,
+            'LaravelLang\\Routes\\' => 19,
             'LaravelLang\\Publisher\\' => 22,
             'LaravelLang\\NativeLocaleNames\\' => 30,
             'LaravelLang\\NativeCurrencyNames\\' => 32,
             'LaravelLang\\NativeCountryNames\\' => 31,
+            'LaravelLang\\MoonShine\\' => 22,
+            'LaravelLang\\Models\\' => 19,
             'LaravelLang\\Locales\\' => 20,
             'LaravelLang\\LocaleList\\' => 23,
             'LaravelLang\\Lang\\' => 17,
+            'LaravelLang\\JsonFallback\\' => 25,
+            'LaravelLang\\HttpStatuses\\' => 25,
             'LaravelLang\\Config\\' => 19,
+            'LaravelLang\\Attributes\\' => 23,
+            'LaravelLang\\Actions\\' => 20,
         ),
         'I' => 
         array (
@@ -204,7 +213,9 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
             'Cron\\' => 5,
             'Composer\\Semver\\' => 16,
             'Composer\\Pcre\\' => 14,
+            'Composer\\ClassMapGenerator\\' => 27,
             'Complex\\' => 8,
+            'CodeZero\\BrowserLocale\\' => 23,
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
@@ -531,6 +542,14 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         array (
             0 => __DIR__ . '/..' . '/laravel/boost/src',
         ),
+        'LaravelLang\\StarterKits\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/starter-kits/src',
+        ),
+        'LaravelLang\\Routes\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/routes/src',
+        ),
         'LaravelLang\\Publisher\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel-lang/publisher/src',
@@ -547,6 +566,14 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         array (
             0 => __DIR__ . '/..' . '/laravel-lang/native-country-names/src',
         ),
+        'LaravelLang\\MoonShine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/moonshine/src',
+        ),
+        'LaravelLang\\Models\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/models/src',
+        ),
         'LaravelLang\\Locales\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel-lang/locales/src',
@@ -559,9 +586,25 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         array (
             0 => __DIR__ . '/..' . '/laravel-lang/lang/src',
         ),
+        'LaravelLang\\JsonFallback\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/json-fallback/src',
+        ),
+        'LaravelLang\\HttpStatuses\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/http-statuses/src',
+        ),
         'LaravelLang\\Config\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel-lang/config/src',
+        ),
+        'LaravelLang\\Attributes\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/attributes/src',
+        ),
+        'LaravelLang\\Actions\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-lang/actions/src',
         ),
         'Inertia\\' => 
         array (
@@ -671,9 +714,17 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         array (
             0 => __DIR__ . '/..' . '/composer/pcre/src',
         ),
+        'Composer\\ClassMapGenerator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/class-map-generator/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
+        ),
+        'CodeZero\\BrowserLocale\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codezero/browser-locale/src',
         ),
         'Carbon\\Doctrine\\' => 
         array (
@@ -896,10 +947,25 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         'Carbon\\Unit' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Unit.php',
         'Carbon\\WeekDay' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/WeekDay.php',
         'Carbon\\WrapperClock' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/WrapperClock.php',
+        'CodeZero\\BrowserLocale\\BrowserLocale' => __DIR__ . '/..' . '/codezero/browser-locale/src/BrowserLocale.php',
+        'CodeZero\\BrowserLocale\\Filters\\CombinedFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/CombinedFilter.php',
+        'CodeZero\\BrowserLocale\\Filters\\CountryFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/CountryFilter.php',
+        'CodeZero\\BrowserLocale\\Filters\\Filter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/Filter.php',
+        'CodeZero\\BrowserLocale\\Filters\\LanguageFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/LanguageFilter.php',
+        'CodeZero\\BrowserLocale\\Filters\\LocaleFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/LocaleFilter.php',
+        'CodeZero\\BrowserLocale\\Filters\\PropertyFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/PropertyFilter.php',
+        'CodeZero\\BrowserLocale\\Filters\\WeightFilter' => __DIR__ . '/..' . '/codezero/browser-locale/src/Filters/WeightFilter.php',
+        'CodeZero\\BrowserLocale\\Laravel\\BrowserLocaleServiceProvider' => __DIR__ . '/..' . '/codezero/browser-locale/src/Laravel/BrowserLocaleServiceProvider.php',
+        'CodeZero\\BrowserLocale\\Locale' => __DIR__ . '/..' . '/codezero/browser-locale/src/Locale.php',
         'Complex\\Complex' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Complex.php',
         'Complex\\Exception' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Exception.php',
         'Complex\\Functions' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Functions.php',
         'Complex\\Operations' => __DIR__ . '/..' . '/markbaker/complex/classes/src/Operations.php',
+        'Composer\\ClassMapGenerator\\ClassMap' => __DIR__ . '/..' . '/composer/class-map-generator/src/ClassMap.php',
+        'Composer\\ClassMapGenerator\\ClassMapGenerator' => __DIR__ . '/..' . '/composer/class-map-generator/src/ClassMapGenerator.php',
+        'Composer\\ClassMapGenerator\\FileList' => __DIR__ . '/..' . '/composer/class-map-generator/src/FileList.php',
+        'Composer\\ClassMapGenerator\\PhpFileCleaner' => __DIR__ . '/..' . '/composer/class-map-generator/src/PhpFileCleaner.php',
+        'Composer\\ClassMapGenerator\\PhpFileParser' => __DIR__ . '/..' . '/composer/class-map-generator/src/PhpFileParser.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Pcre\\MatchAllResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllResult.php',
         'Composer\\Pcre\\MatchAllStrictGroupsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllStrictGroupsResult.php',
@@ -3741,6 +3807,13 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         'Inertia\\Testing\\Concerns\\PageObject' => __DIR__ . '/..' . '/inertiajs/inertia-laravel/src/Testing/Concerns/PageObject.php',
         'Inertia\\Testing\\ReloadRequest' => __DIR__ . '/..' . '/inertiajs/inertia-laravel/src/Testing/ReloadRequest.php',
         'Inertia\\Testing\\TestResponseMacros' => __DIR__ . '/..' . '/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php',
+        'LaravelLang\\Actions\\Plugin' => __DIR__ . '/..' . '/laravel-lang/actions/src/Plugin.php',
+        'LaravelLang\\Actions\\Plugins\\Main' => __DIR__ . '/..' . '/laravel-lang/actions/src/Plugins/Main.php',
+        'LaravelLang\\Actions\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/actions/src/ServiceProvider.php',
+        'LaravelLang\\Attributes\\Plugin' => __DIR__ . '/..' . '/laravel-lang/attributes/src/Plugin.php',
+        'LaravelLang\\Attributes\\Plugins\\Laravel' => __DIR__ . '/..' . '/laravel-lang/attributes/src/Plugins/Laravel.php',
+        'LaravelLang\\Attributes\\Plugins\\Lumen' => __DIR__ . '/..' . '/laravel-lang/attributes/src/Plugins/Lumen.php',
+        'LaravelLang\\Attributes\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/attributes/src/ServiceProvider.php',
         'LaravelLang\\Config\\Concerns\\HasKey' => __DIR__ . '/..' . '/laravel-lang/config/src/Concerns/HasKey.php',
         'LaravelLang\\Config\\Concerns\\HasValues' => __DIR__ . '/..' . '/laravel-lang/config/src/Concerns/HasValues.php',
         'LaravelLang\\Config\\Constants\\RouteName' => __DIR__ . '/..' . '/laravel-lang/config/src/Constants/RouteName.php',
@@ -3765,6 +3838,11 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         'LaravelLang\\Config\\Helpers\\Path' => __DIR__ . '/..' . '/laravel-lang/config/src/Helpers/Path.php',
         'LaravelLang\\Config\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/config/src/ServiceProvider.php',
         'LaravelLang\\Config\\Services\\Config' => __DIR__ . '/..' . '/laravel-lang/config/src/Services/Config.php',
+        'LaravelLang\\HttpStatuses\\Plugin' => __DIR__ . '/..' . '/laravel-lang/http-statuses/src/Plugin.php',
+        'LaravelLang\\HttpStatuses\\Plugins\\Main' => __DIR__ . '/..' . '/laravel-lang/http-statuses/src/Plugins/Main.php',
+        'LaravelLang\\HttpStatuses\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/http-statuses/src/ServiceProvider.php',
+        'LaravelLang\\JsonFallback\\TranslationServiceProvider' => __DIR__ . '/..' . '/laravel-lang/json-fallback/src/TranslationServiceProvider.php',
+        'LaravelLang\\JsonFallback\\Translator' => __DIR__ . '/..' . '/laravel-lang/json-fallback/src/Translator.php',
         'LaravelLang\\Lang\\Plugin' => __DIR__ . '/..' . '/laravel-lang/lang/src/Plugin.php',
         'LaravelLang\\Lang\\Plugins\\Breeze\\Master' => __DIR__ . '/..' . '/laravel-lang/lang/src/Plugins/Breeze/Master.php',
         'LaravelLang\\Lang\\Plugins\\Breeze\\V2' => __DIR__ . '/..' . '/laravel-lang/lang/src/Plugins/Breeze/V2.php',
@@ -3806,6 +3884,35 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         'LaravelLang\\Locales\\Services\\Locales' => __DIR__ . '/..' . '/laravel-lang/locales/src/Services/Locales.php',
         'LaravelLang\\Locales\\Services\\RawLocales' => __DIR__ . '/..' . '/laravel-lang/locales/src/Services/RawLocales.php',
         'LaravelLang\\Locales\\Services\\Resolver' => __DIR__ . '/..' . '/laravel-lang/locales/src/Services/Resolver.php',
+        'LaravelLang\\Models\\Casts\\TrimCast' => __DIR__ . '/..' . '/laravel-lang/models/src/Casts/TrimCast.php',
+        'LaravelLang\\Models\\Concerns\\HasNames' => __DIR__ . '/..' . '/laravel-lang/models/src/Concerns/HasNames.php',
+        'LaravelLang\\Models\\Concerns\\ModelLoader' => __DIR__ . '/..' . '/laravel-lang/models/src/Concerns/ModelLoader.php',
+        'LaravelLang\\Models\\Concerns\\Scopes' => __DIR__ . '/..' . '/laravel-lang/models/src/Concerns/Scopes.php',
+        'LaravelLang\\Models\\Console\\ModelMakeCommand' => __DIR__ . '/..' . '/laravel-lang/models/src/Console/ModelMakeCommand.php',
+        'LaravelLang\\Models\\Console\\ModelsHelperCommand' => __DIR__ . '/..' . '/laravel-lang/models/src/Console/ModelsHelperCommand.php',
+        'LaravelLang\\Models\\Eloquent\\Scopes\\FilterTranslationsScope' => __DIR__ . '/..' . '/laravel-lang/models/src/Eloquent/Scopes/FilterTranslationsScope.php',
+        'LaravelLang\\Models\\Eloquent\\Translation' => __DIR__ . '/..' . '/laravel-lang/models/src/Eloquent/Translation.php',
+        'LaravelLang\\Models\\Events\\AllTranslationsHasBeenForgetEvent' => __DIR__ . '/..' . '/laravel-lang/models/src/Events/AllTranslationsHasBeenForgetEvent.php',
+        'LaravelLang\\Models\\Events\\TranslationHasBeenForgetEvent' => __DIR__ . '/..' . '/laravel-lang/models/src/Events/TranslationHasBeenForgetEvent.php',
+        'LaravelLang\\Models\\Events\\TranslationHasBeenSetEvent' => __DIR__ . '/..' . '/laravel-lang/models/src/Events/TranslationHasBeenSetEvent.php',
+        'LaravelLang\\Models\\Exceptions\\AttributeIsNotTranslatableException' => __DIR__ . '/..' . '/laravel-lang/models/src/Exceptions/AttributeIsNotTranslatableException.php',
+        'LaravelLang\\Models\\Exceptions\\UnavailableLocaleException' => __DIR__ . '/..' . '/laravel-lang/models/src/Exceptions/UnavailableLocaleException.php',
+        'LaravelLang\\Models\\Exceptions\\UnknownModelPathException' => __DIR__ . '/..' . '/laravel-lang/models/src/Exceptions/UnknownModelPathException.php',
+        'LaravelLang\\Models\\Generators\\Generator' => __DIR__ . '/..' . '/laravel-lang/models/src/Generators/Generator.php',
+        'LaravelLang\\Models\\Generators\\HelperGenerator' => __DIR__ . '/..' . '/laravel-lang/models/src/Generators/HelperGenerator.php',
+        'LaravelLang\\Models\\Generators\\MigrationGenerator' => __DIR__ . '/..' . '/laravel-lang/models/src/Generators/MigrationGenerator.php',
+        'LaravelLang\\Models\\Generators\\ModelGenerator' => __DIR__ . '/..' . '/laravel-lang/models/src/Generators/ModelGenerator.php',
+        'LaravelLang\\Models\\Generators\\ParentGenerator' => __DIR__ . '/..' . '/laravel-lang/models/src/Generators/ParentGenerator.php',
+        'LaravelLang\\Models\\HasTranslations' => __DIR__ . '/..' . '/laravel-lang/models/src/HasTranslations.php',
+        'LaravelLang\\Models\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/models/src/ServiceProvider.php',
+        'LaravelLang\\Models\\Services\\Attribute' => __DIR__ . '/..' . '/laravel-lang/models/src/Services/Attribute.php',
+        'LaravelLang\\Models\\Services\\ClassMap' => __DIR__ . '/..' . '/laravel-lang/models/src/Services/ClassMap.php',
+        'LaravelLang\\Models\\Services\\Registry' => __DIR__ . '/..' . '/laravel-lang/models/src/Services/Registry.php',
+        'LaravelLang\\Models\\Services\\Relation' => __DIR__ . '/..' . '/laravel-lang/models/src/Services/Relation.php',
+        'LaravelLang\\Models\\Services\\Validator' => __DIR__ . '/..' . '/laravel-lang/models/src/Services/Validator.php',
+        'LaravelLang\\MoonShine\\Plugin' => __DIR__ . '/..' . '/laravel-lang/moonshine/src/Plugin.php',
+        'LaravelLang\\MoonShine\\Plugins\\V3' => __DIR__ . '/..' . '/laravel-lang/moonshine/src/Plugins/V3.php',
+        'LaravelLang\\MoonShine\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/moonshine/src/ServiceProvider.php',
         'LaravelLang\\NativeCountryNames\\CountryNames' => __DIR__ . '/..' . '/laravel-lang/native-country-names/src/CountryNames.php',
         'LaravelLang\\NativeCountryNames\\Data\\CountryData' => __DIR__ . '/..' . '/laravel-lang/native-country-names/src/Data/CountryData.php',
         'LaravelLang\\NativeCountryNames\\Enums\\SortBy' => __DIR__ . '/..' . '/laravel-lang/native-country-names/src/Enums/SortBy.php',
@@ -3859,6 +3966,26 @@ class ComposerStaticInit3e987f9a01a83fbbf7b391dd1b2dd6a0
         'LaravelLang\\Publisher\\Services\\Filesystem\\Manager' => __DIR__ . '/..' . '/laravel-lang/publisher/src/Services/Filesystem/Manager.php',
         'LaravelLang\\Publisher\\Services\\Filesystem\\Php' => __DIR__ . '/..' . '/laravel-lang/publisher/src/Services/Filesystem/Php.php',
         'LaravelLang\\Publisher\\Services\\Renderer\\ParagraphRenderer' => __DIR__ . '/..' . '/laravel-lang/publisher/src/Services/Renderer/ParagraphRenderer.php',
+        'LaravelLang\\Routes\\Concerns\\RouteParameters' => __DIR__ . '/..' . '/laravel-lang/routes/src/Concerns/RouteParameters.php',
+        'LaravelLang\\Routes\\Events\\LocaleHasBeenSetEvent' => __DIR__ . '/..' . '/laravel-lang/routes/src/Events/LocaleHasBeenSetEvent.php',
+        'LaravelLang\\Routes\\Facades\\LocalizationRoute' => __DIR__ . '/..' . '/laravel-lang/routes/src/Facades/LocalizationRoute.php',
+        'LaravelLang\\Routes\\Helpers\\Name' => __DIR__ . '/..' . '/laravel-lang/routes/src/Helpers/Name.php',
+        'LaravelLang\\Routes\\Helpers\\Route' => __DIR__ . '/..' . '/laravel-lang/routes/src/Helpers/Route.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByCookie' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByCookie.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByHeader' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByHeader.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByModel' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByModel.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByParameter' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByParameter.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByParameterPrefix' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByParameterPrefix.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationByParameterWithRedirect' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationByParameterWithRedirect.php',
+        'LaravelLang\\Routes\\Middlewares\\LocalizationBySession' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/LocalizationBySession.php',
+        'LaravelLang\\Routes\\Middlewares\\Middleware' => __DIR__ . '/..' . '/laravel-lang/routes/src/Middlewares/Middleware.php',
+        'LaravelLang\\Routes\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/routes/src/ServiceProvider.php',
+        'LaravelLang\\Routes\\Services\\Route' => __DIR__ . '/..' . '/laravel-lang/routes/src/Services/Route.php',
+        'LaravelLang\\StarterKits\\Plugin' => __DIR__ . '/..' . '/laravel-lang/starter-kits/src/Plugin.php',
+        'LaravelLang\\StarterKits\\Plugins\\Livewire' => __DIR__ . '/..' . '/laravel-lang/starter-kits/src/Plugins/Livewire.php',
+        'LaravelLang\\StarterKits\\Plugins\\React' => __DIR__ . '/..' . '/laravel-lang/starter-kits/src/Plugins/React.php',
+        'LaravelLang\\StarterKits\\Plugins\\Vue' => __DIR__ . '/..' . '/laravel-lang/starter-kits/src/Plugins/Vue.php',
+        'LaravelLang\\StarterKits\\ServiceProvider' => __DIR__ . '/..' . '/laravel-lang/starter-kits/src/ServiceProvider.php',
         'Laravel\\Boost\\BoostServiceProvider' => __DIR__ . '/..' . '/laravel/boost/src/BoostServiceProvider.php',
         'Laravel\\Boost\\Concerns\\MakesHttpRequests' => __DIR__ . '/..' . '/laravel/boost/src/Concerns/MakesHttpRequests.php',
         'Laravel\\Boost\\Concerns\\ReadsLogs' => __DIR__ . '/..' . '/laravel/boost/src/Concerns/ReadsLogs.php',

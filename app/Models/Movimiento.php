@@ -12,9 +12,9 @@ class Movimiento extends Model
     protected $fillable = [
         'user_id',
         'caja_id',
+        'cliente_id',
         'referencia_id',
         'referencia_type',
-        'nro',
         'descripcion',
         'monto',
         'tipo',
@@ -22,15 +22,15 @@ class Movimiento extends Model
     ];
 
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($movimiento) {
-            $ultimo = Movimiento::max('nro') ?? 0;
-            $movimiento->nro = $ultimo + 1; // autoincremental desde 1
-        });
-    }
+    //     static::creating(function ($movimiento) {
+    //         $ultimo = Movimiento::max('nro') ?? 0;
+    //         $movimiento->nro = $ultimo + 1; // autoincremental desde 1
+    //     });
+    // }
 
     static public function getSiguienteNroAttribute()
     {
@@ -46,5 +46,10 @@ class Movimiento extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
     }
 }

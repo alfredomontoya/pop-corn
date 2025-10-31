@@ -84,4 +84,12 @@ class Caja extends Model
 
         return true;
     }
+
+    static public function cajaAbierta($user_id)
+    {
+        return self::where('user_id', $user_id)
+            ->where('estado', 'ABIERTA')
+            ->first();
+    }
+
 }

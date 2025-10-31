@@ -2,22 +2,22 @@ export interface Movimiento {
   id: number;
   user_id: number;
   cliente_id?: number;
-  nro: number;
-  fecha: string; // formato "YYYY-MM-DD"
+  referencia_id?: number;
+  referencia_type?: string;
   descripcion?: string;
-  total: number;
+  monto: number;
   tipo: "ingreso" | "egreso";
+  fecha: string; // formato "YYYY-MM-DD"
   created_at: string;
   updated_at: string;
 }
 
 export interface MovimientoCreate {
-  fecha?: string;       // opcional (se puede autollenar con la actual)
-  nombre: string;
   cliente_id?: number;
   descripcion?: string;
-  total: number;
+  monto: number;
   tipo: "ingreso" | "egreso";
+  fecha?: string;       // opcional (se puede autollenar con la actual)
 }
 
 export interface PaginatedMovimientos {

@@ -48,8 +48,8 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
         </div>
 
         {/* filtro de fecha */}
-        <div className="flex items-center space-x-2">
-          <label>Desde:</label>
+        <div className="flex items-center space-x-2 mb-2">
+          <label>Filtrar por fecha Desde:</label>
           <input
             type="date"
             value={fechaInicio || ""}
@@ -76,7 +76,7 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
                 preserveState: true, // mantiene la paginación y scroll
               });
             }}
-            variant="outline"
+            variant="default"
           >
             Filtrar
           </Button>

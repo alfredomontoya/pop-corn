@@ -3,20 +3,29 @@ import AppLayout from "@/layouts/app-layout";
 
 import { Cliente } from "@/interfaces/Clientes.Interface";
 import Form from "./Form";
+import HeadingSmall from "@/components/heading-small";
+import Heading from "@/components/heading";
+import { Caja } from "@/interfaces/Caja.Ingerface";
 
 interface Props {
   clientes: Cliente[];
+  caja?: Caja | null;
+  tipo?: "ingreso" | "egreso"; // prop opcional para Create
 }
 
-export default function Create({ clientes }: Props) {
+export default function Create({ clientes, caja, tipo }: Props) {
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={ [{ title: "Movimientos", href: "/movimientos" }] }>
       <Head title="Nuevo Movimiento" />
+      <div className="py-2">
+        <div className="max-w-4xl">
+          <div className="shadow rounded-lg p-6">
+            <Heading
+              title={`Nuevo Movimiento ${tipo}`}
+              description={`Crea un nuevo movimiento de ${tipo}`}
+            />
 
-      <div className="py-6">
-        <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white shadow rounded-lg p-6">
-            <Form movimiento={null} tipo="ingreso" clientes={clientes} />
+            <Form movimiento={null} tipo={tipo} clientes={clientes} caja={caja} />
           </div>
         </div>
       </div>

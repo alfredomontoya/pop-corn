@@ -47,6 +47,12 @@ const Create = ({ categorias }: Props) => {
     });
   };
 
+  const handleCancel = () => {
+    reset();
+    setCategoriaSeleccionada(null);
+    window.history.back();
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <FloatingCreateButton />
@@ -106,8 +112,9 @@ const Create = ({ categorias }: Props) => {
         </div>
 
         {/* Botón Guardar */}
-        <div className="mt-6">
+        <div className="mt-6 flex space-x-2">
           <Button variant="default" onClick={handleSubmit}>Guardar</Button>
+          <Button variant="secondary" onClick={handleCancel}>Cancelar</Button>
         </div>
 
         {/* Toast */}

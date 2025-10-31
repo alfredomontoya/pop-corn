@@ -41,7 +41,7 @@ class ProductoController extends Controller
         // Cargar todas las categorías para el modal de creación
         $categorias = \App\Models\Categoria::all();
 
-        return Inertia::render('Productos/ProductoIndex', [
+        return Inertia::render('Productos/Index', [
             'productos' => $productos,
             'filters' => $request->only('search', 'sort', 'direction'),
             'categorias' => $categorias, // <-- agregado

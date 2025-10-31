@@ -15,7 +15,7 @@ const ItemsTable = ({ movimientos }: Props) => {
       <table className="w-full dark:bg-white/10">
         <thead>
           <tr>
-            <th className="p-2 border">Nro</th>
+            <th className="p-2 border">ID</th>
             <th className="p-2 border">Caja</th>
             <th className="p-2 border">Tipo</th>
             <th className="p-2 border">Fecha</th>
@@ -27,7 +27,7 @@ const ItemsTable = ({ movimientos }: Props) => {
         <tbody>
           {movimientos.data.map((m: any) => (
             <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20">
-              <td className="p-2">{m.nro}</td>
+              <td className="p-2">{m.id}</td>
               <td className="p-2 text-right">{m.caja_id}</td>
               <td
                 className={`p-2 ${m.tipo === "INGRESO" ? "text-green-600" : "text-red-600"}`}
@@ -42,6 +42,7 @@ const ItemsTable = ({ movimientos }: Props) => {
                 <Button
                   variant={'warning'}
                   className="m-1 w-20"
+                  onClick={() => route.visit('productos/edit')}
                 >
                   Editar
                 </Button>

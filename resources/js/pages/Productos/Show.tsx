@@ -13,7 +13,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: "Productos", href: "/productos" }];
 
-const ProductoShow: React.FC<Props> = ({producto}) => {
+const Show: React.FC<Props> = ({producto}) => {
     console.log(producto)
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -28,4 +28,4 @@ const ProductoShow: React.FC<Props> = ({producto}) => {
   );
 };
 
-export default ProductoShow;
+export default Show;

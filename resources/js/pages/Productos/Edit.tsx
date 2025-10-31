@@ -22,7 +22,7 @@ const Edit = ({ categorias, producto, page }: Props) => {
   console.log('page in edit:', page);
   console.log(page)
   // Inicializar el formulario con los datos actuales del producto
-  const { data, setData, put, errors: rawErrors } = useForm<SimpleProductoEdit>({
+  const { data, setData, put, reset, errors: rawErrors } = useForm<SimpleProductoEdit>({
     id: producto.id,
     categoria_id: producto.categoria_id || 0,
     nombre: producto.nombre || "",
@@ -54,6 +54,12 @@ const Edit = ({ categorias, producto, page }: Props) => {
       },
     });
   };
+
+  const handleCancel = () => {
+    reset();
+    setCategoriaSeleccionada(null);
+    window.history.back();
+  }
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -113,10 +119,9 @@ const Edit = ({ categorias, producto, page }: Props) => {
         </div>
 
         {/* Botón Guardar */}
-        <div className="mt-6">
-          <Button variant="default" onClick={handleSubmit}>
-            Actualizar
-          </Button>
+        <div className="mt-6 flex space-x-2">
+          <Button variant="default" onClick={handleSubmit}>Actualizar</Button>
+          <Button variant="secondary" onClick={handleCancel}>Cancelar</Button>
         </div>
 
         {/* Toast */}

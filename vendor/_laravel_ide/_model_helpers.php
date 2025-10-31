@@ -2927,20 +2927,21 @@ namespace App\Models {
      * @property mixed $tipo
      * @property float $monto
      * @property string|null $descripcion
-     * @property int $nro
      * @property int|null $referencia_id
      * @property string|null $referencia_type
+     * @property int|null $cliente_id
      * @property int $caja_id
      * @property int $user_id
      * @property int $id
      * @property-read \App\Models\Caja $caja
      * @property-read \App\Models\User $user
+     * @property-read \App\Models\Cliente $cliente
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereUserId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereCajaId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereClienteId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereReferenciaType($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereReferenciaId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereNro($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereDescripcion($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereMonto($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Movimiento>|Movimiento whereTipo($value)

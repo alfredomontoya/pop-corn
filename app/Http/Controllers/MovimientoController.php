@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Caja;
 use App\Models\Movimiento;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
@@ -50,24 +51,24 @@ class MovimientoController extends Controller
     public function create(Request $request)
     {
         $clientes = Cliente::all();
+        $cajaAbierta = Caja::cajaAbierta(Auth::id());
+        // DD($cajaAbierta);
         return Inertia::render('Movimientos/Create', [
             'tipo' => $request->query('tipo', 'ingreso'),
-            'clientes' => $clientes
+            'clientes' => $clientes,
+            'caja' => $cajaAbierta
         ]);
     }
 
    public function store(Request $request)
     {
         $validated = $request->validate([
-            'fecha' => 'required|date',
-            'nombre' => 'required|string|max:255',
-            'cliente_id' => 'nullable|exists:clientes,id',
+            'caja_id' => 'required|exists:cajas,id',
+            'cliente_id' => 'required|exists:clientes,id',
             'descripcion' => 'nullable|string',
-            'cantidad' => 'required|integer|min:1',
-            'umedida' => 'nullable|string|max:50',
-            'precio' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
+            'monto' => 'required|numeric|min:1',
             'tipo' => 'required|in:ingreso,egreso',
+            'fecha' => 'required|date',
         ]);
 
         $validated['user_id'] = Auth::id();
@@ -87,7 +88,6 @@ class MovimientoController extends Controller
     public function update(Request $request, Movimiento $movimiento)
     {
         $data = $request->validate([
-            'nro' => 'required|unique:movimientos,nro,' . $movimiento->id,
             'fecha' => 'required|date',
             'nombre' => 'required|string',
             'descripcion' => 'nullable|string',

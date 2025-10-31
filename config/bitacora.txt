@@ -1,0 +1,10 @@
+spanish valitacion ok
+
+Products ok
+
+Movimientos
+    Index
+        Editar
+        Eliminar
+    Create ok
+    Edit @

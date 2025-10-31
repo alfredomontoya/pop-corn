@@ -22,7 +22,7 @@ interface Props {
 }
 
 
-const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
+const Index: React.FC<Props> = ({ productos, filters }) => {
 
   const { flash } = usePage().props as { flash?: { success?: string; error?: string } };
 
@@ -60,12 +60,6 @@ const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="p-4">
         <FloatingCreateButton />
-        <Link
-          href="/productos/create"
-          className="mb-4 bg-black text-white px-4 py-2 rounded hover:bg-black/50 decoration-none inline-block"
-        >
-          Nuevo Producto
-        </Link>
 
         <ProductoSearch initialSearch={filters.search} />
 
@@ -105,4 +99,4 @@ const ProductoIndex: React.FC<Props> = ({ productos, filters }) => {
   );
 };
 
-export default ProductoIndex;
+export default Index;
