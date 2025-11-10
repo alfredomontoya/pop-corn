@@ -1,6 +1,6 @@
 import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import Pagination from "../PaginationInertia";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import dayjs from "dayjs"
 import { Button } from "../ui/button";
 
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const ItemsTable = ({ movimientos }: Props) => {
+  // console.log("Movimientos en ItemsTable:", movimientos);
   return (
     <div className="overflow-x-auto bg-default rounded-lg shadow">
       <table className="w-full dark:bg-white/10">
@@ -20,13 +21,13 @@ const ItemsTable = ({ movimientos }: Props) => {
             <th className="p-2 border">Tipo</th>
             <th className="p-2 border">Fecha</th>
             <th className="p-2 border">Monto</th>
-            <th className="p-2 border">Descripcion</th>
+            <th className="p-2 border">Cliente</th>
             <th className="p-2 border">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {movimientos.data.map((m: any) => (
-            <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20">
+            <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20 cursor-pointer" >
               <td className="p-2">{m.id}</td>
               <td className="p-2 text-right">{m.caja_id}</td>
               <td
@@ -36,13 +37,13 @@ const ItemsTable = ({ movimientos }: Props) => {
               </td>
               <td className="p-2">{dayjs(m.fecha).format("DD/MM/YYYY HH:mm")}</td>
               <td className="p-2 text-right">{m.monto}</td>
-              <td className="p-2 text-left">{m.descripcion}</td>
+              <td className="p-2 text-left">{m.cliente?.nombre_razon_social}</td>
 
               <td className="p-2 text-center">
                 <Button
                   variant={'warning'}
                   className="m-1 w-20"
-                  onClick={() => route.visit('productos/edit')}
+                  onClick={() => router.visit(`/movimientos/${m.id}/edit`)}
                 >
                   Editar
                 </Button>

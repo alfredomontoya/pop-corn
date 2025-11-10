@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function Form({ movimiento, tipo, clientes, caja }: Props) {
+
   const today = new Date().toISOString().split("T")[0];
 
   const { data, setData, post, put, processing, errors, reset } = useForm({
@@ -21,7 +22,7 @@ export default function Form({ movimiento, tipo, clientes, caja }: Props) {
     cliente_id: movimiento?.cliente_id ?? null, // nuevo campo cliente
     tipo: movimiento?.tipo ?? tipo ?? "ingreso",
     descripcion: movimiento?.descripcion ?? "",
-    fecha: movimiento?.fecha ?? today,
+    fecha: movimiento?.fecha ? movimiento.fecha.split(" ")[0] : today,
     monto: movimiento?.monto ?? 0, // monto
   });
 
@@ -43,7 +44,14 @@ export default function Form({ movimiento, tipo, clientes, caja }: Props) {
 
     if (movimiento) {
       console.log('Updating movimiento with data:', data);
-      put(`/movimientos/${movimiento.id}`);
+      put(`/movimientos/${movimiento.id}`, {
+        onSuccess: () => {
+          // Opcional: alguna acción después de actualizar
+        },
+        onError: (errs) => {
+          console.log("Errores de validación:", errs);
+        }
+      });
     } else {
       console.log('Creating movimiento with data:', data);
       post("/movimientos", {

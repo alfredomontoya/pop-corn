@@ -2,12 +2,13 @@ import { ItemsTable } from "@/components/Movimientos/ItemsTable";
 import { Totales } from "@/components/Movimientos/Totales";
 import PaginationInertia from "@/components/PaginationInertia";
 import Pagination from "@/components/PaginationInertia";
+import Toast from "@/components/Toast";
 import { Button } from "@/components/ui/button";
 import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
-import { Link, router } from "@inertiajs/react";
-import { useState } from "react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: "Movimientos", href: "/movimientos" },
@@ -23,6 +24,17 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
   // 🔹 Filtros de fecha
   const [fechaInicio, setFechaInicio] = useState<string | null>(null);
   const [fechaFin, setFechaFin] = useState<string | null>(null);
+
+  const { flash } = usePage().props as { flash?: { success?: string; error?: string } };
+  const [toastMessage, setToastMessage] = useState(flash?.success || null);
+
+  // 🔹 Detectar cambio en flash.success (cuando se redirige desde store)
+  useEffect(() => {
+    if (flash?.success) {
+      setToastMessage(flash.success);
+    }
+  }, [flash?.success]);
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="p-6">
@@ -35,20 +47,20 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
         <div className="flex gap-2 mb-6">
           <Button
             variant={'default'}
-            onClick={ () => router.visit("/movimientos/create?tipo=ingreso")}
+            onClick={ () => router.visit("/movimientos/create?tipo=INGRESO")}
           >
             Nuevo Ingreso
           </Button>
           <Button
             variant={'secondary'}
-            onClick={ () => router.visit("/movimientos/create?tipo=egreso")}
+            onClick={ () => router.visit("/movimientos/create?tipo=EGRESO")}
           >
             Nuevo Egreso
           </Button>
         </div>
 
         {/* filtro de fecha */}
-        <div className="flex items-center space-x-2 mb-2">
+        <div className="flex items-center space-x-2 mb-3">
           <label>Filtrar por fecha Desde:</label>
           <input
             type="date"
@@ -94,6 +106,9 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
           />
         </div>
 
+        {toastMessage && (
+          <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+        )}
       </div>
     </AppLayout>
   );

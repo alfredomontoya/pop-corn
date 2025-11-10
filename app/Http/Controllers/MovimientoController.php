@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MovimientoRequest;
 use App\Models\Caja;
 use App\Models\Movimiento;
 use App\Models\Cliente;
@@ -13,7 +14,7 @@ class MovimientoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Movimiento::orderBy('id', 'desc');
+        $query = Movimiento::with(['cliente'])->orderBy('id', 'desc');
 
         // 🔹 Filtrar por fecha si vienen parámetros
         if ($request->filled('fechaInicio')) {
@@ -60,45 +61,32 @@ class MovimientoController extends Controller
         ]);
     }
 
-   public function store(Request $request)
+    public function store(MovimientoRequest $request)
     {
-        $validated = $request->validate([
-            'caja_id' => 'required|exists:cajas,id',
-            'cliente_id' => 'required|exists:clientes,id',
-            'descripcion' => 'nullable|string',
-            'monto' => 'required|numeric|min:1',
-            'tipo' => 'required|in:ingreso,egreso',
-            'fecha' => 'required|date',
-        ]);
-
+        $validated = $request->validated();
         $validated['user_id'] = Auth::id();
 
         Movimiento::create($validated);
 
-        return redirect()->route('movimientos.index')->with('success', 'Movimiento creado con éxito.');
+        return redirect()->route('movimientos.index')
+            ->with('success', 'Movimiento creado con éxito.');
     }
 
     public function edit(Movimiento $movimiento)
     {
+        $clientes = Cliente::all();
+        $cajaAbierta = Caja::cajaAbierta(Auth::id());
         return Inertia::render('Movimientos/Edit', [
-            'movimiento' => $movimiento
+            'movimiento' => $movimiento,
+            'clientes' => $clientes,
+            'caja' => $cajaAbierta
         ]);
     }
 
-    public function update(Request $request, Movimiento $movimiento)
+    public function update(MovimientoRequest $request, Movimiento $movimiento)
     {
-        $data = $request->validate([
-            'fecha' => 'required|date',
-            'nombre' => 'required|string',
-            'descripcion' => 'nullable|string',
-            'cantidad' => 'required|integer|min:1',
-            'precio' => 'required|numeric|min:0',
-            'tipo' => 'required|in:ingreso,egreso',
-        ]);
-
-        $data['total'] = $data['cantidad'] * $data['precio'];
-
-        $movimiento->update($data);
+        $validated = $request->validated();
+        $movimiento->update($validated);
 
         return redirect()->route('movimientos.index')->with('success', 'Movimiento actualizado');
     }
