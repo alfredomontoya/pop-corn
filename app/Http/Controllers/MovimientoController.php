@@ -48,14 +48,20 @@ class MovimientoController extends Controller
         ]);
     }
 
+    public function show(Movimiento $movimiento){
+        return Inertia::render('Movimientos/Show', [
+            'movimiento' => $movimiento,
+        ]);
+    }
 
     public function create(Request $request)
     {
         $clientes = Cliente::all();
         $cajaAbierta = Caja::cajaAbierta(Auth::id());
+        $tipo = $request->tipo;
         // DD($cajaAbierta);
         return Inertia::render('Movimientos/Create', [
-            'tipo' => $request->query('tipo', 'ingreso'),
+            'tipo' => $tipo,
             'clientes' => $clientes,
             'caja' => $cajaAbierta
         ]);
@@ -88,12 +94,21 @@ class MovimientoController extends Controller
         $validated = $request->validated();
         $movimiento->update($validated);
 
-        return redirect()->route('movimientos.index')->with('success', 'Movimiento actualizado');
+        return redirect()->route('movimientos.index')
+            ->with('success', [
+                'type' => 'success',
+                'title' => 'Movimiento Actualizado',
+                'message' => "Movimiento $movimiento->id actualizado"
+            ]);
     }
 
     public function destroy(Movimiento $movimiento)
     {
         $movimiento->delete();
-        return redirect()->route('movimientos.index')->with('success', 'Movimiento eliminado');
+        return redirect()->route('movimientos.index')->with('success', [
+            'type' => 'success',
+            'title' => "Eliminar movimiento",
+            "message" => "Movimiento $movimiento->id eliminado con exito"
+        ]);
     }
 }

@@ -1,10 +1,11 @@
+import ConfirmModal from "@/components/ConfirmModal";
 import { ItemsTable } from "@/components/Movimientos/ItemsTable";
 import { Totales } from "@/components/Movimientos/Totales";
 import PaginationInertia from "@/components/PaginationInertia";
 import Pagination from "@/components/PaginationInertia";
 import Toast from "@/components/Toast";
 import { Button } from "@/components/ui/button";
-import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
+import { Movimiento, PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -20,20 +21,55 @@ interface Props {
   totalEgresos: number;
   saldo: number;
 }
+
+interface PropsMessage {
+  type: string;
+  title: string;
+  message: string;
+}
+
 export default function Index({ movimientos, totalIngresos, totalEgresos, saldo }: Props) {
   // 🔹 Filtros de fecha
   const [fechaInicio, setFechaInicio] = useState<string | null>(null);
   const [fechaFin, setFechaFin] = useState<string | null>(null);
 
-  const { flash } = usePage().props as { flash?: { success?: string; error?: string } };
-  const [toastMessage, setToastMessage] = useState(flash?.success || null);
+  const { flash } = usePage().props as { flash: { success?: PropsMessage } };
+  if (flash.success){
+    console.log("Flash messages:", flash);
+    console.log(flash.success.type)
+    console.log(flash.success.title)
+    console.log(flash.success.message)
+  }
+  const [toastMessage, setToastMessage] = useState<PropsMessage | null>(null);
+
+  const [confirmDelete, setConfirmDelete] = useState<Movimiento | null>(null)
 
   // 🔹 Detectar cambio en flash.success (cuando se redirige desde store)
   useEffect(() => {
     if (flash?.success) {
       setToastMessage(flash.success);
+      (usePage().props as any).flash.success = undefined;
+          (page.props as any).flash.success = undefined;
+
     }
-  }, [flash?.success]);
+  }, [flash.success]);
+
+  const handleDelete = (movimiento: Movimiento) => {
+    router.delete(`/movimientos/${movimiento.id}`, {
+      onSuccess: () => {
+        setToastMessage({
+          type: flash.success?.type,
+          title: flash.success?.title,
+          message: flash.success?.message
+        })
+        setConfirmDelete(null)
+      },
+      onError: () => {
+        alert('error')
+      }
+    })
+
+  }
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -95,7 +131,8 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
         </div>
 
         {/* Tabla */}
-        <ItemsTable movimientos={movimientos} />
+        <ItemsTable movimientos={movimientos} onDelete={setConfirmDelete}/>
+
         {/* Paginación */}
         <div className="flex gap-2 mt-4">
           <PaginationInertia
@@ -107,7 +144,21 @@ export default function Index({ movimientos, totalIngresos, totalEgresos, saldo 
         </div>
 
         {toastMessage && (
-          <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
+          <Toast
+            type={toastMessage.type}
+            title={toastMessage.title}
+            message={toastMessage.message}
+            onClose={() => setToastMessage(null)} />
+        )}
+
+        {confirmDelete && (
+          <ConfirmModal
+            text={String(confirmDelete.id)}
+            onConfirm={() => handleDelete(confirmDelete)}
+            onClose={() => {
+              setConfirmDelete(null)
+            }}
+          />
         )}
       </div>
     </AppLayout>

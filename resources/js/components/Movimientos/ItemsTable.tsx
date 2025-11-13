@@ -1,4 +1,4 @@
-import { PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
+import { Movimiento, PaginatedMovimientos } from "@/interfaces/Movimientos.Interface";
 import Pagination from "../PaginationInertia";
 import { Link, router } from "@inertiajs/react";
 import dayjs from "dayjs"
@@ -7,9 +7,10 @@ import { Button } from "../ui/button";
 
 interface Props {
     movimientos: PaginatedMovimientos;
+    onDelete: (movimient: Movimiento) => void
 }
 
-const ItemsTable = ({ movimientos }: Props) => {
+const ItemsTable = ({ movimientos, onDelete }: Props) => {
   // console.log("Movimientos en ItemsTable:", movimientos);
   return (
     <div className="overflow-x-auto bg-default rounded-lg shadow">
@@ -27,7 +28,7 @@ const ItemsTable = ({ movimientos }: Props) => {
         </thead>
         <tbody>
           {movimientos.data.map((m: any) => (
-            <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20 cursor-pointer" >
+            <tr key={m.id} className="hover:bg-gray-200 dark:hover:bg-white/20 cursor-pointer" onClick={() => router.visit(`movimientos/${m.id}`)} >
               <td className="p-2">{m.id}</td>
               <td className="p-2 text-right">{m.caja_id}</td>
               <td
@@ -43,13 +44,20 @@ const ItemsTable = ({ movimientos }: Props) => {
                 <Button
                   variant={'warning'}
                   className="m-1 w-20"
-                  onClick={() => router.visit(`/movimientos/${m.id}/edit`)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.visit(`/movimientos/${m.id}/edit`)
+                  }}
                 >
                   Editar
                 </Button>
                 <Button
                   variant={'destructive'}
                   className="m-1 w-20"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDelete(m)
+                  }}
                 >
                   Eliminar
                 </Button>

@@ -34,7 +34,6 @@ const ClienteItemsTable: React.FC<Props> = ({
         // Si es otra columna nueva, empiezo con asc
         direction = "asc";
     }
-    console.log(direction);
 
     router.get(
         "/clientes",

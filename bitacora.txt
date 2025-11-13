@@ -7,4 +7,5 @@ Movimientos
         Editar
         Eliminar
     Create ok
-    Edit @
+    Edit Ok
+    Show
